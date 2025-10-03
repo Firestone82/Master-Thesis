@@ -1,0 +1,78 @@
+\documentclass[czech,master]{diploma}
+
+\usepackage{additionallst} % Additional diploma thesis listings
+\usepackage[autostyle=true,czech=quotes]{csquotes} % correct quotation typesetting, support for biblatex
+\usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliography
+\usepackage{dcolumn} % table columns with numeric values
+\usepackage{subfig} % macros for "subfigures" and "subtables"
+\usepackage{float} % better figure placement (H)
+\usepackage{bookmark} % Required for generating PDF bookmarks
+\usepackage{hyperref} % Links in PDF
+\usepackage{subcaption} % For multiple images in one float
+\usepackage{tikz} % For drawing in LaTeX
+\usepackage{amsmath} % For improved equation typesetting
+\usepackage[cpp]{diplomalst}
+\usepackage{fontspec}
+
+\renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
+\newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
+
+% Required thesis metadata
+\ThesisAuthor{Bc. Pavel Mikula}
+\ThesisSupervisor{Mgr. Ing. Michal Krumnikl, Ph.D.}
+\CzechThesisTitle{Integrace velkých jazykových modelů do systému Kelvin}
+\EnglishThesisTitle{Integrating large language models into the Kelvin system}
+\SubmissionYear{2025}
+
+\ThesisAssignmentFileName{../resources/ThesisSpecification_MIK0486.pdf}
+
+\CzechAbstract{} % TODO: Abstract
+\CzechKeywords{} % TODO: Keywords
+
+\EnglishAbstract{} % TODO: Abstract
+\EnglishKeywords{} % TODO: Keywords
+
+% TODO: add acronyms used in the thesis
+\AddAcronym{TUG}{\TeX{} Users Group}
+
+% TODO: Write acknowledgement
+\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
+
+\addbibresource{../resources/sauce.bib}
+
+%
+% ==] Main document [==
+%
+
+\begin{document}
+    \MakeTitlePages
+
+    % Pictures
+    \listoffigures
+    \clearpage
+
+    % Tables
+    \listoftables
+    \clearpage
+
+    \renewcommand{\lstlistlistingname}{Seznam zdrojových kódů}
+    \addcontentsline{toc}{chapter}{Seznam zdrojových kódů}
+    \lstlistoflistings
+    \clearpage
+
+    % Introduction
+    \input{chapters/Introduction}
+
+    % Main chapters
+    \input{chapters/Theory}
+
+    % Conclusion
+    \input{chapters/Conclusion}
+
+    \appendix
+    \input{chapters/Appendix}
+
+    % Bibliography
+    \printbibliography[title={Literatura}, heading=bibintoc]
+
+\end{document}
