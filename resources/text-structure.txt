@@ -1,0 +1,126 @@
+1. Úvod
+├─ 1.1 Motivace práce
+│  ├─ Vývoj systému Kelvin
+│  ├─ Usnadnění hodnocení úloh učitelům
+│  └─ Velký počet studentů a časová náročnost ručního hodnocení
+├─ 1.2 Cíl práce
+│  ├─ Integrace systému založeného na LLM
+│  ├─ Vytváření podpůrných komentářů ke zdrojovému kódu
+│  └─ Zhodnocení studentského řešení a návrhy na zlepšení
+└─ 1.3 Struktura práce
+
+2. Systém Kelvin
+├─ 2.1 Účel a použití systému
+│  ├─ Student odevzdává úkol
+│  ├─ Učitel hodnotí řešení
+│  └─ Učitel uděluje zpětnou vazbu a bodové hodnocení
+├─ 2.2 Architektura systému
+│  ├─ Backend
+│  ├─ API
+│  ├─ Frontend
+│  └─ Architektonický diagram systému
+├─ 2.3 Nasazení a provoz
+│  ├─ Nasazení pomocí Dockeru
+│  └─ Diagram nasazení (deployment diagram)
+└─ 2.4 Vývojové omezení a proces
+   ├─ Atomické pull requesty
+   ├─ Malý rozsah změn v pull requestech
+   ├─ Dlouhé čekání na code review
+   ├─ Migrace frontendu (Svelte → Vue)
+   ├─ Velký probíhající refaktoring
+   └─ Historický vývoj systému Kelvin
+      └─ Původ jako bakalářská / diplomová práce
+      └─ Postupný vznik technického dluhu („špagetový kód“)
+
+3. Velké jazykové modely
+├─ 3.1 Základní principy LLM
+│  ├─ Co je to LLM
+│  ├─ Historický vývoj
+│  ├─ Tokeny, parametry, kontext
+│  └─ Základní princip fungování modelů
+├─ 3.2 Analýza zdrojového kódu pomocí LLM
+│  ├─ Co je k tomu potřeba
+│  ├─ Postup analýzy
+│  └─ Požadavky na sémantické kroky a kontext
+├─ 3.3 Porovnání s tradičními statickými analyzátory
+│  ├─ Kompilátory a jejich warningy
+│  ├─ Nástroje jako Clang
+│  └─ Omezení tradičních přístupů
+└─ 3.4 Rizika a omezení použití LLM
+   ├─ Limit na počet tokenů
+   ├─ Výpočetní náročnost (GPU / CPU)
+   ├─ Paměťové nároky
+   └─ Ochrana dat a otázky GDPR při použití cloudových řešení
+
+4. Výběr modelů a vhodnost pro integraci
+├─ 4.1 Kritéria výběru
+│  ├─ Kvalita výstupů
+│  ├─ Dostupnost modelu
+│  ├─ Náročnost provozu
+│  └─ Schopnost pojmout celé studentské řešení
+├─ 4.2 Porovnání možností nasazení
+│  ├─ Cloudové API
+│  │  ├─ Hardwarové nároky
+│  │  ├─ Limity
+│  │  ├─ Ochrana dat
+│  │  └─ Náklady
+│  └─ On-premise řešení
+│     ├─ Hardwarové nároky
+│     ├─ Limity
+│     ├─ Ochrana dat
+│     └─ Náklady
+├─ 4.3 Technické nároky
+│  ├─ Rozdíl mezi použitím GPU a CPU
+│  ├─ Paralelizace zpracování
+│  └─ Batchování požadavků
+├─ 4.4 Analýza dostupných modelů
+│  ├─ Přehled dostupných modelů
+│  ├─ Modely zaměřené na zdrojový kód
+│  ├─ Modely zaměřené na text
+│  └─ Srovnávací tabulka vlastností modelů
+├─ 4.5 Návrh práce s prompty
+│  ├─ Struktura promptu
+│  ├─ Typy výstupů (komentáře k řádkům, shrnutí, hodnocení)
+│  └─ Iterativní ladění promptu
+└─ 4.6 Zvolená varianta a odůvodnění
+   ├─ Trade-offs jednotlivých řešení
+   └─ Odůvodnění volby konkrétního modelu
+
+5. Implementace do systému Kelvin
+├─ 5.1 Backend
+│  ├─ Integrace nové asynchronní části systému Kelvin
+│  ├─ Nezablokování existující evaluační pipeline
+│  ├─ Práce s LLM a odesílání dat
+│  ├─ Architektonický / sekvenční diagram
+│  └─ Omezení vývoje daná historickou architekturou („špagetový kód“)
+├─ 5.2 Frontend
+│  ├─ Zobrazení výstupu LLM
+│  ├─ Interakce učitele s návrhy LLM
+│  └─ Omezení vývoje kvůli migraci na Vue
+└─ 5.3 Řízení vývoje
+   ├─ Iterativní vývoj pomocí pull requestů
+   ├─ Code review proces
+   └─ Struktura commitů
+
+6. Vyhodnocení řešení
+├─ 6.1 Scénáře použití
+│  └─ Jak bude systém v praxi používán
+├─ 6.2 Přínos pro učitele
+│  └─ Jak systém pomáhá při hodnocení
+├─ 6.3 Experimenty na historických datech
+│  ├─ Popis dat a způsob jejich zpracování
+│  ├─ Analýza výstupů
+│  ├─ Výběr a ladění promptu
+│  └─ Nastavení parametrů modelu (teplota apod.)
+└─ 6.4 Možný dopad na hodnocení
+   ├─ Riziko přehnaného spoléhání se na LLM
+   ├─ Chybovost modelu
+   └─ Nutnost lidské kontroly
+
+7. Doporučení pro další rozvoj systému
+├─ Iterativní zlepšování promptů
+├─ Využití dalších verzí modelů
+├─ Personalizace podle typu úlohy nebo cvičení (nejen C++)
+└─ Další možnosti rozšíření systému
+
+8. Závěr
