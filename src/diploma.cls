@@ -94,7 +94,7 @@
 \setcounter{Dipl@CurrentThesisLanguage}{\Dipl@CzechLanguage}
 \Dipl@BabelLanguageOptions={english,main=czech}
 \Dipl@SupervisorCaption={Vedoucí práce}
-\Dipl@FacultyLogoFileName={../resources/images/FEI_CZ.pdf}
+\Dipl@FacultyLogoFileName={resources/images/FEI_CZ.pdf}
 }
 \DeclareOption{english}
 {
@@ -108,7 +108,7 @@
 \setcounter{Dipl@CurrentThesisLanguage}{\Dipl@SlovakLanguage}
 \Dipl@BabelLanguageOptions={english,main=slovak}
 \Dipl@SupervisorCaption={Vedoucí práce}
-\Dipl@FacultyLogoFileName={../resources/images/FEI_CZ.pdf}
+\Dipl@FacultyLogoFileName={resources/images/FEI_CZ.pdf}
 }
 \DeclareOption{bachelor}
 {
