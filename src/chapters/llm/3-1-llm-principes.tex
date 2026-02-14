@@ -1,0 +1,216 @@
+\section{Základní principy LLM}
+\label{sec:llm-principles}
+
+\TODO{Skipnout podsekci a nechat hned za sekci?}
+
+\subsection{Co jsou LLM?}
+\label{subsec:llm-about}
+
+% https://www.redhat.com/en/topics/ai/what-are-large-language-models
+% https://arxiv.org/pdf/2503.17502
+
+Velké jazykové modely představují třídu modelů strojového učení, které dosahují výrazných výsledků v úlohách zpracování přirozeného jazyka.
+Jsou trénovány na rozsáhlých textových datech a jejich cílem je modelovat pravděpodobnostní rozdělení posloupností tokenů.
+Zjednodušeně řečeno se učí předpovídat, jaký text pravděpodobně následuje za daným vstupem.
+
+V posledních letech se ukazuje, že zdrojový kód lze z pohledu modelu chápat jako specifický jazyk.
+Má jasně definovanou syntaxi a do určité míry i sémantiku vyjádřitelnou prostřednictvím pravidelných vzorů a závislostí v textu.
+Tato vlastnost umožňuje využít LLM nejen pro generování kódu, ale také pro jeho analýzu, vysvětlování, refactoring nebo detekci potenciálních problémů.
+
+V kontextu této práce je klíčové, že zdrojový kód je pro LLM stále text - pouze s přísnější strukturou a vyšší mírou formálnosti.
+Model tak může nad kódem provádět například:
+
+\begin{itemize}
+    \item \textbf{Syntaktickou analýzu} - rozpoznávání struktur, funkcí, tříd nebo proměnných,
+    \item \textbf{Sémantickou analýzu} - interpretaci významu jednotlivých částí kódu a jejich vztahů,
+    \item \textbf{Detekci potenciálních problémů} - identifikaci neefektivních konstrukcí nebo rizikových míst,
+    \item \textbf{Generování vysvětlení} - popis toho, co daný kód dělá a jakým způsobem funguje.
+\end{itemize}
+
+Je však důležité zdůraznit, že LLM typicky negeneruje formální důkaz správnosti programu.
+Jedná se o pravděpodobnostní model, který vytváří interpretaci vstupu na základě vzorů, jež se naučil během trénování.
+Výsledná analýza se tak blíží spíše heuristickému čtení kódu zkušeným programátorem než formální verifikaci.
+
+\subsection{Historický vývoj}
+\label{subsec:llm-history}
+
+% https://www.geeksforgeeks.org/blogs/history-and-evolution-of-llms/
+% https://arxiv.org/abs/2206.08896
+
+Vývoj jazykových modelů lze zjednodušeně rozdělit do několika etap, které postupně vedly k dnešním velkým jazykovým modelům.
+
+\begin{itemize}
+    \item \textbf{Statistické a n-gramové modely} -
+    První přístupy byly založeny na počítání pravděpodobností výskytu posloupností slov délky $n$.
+    Tyto modely byly jednoduché, ale pracovaly pouze s velmi omezeným kontextem a nedokázaly zachytit dlouhodobé závislosti v textu.
+
+    \item \textbf{Rekurentní neuronové sítě (RNN)} -
+    Další etapa přinesla modely schopné zpracovávat sekvence postupně a uchovávat informaci o předchozím kontextu.
+    V praxi však narážely na problémy s dlouhými závislostmi a obtížnou paralelizací výpočtů.
+
+    \item \textbf{Architektura Transformer} -
+    Zásadní zlom nastal s publikací architektury Transformer.
+    Ta využívá mechanismus self-attention, který umožňuje modelu zohlednit vztahy mezi všemi částmi vstupu současně.
+    Díky tomu je možné efektivněji zachytit dlouhé závislosti a zároveň paralelizovat výpočty.
+
+    \item \textbf{Instrukční ladění a specializace} -
+    Moderní modely již nejsou pouze generátory textu.
+    Dodatečně se ladí na práci s instrukcemi, konverzací nebo konkrétní doménou, například se zdrojovým kódem.
+    Specializované modely zaměřené na programování často dosahují lepších výsledků při úlohách typu code review nebo refactoring než obecné jazykové modely.
+\end{itemize}
+
+\TODO{Více rozebat osu času, od 1960 podle geeks for geeks článku.}
+\TODO{Časová osa vývoje jazykových modelů (N-gram → RNN → Transformer → Instruct/RLHF). Kvalita vs náročnost, roky přelomu.}
+
+\subsection{Tokeny, parametry a kontext}
+\label{subsec:llm-tokens-parameters-context}
+
+\subsubsection*{Tokenizace}
+
+Tokenizace převádí vstupní text na posloupnost diskrétních jednotek zvaných tokeny.
+V praxi se používají tzv.\ subword metody, které umožňují reprezentovat i neznámé nebo složené výrazy.
+
+V případě zdrojového kódu vznikají tokeny nejen pro klíčová slova, ale také pro operátory, závorky, identifikátory nebo jejich části.
+Například výraz \code{std::vector<int>} je rozdělen do více tokenů.
+To znamená, že i relativně krátký kód může ve skutečnosti obsahovat velké množství tokenů.
+
+Z toho vyplývá několik důsledků:
+
+\begin{itemize}
+    \item dlouhé identifikátory zvyšují počet tokenů,
+    \item formátování a komentáře ovlivňují délku vstupu,
+    \item některé programovací konstrukce jsou z tokenového hlediska náročnější než jiné.
+\end{itemize}
+
+\TODO{Přidat příklady tokenizace zdrojového kódu.}
+
+\subsubsection*{Parametry}
+
+Parametry modelu představují váhy neuronové sítě.
+Vyšší počet parametrů obecně znamená vyšší kapacitu modelu zachytit složité vzory v datech.
+Zároveň však roste výpočetní a paměťová náročnost.
+
+V kontextu analýzy zdrojového kódu je důležité, že větší modely často lépe pracují s komplexními strukturami nebo delšími závislostmi.
+Tento vztah však není lineární a kvalita výstupu závisí i na kvalitě trénovaných dat a následném ladění modelu.
+
+\subsubsection*{Kontextové okno}
+
+Kontextové okno určuje maximální délku vstupu (v tokenech), kterou je model schopen zpracovat v jednom průchodu.
+Toto omezení je při analýze zdrojového kódu zásadní.
+
+Reálné projekty nebo rozsáhlejší studentské úlohy mohou jednoduše přesáhnout limit kontextu.
+V takovém případě je nutné vstup rozdělit na části a výsledky následně agregovat, případně použít modely s rozšířeným kontextem, které jsou však výpočetně náročnější.
+Pro běžné studentské úlohy se však nepředpokládá extrémní rozsah kódu, a proto jsou modely s kontextem v řádu tisíců až desítek tisíc tokenů pro tento účel zpravidla dostačující.
+
+\TODO{Graf velikosti zdrojového kódu vs počet tokenů.}
+
+\subsection{Základní princip fungování modelů}
+\label{subsec:llm-functioning}
+
+Většina moderních velkých jazykových modelů je založena na tzv.\ autoregresivním principu.
+Autoregresivní model generuje výstup postupně, vždy po jednom tokenu.
+To znamená, že při generování textu model v každém kroku predikuje pravděpodobnostní rozdělení dalšího možného tokenu na základě všech předchozích tokenů, které již byly vygenerovány.
+Vybraný token se následně přidá na konec vstupu a celý proces se opakuje, dokud není generování ukončeno.
+
+Zjednodušeně lze říci, že model vždy odpovídá na otázku:
+„Jaký token s nejvyšší pravděpodobností následuje po dosavadním textu?“
+
+Tento proces se nazývá inference.
+V každém kroku inference model vypočítá distribuční rozdělení pravděpodobností nad celým slovníkem tokenů.
+Samotný výběr konkrétního tokenu může probíhat různými způsoby – buď deterministicky (například výběrem nejpravděpodobnějšího tokenu), nebo pomocí řízeného náhodného vzorkování.
+
+Chování modelu během generování lze ovlivnit několika parametry:
+
+\begin{itemize}
+    \item \textbf{teplota (temperature)} -
+    určuje míru náhodnosti při výběru tokenů.
+    Nízká teplota vede k determinističtějším a konzervativnějším výstupům, zatímco vyšší teplota podporuje variabilitu a kreativitu,
+
+    \item \textbf{top-k} a \textbf{top-p} -
+    omezují výběr pouze na nejpravděpodobnější tokeny, čímž zabraňují výběru velmi nepravděpodobných možností,
+
+    \item \textbf{seed} -
+    umožňuje částečnou reprodukovatelnost generování při použití náhodného vzorkování.
+\end{itemize}
+
+V kontextu analýzy zdrojového kódu je obvykle žádoucí co nejvyšší míra determinismu.
+Cílem není kreativní generování textu, ale konzistentní a opakovatelná diagnostika možných problémů.
+Z tohoto důvodu se používají nízké hodnoty teploty a omezené vzorkování.
+
+Prakticky lze z hlediska fungování modelu zjednodušit do následujících kroků:
+
+\begin{enumerate}
+    \item vstupní text je rozdělen na tokeny,
+    \item jednotlivé tokeny jsou převedeny na numerické reprezentace (embeddingy) včetně poziční informace,
+    \item data procházejí opakovaně několika bloky architektury Transformer (self-attention a feed-forward vrstvy),
+    \item výstupní vrstva vypočítá pravděpodobnostní rozdělení nad možnými dalšími tokeny,
+    \item na základě zvoleného dekódovacího mechanismu je vybrán konkrétní token,
+    \item proces se opakuje až do dosažení konce generování.
+\end{enumerate}
+
+\subsection{Rozdíly mezi typy modelů}
+\label{subsec:llm-differences}
+
+Vývoj jazykových modelů probíhal postupně a jednotlivé generace modelů se od sebe výrazně liší nejen architekturou, ale i schopnostmi a oblastí použití.
+Pro lepší pochopení současných LLM je vhodné stručně porovnat hlavní přístupy, které se v historii objevily.
+
+\subsubsection*{Pravidlové systémy}
+
+Jedním z prvních systémů byl například model ELIZA (1966), který byl založen čistě na pravidlech a klíčových slovech.
+Takové systémy nebyly založeny na učení z dat, ale na předem definovaných vzorech odpovědí.
+Nevýhodou byla naprostá absence skutečného porozumění – model pouze mechanicky nahrazoval části vstupu podle pravidel.
+
+\subsubsection*{Rekurentní neuronové sítě}
+
+Dalším krokem byly neuronové modely založené na rekurentních sítích (RNN).
+Významným milníkem byl model LSTM (1997), který řešil problém mizejícího gradientu a umožnil lépe pracovat s pamětí předchozího kontextu.
+Přesto však tyto modely měly obtíže se zachycením dlouhodobých závislostí a byly výpočetně náročné při práci s delšími sekvencemi.
+
+\subsubsection*{Embeddingové modely}
+
+Modely jako Word2Vec (2013) přinesly schopnost převádět slova do vektorových reprezentací, které zachycují jejich sémantické vztahy.
+Tyto modely však pracovaly s kontextem omezeně a generovaly reprezentace nezávislé na konkrétním použití slova ve větě.
+
+\subsubsection*{Transformer modely}
+
+Zásadní zlom přinesla architektura Transformer.
+Modely jako BERT (2018) využívají tzv.\ bidirekcionální zpracování, což znamená, že berou v úvahu kontext zleva i zprava.
+Jsou velmi silné v porozumění textu, ale samy o sobě nejsou určeny pro generování delších sekvencí textu.
+
+Naopak modely rodiny Generative Pre-trained Transformer (GPT) využívají unidirekcionální autoregresivní přístup.
+Jsou optimalizovány pro generování textu a postupně se rozšířily i na multimodální vstupy (text, obraz, kód).
+S rostoucím počtem parametrů výrazně vzrostla jejich schopnost pracovat s kontextem a provádět tzv\. few-shot učení, tedy řešit úlohy na základě několika příkladů.
+
+Nevýhodou těchto modelů je vysoká výpočetní náročnost, finanční náklady na provoz a stále přítomná rizika, jako jsou faktické nepřesnosti nebo bias.
+
+\subsubsection*{Multimodální modely}
+
+Novější generace modelů rozšiřují práci pouze s textem o další modality.
+Multimodální modely dokáží pracovat například s kombinací textu a obrazu.
+Tím se přibližují komplexnějšímu vnímání vstupních dat.
+V kontextu této práce je však primárně relevantní textová a kódová složka.
+
+\subsubsection*{Specializované (doménové) modely}
+
+Další kategorií jsou modely specializované na konkrétní oblast, například medicínu, finance nebo právo.
+Tyto modely jsou trénovány nebo dodatečně laděny na doménově specifických datech.
+V oblasti programování existují modely zaměřené přímo na zdrojový kód, které obvykle dosahují lepších výsledků při úlohách jako je generování nebo analýza kódu než obecné jazykové modely.
+
+Mezi tyto modely patří například qwen3-coder, codegemma, deep-coder nebo modely od OpenAI jako Codex.
+Jejich podrobnější analýzou se budeme zabývat v následující kapitole.
+
+\subsubsection*{Rozdělení podle způsobu trénování}
+
+Z hlediska trénování lze modely rozdělit do několika skupin:
+
+\begin{itemize}
+    \item \textbf{Předtrénované modely} – univerzální modely trénované na rozsáhlých datech, které lze použít pro široké spektrum úloh bez dalšího trénování.
+    \item \textbf{Jemně doladěné (fine-tuned) modely} – modely, které jsou dále specializovány na konkrétní úlohu nebo doménu pomocí dodatečných trénovaných dat.
+    \item \textbf{Multimodální modely} – modely schopné pracovat s více typy vstupních dat (např\. text a obraz).
+    \item \textbf{Doménově specifické modely} – modely optimalizované pro konkrétní průmyslové nebo odborné oblasti.
+\end{itemize}
+
+Z pohledu této diplomové práce jsou nejrelevantnější autoregresivní transformer modely, které umožňují generovat textové výstupy na základě vstupního zdrojového kódu.
+Tyto modely jsou vhodné pro generování komentářů, shrnutí řešení a identifikaci potenciálních problémů ve studentských úlohách.
+
+\endinput
