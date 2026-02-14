@@ -45,6 +45,8 @@
 \AddAcronym{UX}{User Experience}
 \AddAcronym{CI}{Continuous Integration}
 \AddAcronym{CD}{Continuous Deployment}
+\AddAcronym{RNN}{Recurrent Neural Network}
+\AddAcronym{GPT}{Generative Pre-trained Transformer}
 
 % TODO: Write acknowledgement
 \Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
@@ -53,6 +55,12 @@
 
 % Useful to.do command for marking places in the text that need to be completed
 \newcommand{\TODO}[1]{\textbf{\textcolor{red}{TODO:}} #1}
+
+% Custom command for inline code snippets
+\definecolor{codegray}{gray}{0.95}
+\newcommand{\code}[1]{%
+    \fcolorbox{black}{codegray}{\texttt{#1}}%
+}
 
 %
 % ==] Main document [==
