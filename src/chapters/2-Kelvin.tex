@@ -1,0 +1,96 @@
+\chapter{System Kelvin}
+\label{ch:kelvin}
+
+Tato kapitola se věnuje školnímu systému Kelvin, který slouží jako základní platforma pro odevzdávání a hodnocení programátorských úloh.
+Cílem kapitoly je přiblížit účel systému, jeho architekturu, způsob nasazení a především vývojová omezení, která významně ovlivnila návrh a implementaci řešení popsaného v této diplomové práci.
+
+\section{Účel systému}
+\label{sec:kelvin-purpose}
+
+Hlavním účelem systému Kelvin je podpora výuky programování, především v jazycích C, C++, Python nebo Rust.
+Systém poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh.
+Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim zpětnou vazbu a udělovat bodové hodnocení.
+
+Typický, zjednodušený scénář použití systému probíhá následovně:
+\begin{itemize}
+    \item vyučující vytvoří úlohu a zveřejní ji studentům,
+    \item student odevzdá své řešení úlohy ve formě zdrojového kódu,
+    \item systém řešení uloží a případně spustí automatické testy, které vygenerují základní zpětnou vazbu,
+    \item vyučující provede kontrolu zdrojového kódu, přidá komentáře k jednotlivým částem řešení a udělí bodové hodnocení,
+    \item student obdrží zpětnou vazbu a může se případně zapojit do další diskuse s vyučujícím ohledně svého řešení.
+\end{itemize}
+
+Významnou výhodou systému Kelvin je možnost přidávat komentáře přímo ke konkrétním řádkům zdrojového kódu.
+Díky tomu může vyučující upozornit na konkrétní chyby, nevhodné konstrukce nebo navrhnout možná zlepšení přímo v kontextu řešení, což je pro studenty velmi přínosné a srozumitelné.
+
+Systém Kelvin je využíván nejen pro klasické domácí úlohy, ale také pro testy, kvízy a další formy hodnocení, kde není nutné pracovat se zdrojovým kódem.
+
+\section{Architektura systému}
+\label{sec:kelvin-architecture}
+
+Z architektonického hlediska je systém Kelvin realizován jako webová aplikace, která je rozdělena na backendovou a frontendovou část.
+Backend je implementován v programovacím jazyce Python s využitím frameworku Django, který zajišťuje zpracování požadavků, práci s databází a autentizaci uživatelů.
+
+Frontendová část systému je z historického hlediska výrazně komplikovanější.
+Původní implementace byla postavena na Django templatech, které byly v průběhu času postupně rozšiřovány o komponenty psané ve frameworku Svelte.
+V současné době však probíhá migrace ze Svelte na framework Vue, což má za následek, že se ve zdrojovém kódu systému současně nachází mix třech různých frontendových technologií, konkrétně tedy Django templaty, Svelte komponenty a Vue komponenty.
+
+Současná kombinace více frontendových technologií výrazně zvyšuje složitost vývoje i údržby celého systému.
+Z tohoto důvodu je přidávání nových funkcionalit na frontendové straně omezeno interními pravidly, jejichž cílem je zabránit dalšímu rozšiřování původní Svelte implementace a postupně směřovat celý systém k jednotnému řešení postavenému na frameworku Vue.
+
+Komunikace mezi frontendem a backendem probíhá prostřednictvím aplikačního rozhraní API, které je realizováno pomocí frameworku Django Ninja.
+Toto rozhraní umožňuje asynchronní zpracování požadavků a zároveň odděluje prezentační logiku od aplikační logiky systému.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{resources/diagrams/kelvin-architecture}
+    \caption{Zjednodušená architektura systému Kelvin}\label{fig:kelvin-architecture}
+    \TODO{Přidat referenci na docs https://mrlvsb.github.io/kelvin/intro/architecture}
+\end{figure}
+
+\section{Nasazení a provoz systému}
+\label{sec:kelvin-deployment}
+
+Pro produkční nasazení je systém Kelvin distribuován pomocí kontejnerizační technologie Docker, přičemž jednotlivé části aplikace jsou spravovány nástrojem Docker Compose.
+Tento přístup umožňuje zajistit jednotné běhové prostředí pro vývoj i produkci a zároveň usnadňuje správu závislostí aplikace.
+
+Proces nasazení systému je automatizován pomocí nástroje GitHub Actions, který po každém úspěšném sloučení změn do hlavní větve repozitáře provede sestavení Docker obrazů a jejich nasazení na produkční server.
+Automatizovaný deployment snižuje riziko chyb při manuálním nasazování a zajišťuje, že produkční prostředí odpovídá aktuálnímu stavu zdrojového kódu.
+
+Využití Dockeru a Docker Compose zároveň zjednodušuje provozní správu systému a umožňuje jeho další rozšiřování bez nutnosti zásadních změn v infrastruktuře.
+
+\section{Vývojová omezení a proces}
+\label{sec:kelvin-development}
+
+Vývoj systému Kelvin je ovlivněn několika zásadními omezeními, která vyplývají jak z jeho historického vývoje, tak z organizačních podmínek jeho správy a údržby.
+Tato omezení mají přímý dopad na návrh i samotnou implementaci řešení popsaného v této diplomové práci.
+
+Jedním z hlavních pravidel vývoje je požadavek na malé a atomické pull requesty.
+Každý pull request by měl obsahovat maximálně přibližně 500 změněných řádků kódu a měl by se zaměřovat pouze na jednu konkrétní změnu nebo problém.
+Cílem tohoto přístupu je zjednodušení procesu code review a snížení rizika zavlečení chyb do produkčního systému.
+V praxi to však znamená nutnost rozdělovat i logicky související úpravy do více menších kroků, což může celý vývojový proces prodlužovat.
+
+Dalším významným omezením je probíhající migrace frontendové části systému ze frameworku Svelte na framework Vue.
+Při úpravách nebo přidávání nových funkcionalit by neměly vznikat nové Svelte komponenty.
+V případě rozsáhlejších změn je tak často nutné nejprve přepsat existující část aplikace do Vue a teprve následně provést požadovanou úpravu.
+Tento postup výrazně zvyšuje časovou i technickou náročnost vývoje, zejména u funkcionalit zasahujících do uživatelského rozhraní.
+
+Důvodem této migrace je zejména snaha o sjednocení technologického stacku, zlepšení dlouhodobé udržovatelnosti a snížení vstupní bariéry pro nové vývojáře systému.
+
+Proces schvalování změn představuje další omezení vývoje.
+Code review je v současné době zajišťováno omezeným počtem vyučujících, kteří se systému věnují vedle svých dalších povinností.
+Z tohoto důvodu se může stát, že zpracování pull requestu trvá i několik týdnů.
+Tento fakt má přímý dopad na tempo vývoje a vyžaduje pečlivé plánování jednotlivých kroků implementace s dostatečným časovým předstihem.
+
+\subsection{Historický vývoj systému}
+\label{subsec:kelvin-history}
+
+Systém Kelvin vznikl původně jako obyčejný školní projekt od studenta Dana Trnky \footnote[1]{https://github.com/trnila}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
+Tento způsob vývoje bez jednotné dlouhodobé architektonické vize vedl ke vzniku technického dluhu.
+Ten se v systému projevuje například ve formě dlouhých a obtížně čitelných souborů, nedostatečného nebo chybějícího typování a míchání různých programátorských přístupů.
+
+Uvedené skutečnosti mají výrazný vliv na implementaci nových funkcionalit.
+Před přidáním nové aplikační logiky je často nutné provést částečný refaktoring existujícího kódu, aby byla zachována alespoň základní úroveň čitelnosti a udržovatelnosti systému.
+Tato nutnost dále zpomaluje vývoj, ale zároveň je nezbytná pro dlouhodobou stabilitu a rozšiřitelnost systému Kelvin.
+
+\endinput
