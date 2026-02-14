@@ -63,12 +63,13 @@
     \listoftables
     \clearpage
 
+    % Source codes
     \renewcommand{\lstlistlistingname}{Seznam zdrojových kódů}
     \addcontentsline{toc}{chapter}{Seznam zdrojových kódů}
     \lstlistoflistings
-    \clearpage
 
     % Introduction
+    \clearpage
     \input{chapters/1-Introduction}
 
     % Main chapters
@@ -76,9 +77,15 @@
 
     % Conclusion
     \input{chapters/Conclusion}
+    \input{chapters/3-LLM}
+    \input{chapters/4-Selection}
+    \input{chapters/5-Implementation}
+    \input{chapters/6-Summary}
+    \input{chapters/7-Suggestion}
+    \input{chapters/8-Conclusion}
 
     \appendix
-    \input{chapters/Appendix}
+    \input{chapters/9-Appendix}
 
     % Bibliography
     \printbibliography[title={Literatura}, heading=bibintoc]
