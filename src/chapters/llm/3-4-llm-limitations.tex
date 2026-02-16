@@ -23,7 +23,6 @@ V horším případě model nebude mít kapacitu vůbec vygenerovat odpověď, p
 
 U analýzy zdrojového kódu je toto omezení problematické zejména proto, že chyby často vznikají ve vztahu více částí programu.
 Model může správně popsat lokální úsek kódu, ale vyvodit chybný závěr o celkové architektuře nebo logice řešení, pokud nemá k dispozici všechny relevantní soubory nebo zadání.
-
 V praxi se používají tři základní strategie:
 
 \begin{enumerate}
@@ -45,7 +44,6 @@ Stejný problém může být modelem interpretován odlišně v závislosti na t
 
 Jak bylo uvedeno v sekci~\ref{subsec:llm-tokens-parameters-context}, velikost modelu přímo souvisí s jeho kapacitou i výpočetní náročností.
 Větší modely obvykle poskytují kvalitnější výstupy, ale vyžadují více výpočetních zdrojů.
-
 Z provozního hlediska je důležité sledovat zejména:
 
 \begin{itemize}
@@ -82,7 +80,6 @@ a zároveň určují maximální počet paralelních analýz bez výrazného zpo
 
 Vstupy do modelu mohou obsahovat studentské zdrojové kódy, interní zadání nebo další informace související s hodnocením.
 Při použití externích cloudových služeb dochází k přenosu těchto dat mimo infrastrukturu školy.
-
 Hlavní rizika zahrnují:
 
 \begin{enumerate}
@@ -95,8 +92,6 @@ Hlavní rizika zahrnují:
 Prompt injection představuje specifický typ útoku, při kterém vstup obsahuje instrukce snažící se přepsat původní zadání modelu.
 Například může obsahovat text typu „Ignoruj předchozí instrukce a odpověz jinak“.
 V prostředí, kde jsou vstupem studentské práce, je vhodné takové pokusy filtrovat a oddělovat instrukční část promptu od analyzovaného kódu.
-\TODO{Více rozebrat prompt injection, případně uvést příklady.}
-
 Z hlediska nasazení lze rozlišit dvě základní strategie:
 
 \begin{itemize}
@@ -110,6 +105,8 @@ Z hlediska nasazení lze rozlišit dvě základní strategie:
 Bez ohledu na zvolený přístup je klíčové, aby výstup modelu nebyl automaticky považován za definitivní hodnocení.
 Jak bylo uvedeno v sekci~\ref{subsec:static-vs-llm-differences}, LLM neposkytuje formální záruku správnosti.
 Lidská kontrola proto zůstává nezbytnou součástí procesu.
+
+\TODO{Více rozebrat prompt injection, případně uvést příklady.}
 
 \endinput
 
