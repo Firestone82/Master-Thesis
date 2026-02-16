@@ -90,7 +90,7 @@ jobs:
             </style>
           </head>
           <body>
-            (object data="main.pdf" type="application/pdf">
+            <object data="main.pdf" type="application/pdf">
               <p>Unable to display PDF in browser.
               <a href="main.pdf">Download the thesis PDF</a>.</p>
             </object>
