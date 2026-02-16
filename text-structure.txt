@@ -43,9 +43,9 @@
 │  ├─ Postup analýzy
 │  └─ Požadavky na sémantické kroky a kontext
 ├─ 3.3 Porovnání s tradičními statickými analyzátory
-│  ├─ Kompilátory a jejich warningy
-│  ├─ Nástroje jako Clang
-│  └─ Omezení tradičních přístupů
+│  ├─ Typy statických analyzátorů
+│  ├─ Zásadní rozdíly v přístupu
+│  └─ Možnost kombinace přístupů
 └─ 3.4 Rizika a omezení použití LLM
    ├─ Limit na počet tokenů
    ├─ Výpočetní náročnost (GPU / CPU)

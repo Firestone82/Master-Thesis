@@ -1,0 +1,56 @@
+\section{Rizika a omezení použití LLM}
+\label{sec:llm-limitations}
+
+% https://www.marigold.cz/ai/llm
+
+Použití velkých jazykových modelů v reálných systémech, jako je Kelvin, s sebou nese řadu technických i bezpečnostních výzev, v případě špatného použití.
+I když jsou LLM velmi schopné při analýze textu a generování komentářů, jejich nasazení musí brát v úvahu jejich omezení, výpočetní nároky a rizika spojená s ochranou dat.
+
+\subsection{Limit na počet tokenů}
+\label{subsec:llm-token-limit}
+
+Jak již bylo zmíněno v sekci~\ref{subsec:llm-tokens-parameters-context}, LLM mají pevně dané kontextové okno, tj.~maximální počet tokenů, které mohou zpracovat v jednom „běhu“ inference.
+Pokud vstup překročí tento limit, model nemůže zpracovat celý text najednou, což je problém zejména u dlouhých zdrojových kódů nebo rozsáhlých projektů.
+
+\TODO{Dopsat limity, nějaké chunkování, atd..}
+
+\subsection{Vypočetní náročnost na GPU nebo CPU}
+\label{subsec:llm-computational-cost}
+
+Inference velkých modelů je výpočetně náročná.
+To znamená, že kromě samotného kódu model potřebuje i dostatek výpočetního výkonu:
+
+\begin{itemize}
+    \item CPU inference: na běžných procesorech je inference pomalá, zejména u modelů s vysokým počtem parametrů.
+    \item GPU inference: výrazně rychlejší, ale vyžaduje specializovaný hardware s dostatečnou pamětí grafického procesoru (VRAM).
+    \item Cloud vs On-Premise: cloudová řešení poskytují výkon služeb s GPU, ale stojí to peníze a přenáší se data mimo interní infrastrukturu.
+\end{itemize}
+
+Prakticky má výpočetní náročnost dopad na latenci odpovědi a náklady na provoz systému, zejména pokud je potřeba zpracovávat velké množství kódů současně.
+V případě cloudových služeb je naopak třeba zvážit bezpečnost dat, které se posílají do externího prostředí a zpět.
+
+\subsection{Paměťové nároky}
+\label{subsec:llm-memory-requirements}
+
+Velké jazykové modely nejsou náročné jen na výpočetní výkonnost, ale i na paměť:
+
+\begin{itemize}
+    \item Váhy modelu: ukládají se do paměti při načítání modelu – čím větší model, tím více paměti potřebuje.
+    \item Cache pro attention: během generování odpovědi model udržuje cache s doposud zpracovanými tokeny, což zvyšuje nároky s rostoucím kontextem.
+    \item Batchování: pokud systém zpracovává více dotazů najednou, je potřeba více paměti, než jen pro jeden vstup.
+\end{itemize}
+
+Tyto paměťové požadavky ovlivňují:
+
+\begin{itemize}
+    \item jak velký model může být efektivně nasazen lokálně,
+    \item kolik paralelních požadavků je možné zpracovat bez významného zpomalení.
+\end{itemize}
+
+\subsection{Rizika spojená s ochranou dat}
+\label{subsec:llm-data-security}
+
+\TODO{Dopsat rizika spojená s ochranou dat, zdrojové kody od studentů, zadání úloh, atd..}
+
+\endinput
+
