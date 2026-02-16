@@ -1,17 +1,26 @@
 \documentclass[czech,master]{diploma}
 
+% Standard packages
 \usepackage[autostyle=true,czech=quotes]{csquotes} % correct quotation typesetting, support for biblatex
 \usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliography
 \usepackage{dcolumn} % table columns with numeric values
 \usepackage{subfig} % macros for "subfigures" and "subtables"
+
+% Custom packages
 \usepackage{float} % better figure placement (H)
 \usepackage{bookmark} % Required for generating PDF bookmarks
 \usepackage{hyperref} % Links in PDF
 \usepackage{subcaption} % For multiple images in one float
 \usepackage{tikz} % For drawing in LaTeX
 \usepackage{amsmath} % For improved equation typesetting
+\usepackage{tablefootnote} % For footnotes in tables
+\usepackage{color} % For colored text (e.g., TODO notes)
+\usepackage{array} % For advanced table formatting
 \usepackage[cpp]{diplomalst}
 \usepackage{fontspec}
+
+% Table of contents depth - TODO: Remove in final version!
+\setcounter{tocdepth}{3}
 
 \renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
 \newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
@@ -23,21 +32,39 @@
 \EnglishThesisTitle{Integrating large language models into the Kelvin system}
 \SubmissionYear{2025}
 
-\ThesisAssignmentFileName{../resources/ThesisSpecification_MIK0486.pdf}
+\ThesisAssignmentFileName{resources/ThesisSpecification_MIK0486.pdf}
 
-\CzechAbstract{} % TODO: Abstract
-\CzechKeywords{} % TODO: Keywords
+\CzechAbstract{\TODO{Přidat český abstrakt práce}}
+\CzechKeywords{\TODO{Přidat řeské keywordy práce}}
 
-\EnglishAbstract{} % TODO: Abstract
-\EnglishKeywords{} % TODO: Keywords
+\EnglishAbstract{\TODO{Přidat anglický abstrakt práce}}
+\EnglishKeywords{\TODO{Přidat anglické keywordy práce}}
 
 % TODO: add acronyms used in the thesis
-\AddAcronym{TUG}{\TeX{} Users Group}
+\AddAcronym{LLM}{Large Language Model}
+\AddAcronym{PR}{Pull Request}
+\AddAcronym{API}{Application Programming Interface}
+\AddAcronym{UI}{User Interface}
+\AddAcronym{UX}{User Experience}
+\AddAcronym{CI}{Continuous Integration}
+\AddAcronym{CD}{Continuous Deployment}
+\AddAcronym{RNN}{Recurrent Neural Network}
+\AddAcronym{GPT}{Generative Pre-trained Transformer}
 
-% TODO: Write acknowledgement
-\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
+\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla. \TODO: Doplnit konkrétní jména a poděkování.}
 
-\addbibresource{../resources/sauce.bib}
+\addbibresource{resources/sauce.bib}
+
+% Useful to.do command for marking places in the text that need to be completed
+\newcommand{\TODO}[1]{\textbf{\textcolor{red}{TODO:}} #1}
+
+% Custom command for inline code snippets
+\definecolor{codegray}{gray}{0.95}
+\newcommand{\code}[1]{%
+    \fcolorbox{black}{codegray}{\texttt{#1}}%
+}
+
+\newcommand{\tableref}[1]{(\hyperref[#1]{Tabulka~\ref*{#1}})}
 
 %
 % ==] Main document [==
@@ -54,22 +81,26 @@
     \listoftables
     \clearpage
 
+    % Source codes
     \renewcommand{\lstlistlistingname}{Seznam zdrojových kódů}
     \addcontentsline{toc}{chapter}{Seznam zdrojových kódů}
     \lstlistoflistings
-    \clearpage
 
     % Introduction
-    \input{chapters/Introduction}
+    \clearpage
+    \input{chapters/1-Introduction}
 
     % Main chapters
-    \input{chapters/Theory}
-
-    % Conclusion
-    \input{chapters/Conclusion}
+    \input{chapters/2-Kelvin}
+    \input{chapters/3-LLM}
+    \input{chapters/4-Selection}
+    \input{chapters/5-Implementation}
+    \input{chapters/6-Summary}
+    \input{chapters/7-Suggestion}
+    \input{chapters/8-Conclusion}
 
     \appendix
-    \input{chapters/Appendix}
+    \input{chapters/9-Appendix}
 
     % Bibliography
     \printbibliography[title={Literatura}, heading=bibintoc]

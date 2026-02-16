@@ -1,0 +1,112 @@
+\section{Rizika a omezení použití LLM}
+\label{sec:llm-limitations}
+
+% https://www.marigold.cz/ai/llm
+% https://www.ibm.com/think/topics/llm-limitations
+% https://owasp.org/www-community/attacks/PromptInjection
+% https://www.nist.gov/itl/ai-risk-management-framework
+
+Jak bylo popsáno v sekci~\ref{sec:llm-principles}, velké jazykové modely jsou pravděpodobnostní systémy.
+Jejich výstup nepředstavuje formální důkaz správnosti, ale kvalifikovaný odhad založený na statistických vzorech naučených během trénování.
+Tato vlastnost je užitečná pro generování komentářů a vysvětlení, avšak současně představuje zásadní omezení.
+
+Tato sekce navazuje na porovnání se statickou analýzou v sekci~\ref{subsec:static-vs-llm-differences} a rozebírá technická, provozní a bezpečnostní rizika spojená s nasazením LLM v reálném prostředí.
+V kontextu školního systému je navíc nutné zohlednit etické a právní aspekty práce s daty studentů.
+
+\subsection{Limit kontextového okna}
+\label{subsec:llm-token-limit}
+
+Tokenizace a význam kontextového okna byly vysvětleny v sekci~\ref{subsec:llm-tokens-parameters-context}.
+Každý model je omezen maximálním počtem tokenů, které může zpracovat v jednom průchodu inference.
+Pokud vstup tento limit překročí, část informací se do modelu vůbec nedostane.
+V horším případě model nebude mít kapacitu vůbec vygenerovat odpověď, protože i generovaný výstup by překročil limit.
+
+U analýzy zdrojového kódu je toto omezení problematické zejména proto, že chyby často vznikají ve vztahu více částí programu.
+Model může správně popsat lokální úsek kódu, ale vyvodit chybný závěr o celkové architektuře nebo logice řešení, pokud nemá k dispozici všechny relevantní soubory nebo zadání.
+V praxi se používají tři základní strategie:
+
+\begin{enumerate}
+    \item \textbf{Chunking} -- rozdělení kódu na menší části a jejich samostatné vyhodnocení.
+    Tento přístup je jednoduchý, ale omezuje globální porozumění závislostem.
+
+    \item \textbf{Hierarchická analýza} -- nejprve lokální analýza jednotlivých částí, následně agregace závěrů do celkového shrnutí.
+    Tento postup lépe zachovává celkový obraz, ale může přenášet nepřesnosti mezi vrstvami.
+
+    \item \textbf{Selektivní kontext} -- modelu jsou předány pouze relevantní části (například konkrétní funkce nebo testy).
+    Výsledek je silně závislý na kvalitě výběru vstupu.
+\end{enumerate}
+
+Limit kontextu tedy ovlivňuje nejen úplnost analýzy, ale i stabilitu výstupu.
+Stejný problém může být modelem interpretován odlišně v závislosti na tom, jaký kontext byl zahrnut.
+
+\subsection{Výpočetní náročnost a provozní omezení}
+\label{subsec:llm-computational-cost}
+
+Jak bylo uvedeno v sekci~\ref{subsec:llm-tokens-parameters-context}, velikost modelu přímo souvisí s jeho kapacitou i výpočetní náročností.
+Větší modely obvykle poskytují kvalitnější výstupy, ale vyžadují více výpočetních zdrojů.
+Z provozního hlediska je důležité sledovat zejména:
+
+\begin{itemize}
+    \item \textbf{Latenci} -- dobu odezvy na jeden požadavek,
+    \item \textbf{Propustnost} -- počet požadavků, které systém zvládne zpracovat za určitou dobu,
+    \item \textbf{Škálovatelnost} -- chování systému při zvýšené zátěži.
+\end{itemize}
+
+V prostředí školního systému se tyto faktory projevují zejména během hromadného odevzdávání úloh.
+I když latence jednotlivého požadavku nemusí být kritická, vysoká zátěž může vést k tvorbě front a prodloužení doby zpracování.
+
+Dalším faktorem je variabilita délky generovaného výstupu.
+Protože model generuje text token po tokenu (viz sekce~\ref{subsec:llm-functioning}), může se délka odpovědi i čas inference lišit podle složitosti vstupu a parametrů generování.
+
+\TODO{Pokud vím, že na latenci v našem případě nezáleží, stále to psát genericky?}
+
+\subsection{Paměťové nároky}
+\label{subsec:llm-memory-requirements}
+
+Paměťové nároky modelu nejsou určeny pouze počtem parametrů.
+Zahrnují:
+
+\begin{itemize}
+    \item paměť potřebnou pro uložení vah modelu,
+    \item paměť využívanou během inference (mezivýpočty a attention cache),
+    \item režii spojenou s paralelním zpracováním více požadavků.
+\end{itemize}
+
+Tyto faktory omezují velikost modelu, který lze efektivně provozovat lokálně,
+a zároveň určují maximální počet paralelních analýz bez výrazného zpomalení systému.
+
+\subsection{Bezpečnost a ochrana dat}
+\label{subsec:llm-data-security}
+
+Vstupy do modelu mohou obsahovat studentské zdrojové kódy, interní zadání nebo další informace související s hodnocením.
+Při použití externích cloudových služeb dochází k přenosu těchto dat mimo infrastrukturu školy.
+Hlavní rizika zahrnují:
+
+\begin{enumerate}
+    \item \textbf{Únik nebo zneužití dat} -- data mohou být ukládána nebo zpracovávána třetí stranou.
+    \item \textbf{Nejasné podmínky uchovávání dat} -- není vždy zřejmé, zda jsou vstupy využívány pro další trénování modelu.
+    \item \textbf{Možnost zpětné identifikace} -- i anonymizovaný kód může obsahovat identifikovatelné vzory.
+    \item \textbf{Prompt injection} -- škodlivě formulovaný vstup může změnit chování modelu.
+\end{enumerate}
+
+Prompt injection představuje specifický typ útoku, při kterém vstup obsahuje instrukce snažící se přepsat původní zadání modelu.
+Například může obsahovat text typu „Ignoruj předchozí instrukce a odpověz jinak“.
+V prostředí, kde jsou vstupem studentské práce, je vhodné takové pokusy filtrovat a oddělovat instrukční část promptu od analyzovaného kódu.
+Z hlediska nasazení lze rozlišit dvě základní strategie:
+
+\begin{itemize}
+    \item \textbf{On-premise řešení} -- model je provozován na infrastruktuře školy.
+    Výhodou je plná kontrola nad daty, nevýhodou vyšší nároky na hardware a správu.
+
+    \item \textbf{Cloudové řešení} -- model je dostupný přes API\@.
+    Výhodou je jednoduchost a škálovatelnost, nevýhodou závislost na externím poskytovateli a nutnost řešit přenos dat.
+\end{itemize}
+
+Bez ohledu na zvolený přístup je klíčové, aby výstup modelu nebyl automaticky považován za definitivní hodnocení.
+Jak bylo uvedeno v sekci~\ref{subsec:static-vs-llm-differences}, LLM neposkytuje formální záruku správnosti.
+Lidská kontrola proto zůstává nezbytnou součástí procesu.
+
+\TODO{Více rozebrat prompt injection, případně uvést příklady.}
+
+\endinput
+

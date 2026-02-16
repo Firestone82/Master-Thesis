@@ -1,0 +1,48 @@
+\chapter{Úvod}
+\label{ch:introduction}
+
+Výuka programování je v současnosti běžně podporována školními informačními systémy, které slouží k odevzdávání úloh, testování studentů a správě jejich hodnocení.
+Tyto systémy výrazně usnadňují organizaci výuky, zejména při větším počtu studentů.
+Jednou z nejnáročnějších částí však zůstává samotné hodnocení zdrojových kódů, při kterém je nutné posuzovat nejen správnou funkčnost řešení, ale také jeho strukturu, metodiku a případné chyby.
+
+Tato diplomová práce se zaměřuje na rozšíření školního systému Kelvin o možnost automatické analýzy odevzdaných zdrojových kódů pomocí velkých jazykových modelů (LLM).
+Cílem tohoto rozšíření není nahradit učitele při hodnocení, ale poskytnout mu podpůrný nástroj, který mu pomůže rychleji se zorientovat v řešení a upozorní na problematické části kódu.
+
+\section{Motivace práce}
+\label{sec:motivation}
+
+Systém Kelvin vznikl původně jako studentský projekt pro správu odevzdávání úloh a testování studentů.
+Postupně se ale vyvinul v plnohodnotný systém používaný při výuce, kde jeho vývoj pokračuje i nadále.
+Neboť se jedná o open-source projekt, který se stále rozšiřuje, zdokonaluje a přizpůsobuje potřebám výuky.
+
+Nicméně kvůli rostoucímu počtu studentů a komplexnosti úloh se stává stále náročnější pro učitele efektivně hodnotit odevzdané kódy.
+Učitelé musí projít velké množství řešení, přičemž jednotlivé kódy mohou být velmi různorodé, a to nejen z hlediska funkčnosti, ale i z hlediska stylu psaní a struktury.
+To může vést k tomu, že učitelé nemají dostatek času na důkladné hodnocení každého řešení, což může negativně ovlivnit kvalitu zpětné vazby pro studenty.
+
+Motivací této práce je proto snaha tento proces podpořit automatizovaným nástrojem, který by dokázal analyzovat odevzdaný zdrojový kód a vyučujícímu nabídnout strukturované připomínky.
+Dalším důvodem je ale samotný vývoj systému Kelvin, který je dlouhodobě rozšiřován studenty nebo vyučujícími, a nese s sebou určitý technický dluh.
+
+\section{Cíle práce}
+\label{sec:goals}
+
+Hlavním cílem diplomové práce je návrh a implementace modulu založeného na velkých jazykových modelech, který bude integrován přímo do systému Kelvin.
+Tento modul bude po odevzdání zdrojového kódu studentem asynchronně zpracovávat jeho řešení a generovat automatickou analýzu.
+Výstupem této analýzy budou zejména:
+
+\begin{itemize}
+    \item komentáře vztahující se ke konkrétním částem nebo řádkům zdrojového kódu
+    \item stručné shrnutí celkového řešení
+\end{itemize}
+
+Důraz je kladen na to, aby výsledky analýzy sloužily jako podpůrný nástroj pro učitele.
+Učitel má možnost na vygenerované komentáře reagovat, upravovat je nebo je použít jako podklad pro výsledné hodnocení.
+Hodnocení a zpětná vazba ze strany učitele mohou být dále využity pro budoucí zlepšování celého systému.
+
+Součástí cíle práce je také porovnání různých přístupů k nasazení jazykových modelů, volba vhodného modelu a návrh práce s prompty tak, aby systém poskytoval co nejkvalitnější výstupy při rozumných nárocích na výpočetní prostředky.
+
+\section{Struktura práce}
+\label{sec:structure}
+
+\TODO{Dávat zde nějakou strukturu práce? Nebo je to jasné z obsahu.}
+
+\endinput
