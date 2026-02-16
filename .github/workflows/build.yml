@@ -2,11 +2,9 @@ name: Compile LaTeX
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
   workflow_dispatch:
 
 permissions:
@@ -20,7 +18,6 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-
       - uses: DavidAnson/markdownlint-cli2-action@v13.0.0
         with:
           fix: true
@@ -36,7 +33,7 @@ jobs:
         run: |
           sudo apt-get install -y xvfb
           sudo Xvfb :99 -ac -screen 0 1024x768x8 &
-          export DISPLAY=:99
+          echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Compiling LaTeX documents
         uses: xu-cheng/latex-action@v4
@@ -47,16 +44,25 @@ jobs:
           extra_system_packages: 'inkscape openjdk17'
           latexmk_use_xelatex: true
 
-      - name: Upload LaTeX documents to artifacts
+      - name: Upload LaTeX PDF artifact
         uses: actions/upload-artifact@v4
-        if: success()
         with:
-          name: MIK0486-Thesis
+          name: thesis-pdf
           path: src/main.pdf
           if-no-files-found: error
 
+  publish-release:
+    if: github.event_name != 'pull_request'
+    needs: build-latex
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: thesis-pdf
+          path: src
+
       - name: Publish PDF to GitHub release
-        if: github.event_name != 'pull_request'
         uses: ncipollo/release-action@v1
         with:
           tag: latest
@@ -66,8 +72,18 @@ jobs:
           removeArtifacts: true
           artifacts: src/main.pdf
 
+  pages:
+    if: github.event_name != 'pull_request'
+    needs: build-latex
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: thesis-pdf
+          path: src
+
       - name: Build GitHub Pages site
-        if: github.event_name != 'pull_request'
         run: |
           mkdir -p pages
           cp src/main.pdf pages/main.pdf
@@ -79,16 +95,8 @@ jobs:
             <meta name="viewport" content="width=device-width,initial-scale=1" />
             <title>Thesis PDF</title>
             <style>
-              html, body {
-                margin: 0;
-                height: 100%;
-                background: #111;
-              }
-              object {
-                width: 100%;
-                height: 100%;
-                border: 0;
-              }
+              html, body { margin: 0; height: 100%; background: #111; }
+              object { width: 100%; height: 100%; border: 0; }
             </style>
           </head>
           <body>
@@ -101,14 +109,13 @@ jobs:
           HTML
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: pages
 
   deploy-pages:
     if: github.event_name != 'pull_request'
-    needs: build-latex
+    needs: pages
     runs-on: ubuntu-latest
     environment:
       name: github-pages
