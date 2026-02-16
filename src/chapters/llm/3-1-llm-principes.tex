@@ -118,7 +118,6 @@ Zjednodušeně lze říci, že model vždy odpovídá na otázku:
 Tento proces se nazývá inference.
 V každém kroku inference model vypočítá distribuční rozdělení pravděpodobností nad celým slovníkem tokenů.
 Samotný výběr konkrétního tokenu může probíhat různými způsoby – buď deterministicky (například výběrem nejpravděpodobnějšího tokenu), nebo pomocí řízeného náhodného vzorkování.
-
 Chování modelu během generování lze ovlivnit několika parametry:
 
 \begin{itemize}
@@ -136,7 +135,6 @@ Chování modelu během generování lze ovlivnit několika parametry:
 V kontextu analýzy zdrojového kódu je obvykle žádoucí co nejvyšší míra determinismu.
 Cílem není kreativní generování textu, ale konzistentní a opakovatelná diagnostika možných problémů.
 Z tohoto důvodu se používají nízké hodnoty teploty a omezené vzorkování.
-
 Prakticky lze z hlediska fungování modelu zjednodušit do následujících kroků:
 
 \begin{enumerate}
