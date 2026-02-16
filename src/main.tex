@@ -13,11 +13,14 @@
 \usepackage{subcaption} % For multiple images in one float
 \usepackage{tikz} % For drawing in LaTeX
 \usepackage{amsmath} % For improved equation typesetting
+\usepackage{tablefootnote} % For footnotes in tables
+\usepackage{color} % barvickyy
+\usepackage{array} % schovavani sloupcu v tabulkach
 \usepackage[cpp]{diplomalst}
 \usepackage{fontspec}
 
 % Table of contents depth - TODO: Remove in final version!
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
 
 \renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
 \newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
@@ -61,6 +64,8 @@
 \newcommand{\code}[1]{%
     \fcolorbox{black}{codegray}{\texttt{#1}}%
 }
+
+\newcommand{\tableref}[1]{(\hyperref[#1]{Tabulka~\ref*{#1}})}
 
 %
 % ==] Main document [==
