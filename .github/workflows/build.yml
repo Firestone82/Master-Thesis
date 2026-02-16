@@ -13,22 +13,11 @@ permissions:
   id-token: write
 
 jobs:
-  check-markdown:
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DavidAnson/markdownlint-cli2-action@v13.0.0
-        with:
-          fix: true
-          globs: '**/*.md'
-
   build-latex:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Fake display for plantuml
       - name: Set up Xvfb
         run: |
           sudo apt-get install -y xvfb
@@ -52,9 +41,9 @@ jobs:
           if-no-files-found: error
 
   publish-release:
-    if: github.event_name != 'pull_request'
     needs: build-latex
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Download PDF artifact
         uses: actions/download-artifact@v4
@@ -73,9 +62,9 @@ jobs:
           artifacts: src/main.pdf
 
   pages:
-    if: github.event_name != 'pull_request'
     needs: build-latex
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - name: Download PDF artifact
         uses: actions/download-artifact@v4
@@ -114,9 +103,9 @@ jobs:
           path: pages
 
   deploy-pages:
-    if: github.event_name != 'pull_request'
     needs: pages
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
