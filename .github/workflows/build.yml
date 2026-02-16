@@ -61,10 +61,13 @@ jobs:
           removeArtifacts: true
           artifacts: src/main.pdf
 
-  pages:
+  publish-pages:
     needs: build-latex
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download PDF artifact
         uses: actions/download-artifact@v4
@@ -89,7 +92,7 @@ jobs:
             </style>
           </head>
           <body>
-            <object data="main.pdf" type="application/pdf">
+            (object data="main.pdf" type="application/pdf">
               <p>Unable to display PDF in browser.
               <a href="main.pdf">Download the thesis PDF</a>.</p>
             </object>
@@ -102,14 +105,6 @@ jobs:
         with:
           path: pages
 
-  deploy-pages:
-    needs: pages
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
