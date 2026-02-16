@@ -1,0 +1,102 @@
+\section{Porovnání s tradičními statickými analyzátory}
+\label{sec:llm-vs-static}
+
+% https://agileseekers.com/blog/using-static-code-analysis-tools-as-part-of-sprint-reviews
+% https://blog.codacy.com/static-code-analysis-tools
+% https://okt.inf.szte.hu/tesztalap/gyakorlat/gyak07/
+
+Statická analýza kódu představuje techniku, při které je zdrojový kód analyzován bez jeho spuštění.
+Cílem je identifikovat chyby, potenciální problémy, bezpečnostní rizika nebo porušení konvenčních pravidel.
+Tyto nástroje jsou běžnou součástí profesionálního vývoje softwaru a často bývají integrovány do CI/CD pipeline, vývojových prostředí nebo procesu code review.
+
+Zásadní vlastností statické analýzy je, že nepracuje s reálným během programu, ale s jeho strukturou.
+Analyzátor využívá formální pravidla, kontrolu toku programu (control flow analysis), datové závislosti nebo předem definované heuristiky.
+Výsledkem je deterministická analýza, která je při stejném vstupu opakovatelná a konzistentní.
+
+V kontextu této práce je důležité pochopit, že velké jazykové modely fungují na zcela odlišném principu.
+LLM neprovádí formální analýzu abstraktního syntaktického stromu ani kontrolu datových toků.
+Místo toho generuje text na základě pravděpodobnostních vzorů, které se naučil během trénování.
+To vede k odlišným vlastnostem i omezením obou přístupů.
+
+\subsection{Typy statických analyzátorů}
+\label{subsec:static-types}
+
+Statické analyzátory (SA) lze rozdělit do několika kategorií podle rozsahu a hloubky analýzy.
+
+\begin{enumerate}
+    \item \textbf{Kompilátorová analýza (základní warningy)} –
+    Kompilátory jako GCC nebo Clang generují upozornění během překladu programu.
+    Typicky se jedná o detekci nevyužitých proměnných, potenciálně nebezpečných konstrukcí nebo porušení jazykových pravidel.
+    Tato analýza je úzce svázána s konkrétním jazykem a jeho formální specifikací.
+
+    \item \textbf{Lintery a pokročilé nástroje (např. clang-tidy, cppcheck)} –
+    Tyto nástroje rozšiřují základní kontrolu o dodatečná pravidla.
+    Upozorňují na nedodržení dobrých programátorských praktik, stylové nesrovnalosti nebo potenciální logické chyby.
+    Často umožňují konfigurovat vlastní pravidla.
+
+    \item \textbf{Enterprise-grade analyzátory (např. SonarQube, CodeQL)} –
+    Pokročilé nástroje určené pro větší projekty.
+    Kromě detekce chyb generují metriky kvality kódu, analyzují závislosti mezi moduly a dokáží identifikovat bezpečnostní zranitelnosti.
+    Často poskytují přehledové reporty a sledování trendů v čase.
+\end{enumerate}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Vlastnost} & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
+            \midrule
+            Detekce syntaktických chyb & Ano (deterministicky) & Omezeně \\
+            Formální verifikace pravidel & Ano & Ne \\
+            Analýza řízení toku (control flow) & Ano & Omezeně / heuristicky \\
+            Práce s kontextem zadání & Ne & Ano \\
+            Hodnocení čitelnosti a stylu & Omezeně (dle pravidel) & Ano \\
+            Generování vysvětlení v přirozeném jazyce & Omezeně (technická hlášení) & Ano \\
+            Determinističnost výstupu & Ano & Ne\tablefootnote{LLM generuje výstup pravděpodobnostně. Výsledek může být ovlivněn parametry inference a nemusí být plně reprodukovatelný.\label{tfn:llm}} \\
+            Kontrola bezpečnosti & Ano & Ne\footref{tfn:llm} \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Porovnání statických analyzátorů a velkých jazykových modelů při analýze zdrojového kódu}
+    \label{tab:llm-vs-static}
+\end{table}
+
+\subsection{Zásadní rozdíly v přístupu}
+\label{subsec:static-vs-llm-differences}
+
+Hlavní rozdíl mezi statickými analyzátory a velkými jazykovými modely spočívá v povaze jejich analýzy.
+
+Statický analyzátor pracuje deterministicky.
+Vychází z formální reprezentace programu a aplikace přesně definovaných pravidel.
+Při stejném vstupu vždy poskytne stejný výstup.
+
+Oproti tomu LLM generuje odpověď pravděpodobnostně.
+Výsledek může být ovlivněn parametry inference (např.\ teplotou) a není zaručena plná reprodukovatelnost.
+Model také neprovádí skutečnou kontrolu běhových cest ani formální verifikaci.
+
+Na druhou stranu má LLM schopnost pracovat s kontextem zadání úlohy.
+Dokáže interpretovat nejen samotný kód, ale i jeho účel.
+Může například upozornit, že řešení sice funguje, ale není optimální vzhledem k požadavkům zadání.
+Taková analýza je pro tradiční statický analyzátor velmi obtížná, protože postrádá znalost záměru.
+
+Dalším významným rozdílem je schopnost vysvětlení.
+Statické analyzátory typicky poskytují stručné technické hlášení.
+LLM je schopen generovat vysvětlení v přirozeném jazyce, které může být pro studenta srozumitelnější.
+
+\subsection{Možnost kombinace přístupů}
+\label{subsec:static-llm-combination}
+
+Statické analyzátory a velké jazykové modely by neměly být vnímány jako konkurenční technologie.
+Naopak se mohou vzájemně doplňovat.
+
+Statický analyzátor poskytuje formální, deterministickou kontrolu syntaxe a základních pravidel.
+LLM může nad těmito výsledky provést vyšší úroveň interpretace, například vysvětlit, proč je konkrétní konstrukce problematická, nebo navrhnout alternativní řešení.
+
+V kontextu školního systému může být kombinace obou přístupů velmi efektivní.
+Zatímco automatické testy a statická analýza ověřují formální správnost řešení, LLM může sloužit jako podpůrný nástroj pro generování srozumitelných komentářů a doporučení.
+
+Tento hybridní přístup umožňuje zachovat technickou přesnost a zároveň zvýšit kvalitu zpětné vazby poskytované studentům.
+
+\endinput
+
