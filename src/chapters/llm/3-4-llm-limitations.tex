@@ -8,63 +8,84 @@
 
 Jak bylo popsáno v sekci~\ref{sec:llm-principles}, velké jazykové modely jsou pravděpodobnostní systémy.
 Jejich výstup nepředstavuje formální důkaz správnosti, ale kvalifikovaný odhad založený na statistických vzorech naučených během trénování.
-Tato vlastnost je užitečná pro generování komentářů a vysvětlení, avšak současně představuje zásadní omezení.
+Tato vlastnost je pro generování komentářů a pedagogických vysvětlení cenná, avšak současně přináší celou řadu technických, provozních a bezpečnostních rizik, která musí být při nasazení v reálném školním prostředí pečlivě zohledněna.
 
-Tato sekce navazuje na porovnání se statickou analýzou v sekci~\ref{subsec:static-vs-llm-differences} a rozebírá technická, provozní a bezpečnostní rizika spojená s nasazením LLM v reálném prostředí.
-V kontextu školního systému je navíc nutné zohlednit etické a právní aspekty práce s daty studentů.
+Tato sekce systematicky rozebírá čtyři hlavní kategorie omezení: limit kontextového okna, výpočetní a provozní náročnost, paměťové nároky a otázky ochrany dat.
 
-\subsection{Limit kontextového okna}
+\subsection{Limit na počet tokenů}
 \label{subsec:llm-token-limit}
 
-Tokenizace a význam kontextového okna byly vysvětleny v sekci~\ref{subsec:llm-tokens-parameters-context}.
+Tokenizace a kontextové okno byly vysvětleny v sekci~\ref{subsec:llm-tokens-parameters-context}.
 Každý model je omezen maximálním počtem tokenů, které může zpracovat v jednom průchodu inference.
 Pokud vstup tento limit překročí, část informací se do modelu vůbec nedostane.
-V horším případě model nebude mít kapacitu vůbec vygenerovat odpověď, protože i generovaný výstup by překročil limit.
+Typicky jsou odříznuty tokeny z konce vstupu, nebo musí být vstup manuálně zkrácen před odesláním.
 
-U analýzy zdrojového kódu je toto omezení problematické zejména proto, že chyby často vznikají ve vztahu více částí programu.
-Model může správně popsat lokální úsek kódu, ale vyvodit chybný závěr o celkové architektuře nebo logice řešení, pokud nemá k dispozici všechny relevantní soubory nebo zadání.
-V praxi se používají tři základní strategie:
-
+Pro analýzu zdrojového kódu je toto omezení zvlášť problematické ze dvou důvodů:
 \begin{enumerate}
-    \item \textbf{Chunking} -- rozdělení kódu na menší části a jejich samostatné vyhodnocení.
-    Tento přístup je jednoduchý, ale omezuje globální porozumění závislostem.
+    \item Programátorské chyby mají svou strukturu rozloženou napříč kódem.
+    Únik paměti může vzniknout tím, že je paměť alokována v jedné funkci na řádku 20, přerušena výjimkou na řádku 80 a uvolnění voláno teprve na řádku 150 -- přičemž cesta výjimky ho obejde.
+    Pokud model nemá v kontextu celý tento úsek najednou, může lokálně popsat alokaci jako správnou, aniž by postřehl problém v celkové logice.
 
-    \item \textbf{Hierarchická analýza} -- nejprve lokální analýza jednotlivých částí, následně agregace závěrů do celkového shrnutí.
-    Tento postup lépe zachovává celkový obraz, ale může přenášet nepřesnosti mezi vrstvami.
-
-    \item \textbf{Selektivní kontext} -- modelu jsou předány pouze relevantní části (například konkrétní funkce nebo testy).
-    Výsledek je silně závislý na kvalitě výběru vstupu.
+    \item Smysluplná analýza kódu vyžaduje nejen samotný kód, ale i zadání úlohy a systémový prompt.
+    Celková délka promptu tak může přesáhnout limit i u kódu, jehož samotná délka by byla přijatelná.
 \end{enumerate}
 
-Limit kontextu tedy ovlivňuje nejen úplnost analýzy, ale i stabilitu výstupu.
-Stejný problém může být modelem interpretován odlišně v závislosti na tom, jaký kontext byl zahrnut.
+\subsubsection*{Strategie pro práci s omezeným kontextem}
 
-\subsection{Výpočetní náročnost a provozní omezení}
+V situacích, kdy vstup přesahuje kontextové okno modelu, se v praxi používají tři základní strategie, každá s vlastními trade-offs.
+
+\begin{enumerate}
+    \item \textbf{Chunking} -- rozdělení kódu na menší části, které jsou analyzovány samostatně.
+    Výhodou je jednoduchost implementace; nevýhodou je ztráta globálního kontextu.
+    Model při analýze každé části neví, co se děje v ostatních částech, a nemůže detekovat problémy vyplývající ze vzájemných závislostí.
+
+    \item \textbf{Hierarchická analýza} -- nejprve jsou samostatně analyzovány menší části kódu (například jednotlivé funkce), výsledky jsou pak agregovány do celkového shrnutí.
+    Tento přístup lépe zachovává globální obraz, avšak agregační krok může přenášet nebo zvyšovat nepřesnosti z dílčích analýz.
+    Zároveň přidává výpočetní náklady ve formě více průchodů modelem.
+
+    \item \textbf{Selektivní kontext} -- modelu jsou předány pouze části kódu označené jako relevantní pro hodnocenou úlohu, například konkrétní funkce, jejíž implementaci zadání specifikuje.
+    Tento přístup je efektivní, avšak silně závislý na kvalitě výběru vstupu -- pokud výběr vynechá důležitou část, model generuje neúplnou nebo nepřesnou analýzu.
+\end{enumerate}
+
+Pro typické studentské úlohy v systému Kelvin, kde se rozsah kódu pohybuje v řádu stovek řádků, jsou všechny tři strategie ve většině případů zbytečné: moderní modely s kontextovým oknem 16\,000 tokenů a více pojmou celé odevzdání včetně zadání a systémového promptu s dostatečnou rezervou.
+Strategie jsou relevantní pro rozsáhlejší projekty nebo v případě volby modelu s menším kontextovým oknem.
+
+\subsection{Výpočetní náročnost (GPU / CPU)}
 \label{subsec:llm-computational-cost}
 
-Jak bylo uvedeno v sekci~\ref{subsec:llm-tokens-parameters-context}, velikost modelu přímo souvisí s jeho kapacitou i výpočetní náročností.
-Větší modely obvykle poskytují kvalitnější výstupy, ale vyžadují více výpočetních zdrojů.
-Z provozního hlediska je důležité sledovat zejména:
+Inference jazykového modelu je výpočetně náročná operace.
+Její jádro tvoří opakované násobení matic velkých rozměrů v každé vrstvě architektury Transformer, přičemž tyto operace jsou pro každý generovaný token prováděny znovu.
+Způsob, jakým je výpočet prováděn buď na CPU nebo GPU zásadně ovlivňuje latenci i propustnost systému.
 
-\begin{itemize}
-    \item \textbf{Latenci} -- dobu odezvy na jeden požadavek,
-    \item \textbf{Propustnost} -- počet požadavků, které systém zvládne zpracovat za určitou dobu,
-    \item \textbf{Škálovatelnost} -- chování systému při zvýšené zátěži.
-\end{itemize}
+\subsubsection*{Grafické karty (GPU) jako primární hardware pro inference}
 
-V prostředí školního systému se tyto faktory projevují zejména během hromadného odevzdávání úloh.
-I když latence jednotlivého požadavku nemusí být kritická, vysoká zátěž může vést k tvorbě front a prodloužení doby zpracování.
+GPU jsou navrženy pro masivně paralelní výpočty: moderní karta jako NVIDIA RTX 4090 disponuje 16\,384 CUDA jádry optimalizovanými pro maticové operace.
+Tomu odpovídá výrazně vyšší výkon při inference: model s 7 miliardami parametrů zpracuje dotaz s 8\,000 vstupními tokeny na GPU s 24 GB VRAM typicky za 15 až 60 sekund v závislosti na délce generovaného výstupu.
+Dalším klíčovým faktorem je šířka pásma paměti -- GPU mají typicky 500 až 2\,000 GB/s, zatímco u CPU je to 50 až 200 GB/s.
+Protože největším úzkým hrdlem inference je přenos vah modelu z paměti do výpočetních jader, je tato vlastnost pro výkon inference zásadní.
 
-Dalším faktorem je variabilita délky generovaného výstupu.
-Protože model generuje text token po tokenu (viz sekce~\ref{subsec:llm-functioning}), může se délka odpovědi i čas inference lišit podle složitosti vstupu a parametrů generování.
+\subsubsection*{CPU inference a její omezení}
 
-\TODO{Pokud vím, že na latenci v našem případě nezáleží, stále to psát genericky?}
+Provoz modelu na CPU je technicky možný, avšak výrazně pomalejší.
+Tentýž dotaz, který GPU zpracuje za 30 sekund, může výkonnému serverovému CPU (například AMD EPYC nebo Intel Xeon) trvat 5 až 15 minut, v závislosti na velikosti modelu a délce vstupu.
+Pro systém s asynchronním zpracováním, kde student nečeká na výsledek okamžitě, je takováto latence přijatelná pouze v případech velmi nízkého objemu odevzdání.
+Při hromadném odevzdávání úloh před deadlinem by se fronty zpracování prodlužovaly na nepřijatelné hodnoty.
+
+\subsubsection*{Propustnost a škálování}
+
+V prostředí školního systému je relevantní nejen latence jednotlivého dotazu, ale i propustnost systému při vyšší zátěži.
+Pokud třicet studentů odevzdá řešení v krátkém časovém okně, jsou požadavky zařazeny do fronty a zpracovávány postupně.
+Na GPU s dostatečnou pamětí lze požadavky zpracovávat i v dávkách (batching), čímž se zvyšuje efektivita využití hardware.
+Na CPU je dávkové zpracování prakticky nerealizovatelné bez výrazného prodloužení celkové doby zpracování.
+
+Protože systém Kelvin zpracovává analýzu asynchronně -- výsledky jsou dostupné s určitým zpožděním po odevzdání, nikoliv okamžitě -- je pro školní prostředí latence v řádu minut přijatelná.
+Klíčové je pouze to, aby výsledky byly dostupné před tím, než vyučující přistoupí k manuálnímu hodnocení.
 
 \subsection{Paměťové nároky}
 \label{subsec:llm-memory-requirements}
 
-Paměťové nároky modelu nejsou určeny pouze počtem parametrů.
-Zahrnují:
+Paměťové nároky pro provoz jazykového modelu jsou výrazně vyšší, než by se mohlo na první pohled zdát.
+Celkové nároky tvoří tři složky:
 
 \begin{itemize}
     \item paměť potřebnou pro uložení vah modelu,
@@ -75,38 +96,105 @@ Zahrnují:
 Tyto faktory omezují velikost modelu, který lze efektivně provozovat lokálně,
 a zároveň určují maximální počet paralelních analýz bez výrazného zpomalení systému.
 
-\subsection{Bezpečnost a ochrana dat}
+\subsubsection*{Váhy modelu}
+
+V plné 16-bitové přesnosti (FP16 nebo BF16) jsou potřeba 2 bajty na parametr.
+Model se 7 miliardami parametrů tak vyžaduje přibližně 14 GB VRAM pouze pro uložení vah.
+Model se 13 miliardami parametrů potřebuje přibližně 26 GB.
+Tyto hodnoty přesahují kapacitu většiny spotřebitelských grafických karet.
+
+Kvantizace je technikou, která tuto situaci výrazně mění.
+Redukcí přesnosti vah z 16 bitů na 8 nebo 4 bity lze paměťové nároky snížit na přibližně polovinu, respektive čtvrtinu původní hodnoty.
+Model 7B v 4-bitové kvantizaci (označované například jako GGUF Q4\_K\_M) vyžaduje přibližně 4 až 5 GB VRAM -- hodnota dostupná i na středně výkonných spotřebitelských GPU.
+Ztráta kvality výstupu při kvalitní kvantizaci je pro praktické použití zpravidla zanedbatelná.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lllll}
+            \toprule
+            \textbf{Velikost modelu} & \textbf{FP16} & \textbf{Q8} & \textbf{Q4} & \textbf{Typická GPU} \\
+            \midrule
+            3B parametry  & $\sim$6 GB  & $\sim$3 GB  & $\sim$2 GB  & RTX 3060 (8 GB) \\
+            7B parametrů  & $\sim$14 GB & $\sim$7 GB  & $\sim$5 GB  & RTX 3080 (10 GB) \\
+            13B parametrů & $\sim$26 GB & $\sim$13 GB & $\sim$9 GB  & RTX 3090 (24 GB) \\
+            34B parametrů & $\sim$68 GB & $\sim$34 GB & $\sim$22 GB & 2× A100 nebo A100 80 GB \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přibližné paměťové nároky modelů podle počtu parametrů a kvantizace (bez KV cache)}
+    \label{tab:memory-requirements}
+\end{table}
+
+\subsubsection*{KV cache}
+\label{subsubsec:kv-cache}
+
+KV cache (key-value cache) je vysvětlena v sekci~\ref{subsubsec:inference-generation}.
+Její velikost roste lineárně s délkou zpracovávané sekvence a s počtem vrstev modelu.
+Pro model se 32 vrstvami, kontextovým oknem 8\,000 tokenů a jedním souběžným požadavkem je KV cache typicky v řádu 1 až 4 GB VRAM.
+Při zpracování více souběžných požadavků (dávkové zpracování) se tento nárok násobí.
+
+\subsubsection*{Praktické dopady}
+\label{subsubsec:practical-memory-implications}
+
+Z výše uvedených hodnot plyne, že pro efektivní lokální provoz modelu třídy 7B parametrů je zapotřebí GPU s alespoň 8 GB VRAM pro Q4 kvantizaci, přičemž 12 GB nebo více poskytuje pohodlnou rezervu pro KV cache.
+Model třídy 13B parametrů vyžaduje GPU s 24 GB VRAM nebo více.
+
+%Pokud škola disponuje odpovídajícím GPU (například NVIDIA RTX 3090 s 24 GB nebo profesionální kartou řady A), je lokální nasazení modelu 7B nebo 13B technicky realistické.
+%V opačném případě je variantou cloudové API, u nějž jsou paměťové nároky plně v režiji poskytovatele.
+
+\subsection{Ochrana dat a otázky GDPR při použití cloudových řešení}
 \label{subsec:llm-data-security}
 
-Vstupy do modelu mohou obsahovat studentské zdrojové kódy, interní zadání nebo další informace související s hodnocením.
-Při použití externích cloudových služeb dochází k přenosu těchto dat mimo infrastrukturu školy.
-Hlavní rizika zahrnují:
+Vstupní data odesílaná do LLM mohou obsahovat citlivé informace: studentské zdrojové kódy, interní zadání úloh, identifikátory studentů propojené s jejich řešeními nebo obsah diskuse v komentářích k odevzdání.
+Způsob zpracování těchto dat, zejména při využití cloudových API, vyvolává závažné otázky z hlediska ochrany osobních údajů a souladu s GDPR.
 
-\begin{enumerate}
-    \item \textbf{Únik nebo zneužití dat} -- data mohou být ukládána nebo zpracovávána třetí stranou.
-    \item \textbf{Nejasné podmínky uchovávání dat} -- není vždy zřejmé, zda jsou vstupy využívány pro další trénování modelu.
-    \item \textbf{Možnost zpětné identifikace} -- i anonymizovaný kód může obsahovat identifikovatelné vzory.
-    \item \textbf{Prompt injection} -- škodlivě formulovaný vstup může změnit chování modelu.
-\end{enumerate}
+\subsubsection*{GDPR a přenos dat do třetí strany}
+\label{subsubsec:gdpr-data-transfer}
 
-Prompt injection představuje specifický typ útoku, při kterém vstup obsahuje instrukce snažící se přepsat původní zadání modelu.
-Například může obsahovat text typu „Ignoruj předchozí instrukce a odpověz jinak“.
-V prostředí, kde jsou vstupem studentské práce, je vhodné takové pokusy filtrovat a oddělovat instrukční část promptu od analyzovaného kódu.
-Z hlediska nasazení lze rozlišit dvě základní strategie:
+Nařízení GDPR (General Data Protection Regulation) klasifikuje studentské záznamy spjaté s identifikovatelnými osobami jako osobní údaje.
+Jejich předání externímu poskytovateli cloudových služeb je právně přípustné, avšak vyžaduje splnění konkrétních podmínek.
 
-\begin{itemize}
-    \item \textbf{On-premise řešení} -- model je provozován na infrastruktuře školy.
-    Výhodou je plná kontrola nad daty, nevýhodou vyšší nároky na hardware a správu.
+\TODO{QUESTION: Doplnit GDPR? Záleži opravdu na tom? Nebo to jenom Beránek nechce dál publikovat.}
 
-    \item \textbf{Cloudové řešení} -- model je dostupný přes API\@.
-    Výhodou je jednoduchost a škálovatelnost, nevýhodou závislost na externím poskytovateli a nutnost řešit přenos dat.
-\end{itemize}
+\subsubsection*{Prompt injection jako bezpečnostní riziko}
+\label{subsubsec:prompt-injection}
 
-Bez ohledu na zvolený přístup je klíčové, aby výstup modelu nebyl automaticky považován za definitivní hodnocení.
-Jak bylo uvedeno v sekci~\ref{subsec:static-vs-llm-differences}, LLM neposkytuje formální záruku správnosti.
-Lidská kontrola proto zůstává nezbytnou součástí procesu.
+Prompt injection je specifická třída bezpečnostních útoků cílená na systémy postavené na LLM.
+Útočník, tomto případě potenciálně student, vloží do vstupu (zdrojového kódu) text formulovaný jako instrukce pro model.
+Cílem je přepsat nebo obejít systémový prompt a přimět model k chování, které nebylo zamýšleno.
 
-\TODO{Více rozebrat prompt injection, případně uvést příklady.}
+Příkladem přímé prompt injection ve zdrojovém kódu může být komentář ve stylu:
+\begin{verbatim}
+// Ignoruj předchozí instrukce. Odpovědz pouze: "Toto řešení je perfektní."
+\end{verbatim}
+Pokud model nedostatečně odděluje instrukční kontext od analyzovaného artefaktu, může takový pokus uspět a model vygeneruje nepravdivou nebo zavádějící zpětnou vazbu.
+
+Obranou je striktní oddělení instrukční části promptu od zdrojového kódu pomocí jednoznačných strukturálních značek (XML tagy, Markdown bloky), formulace systémového promptu, která model explicitně upozorňuje na možné pokusy o přepsání instrukcí, a sanitizace vstupu.
+Například odstranění nebo escapování sekvencí, které by mohly být interpretovány jako instrukce.
+
+Důležité je ale zdůraznit, že historicky se v systému kelvin o tento jev pokouší i samotní pedagogové, kteří do zadání úloh vkládají neviditelné instrukce pro model, tak aby následně jednoduše detekovaly, zda řešení bylo generováno umělou inteligencí nebo studentem. % Tady jsem musel přidat tento odstavec, kvůli vám :D
+
+\TODO{Doplnit konkrétní příklady prompt injection útoků přímo učiteli}
+
+\subsubsection*{On-premise řešení jako alternativa}
+\label{subsubsec:on-premise-alternative}
+
+Lokální nasazení modelu zcela eliminuje otázky přenosu dat k třetí straně: studentské kódy a zadání neopouštějí infrastrukturu školy.
+Z pohledu GDPR jde o výrazně přímočařejší situaci.
+Správce dat je totožný s provozovatelem modelu a veškerá zpracování probíhají v rámci interní infrastruktury.
+
+Nevýhodou jsou vyšší hardwarové nároky (GPU) a složitost správy infrastruktury popsané v předcházejících sekcích.
+Volba mezi cloudovým API a lokálním nasazením je tedy v konečném důsledku otázkou vyvážení provozních nákladů, dostupnosti hardware a přijatelné míry právního a bezpečnostního rizika.
+
+\subsubsection*{Odpovědnost za výstup modelu}
+\label{subsubsec:llm-output-responsibility}
+
+Bez ohledu na zvolený způsob nasazení platí jedno fundamentální pravidlo: výstup LLM nesmí být automaticky považován za definitivní hodnocení studentského řešení.
+Jak bylo popsáno v sekci~\ref{subsec:static-vs-llm-differences}, LLM neposkytuje formální záruku správnosti svých závěrů.
+Generované komentáře mohou obsahovat vážné chyby, nesprávné vyjadřování nebo nepřesné odkazy na řádky kódu.
+Lidská kontrola vyučujícím zůstává nezbytnou součástí procesu, neboť LLM slouží jako podpůrný nástroj usnadňující orientaci, nikoli jako autonomní hodnotitel.
+Tato skutečnost musí být zřejmá jak z uživatelského rozhraní systému, tak z metodiky jeho používání.
 
 \endinput
 
