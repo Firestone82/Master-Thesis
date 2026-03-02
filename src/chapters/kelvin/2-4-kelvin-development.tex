@@ -1,0 +1,24 @@
+\section{Vývojová omezení a proces}
+\label{sec:kelvin-development}
+
+Vývoj systému Kelvin je ovlivněn několika zásadními omezeními, která vyplývají jak z jeho historického vývoje, tak z organizačních podmínek jeho správy a údržby.
+Tato omezení mají přímý dopad na návrh i samotnou implementaci řešení popsaného v této diplomové práci.
+
+Jedním z hlavních pravidel vývoje je požadavek na malé a atomické pull requesty.
+Každý pull request by měl obsahovat maximálně přibližně 500 změněných řádků kódu a měl by se zaměřovat pouze na jednu konkrétní změnu nebo problém.
+Cílem tohoto přístupu je zjednodušení procesu code review a snížení rizika zavlečení chyb do produkčního systému.
+V praxi to však znamená nutnost rozdělovat i logicky související úpravy do více menších kroků, což může celý vývojový proces prodlužovat.
+
+Dalším významným omezením je probíhající migrace frontendové části systému ze frameworku Svelte na framework Vue.
+Při úpravách nebo přidávání nových funkcionalit by neměly vznikat nové Svelte komponenty.
+V případě rozsáhlejších změn je tak často nutné nejprve přepsat existující část aplikace do Vue a teprve následně provést požadovanou úpravu.
+Tento postup výrazně zvyšuje časovou i technickou náročnost vývoje, zejména u funkcionalit zasahujících do uživatelského rozhraní.
+
+Důvodem této migrace je zejména snaha o sjednocení technologického stacku, zlepšení dlouhodobé udržovatelnosti a snížení vstupní bariéry pro nové vývojáře systému.
+
+Proces schvalování změn představuje další omezení vývoje.
+Code review je v současné době zajišťováno omezeným počtem vyučujících, kteří se systému věnují vedle svých dalších povinností.
+Z tohoto důvodu se může stát, že zpracování pull requestu trvá i několik týdnů.
+Tento fakt má přímý dopad na tempo vývoje a vyžaduje pečlivé plánování jednotlivých kroků implementace s dostatečným časovým předstihem.
+
+\endinput
