@@ -152,9 +152,15 @@ Způsob zpracování těchto dat, zejména při využití cloudových API, vyvol
 \subsubsection*{GDPR a přenos dat do třetí strany}
 \label{subsubsec:gdpr-data-transfer}
 
-Nařízení GDPR (General Data Protection Regulation) klasifikuje studentské záznamy spjaté s identifikovatelnými osobami jako osobní údaje.
-Jejich předání externímu poskytovateli cloudových služeb je právně přípustné, avšak vyžaduje splnění konkrétních podmínek.
+Použití cloudového API znamená, že vstupní data, včetně studentských zdrojových kódů a zadání úloh, sou přenášena a zpracovávána na serverech externího poskytovatele.
+To vyvolává otázky souladu s nařízením GDPR, zejména pokud jsou studenti identifikovatelní prostřednictvím jejich odevzdání.
 
+Klíčovou otázkou je, zda poskytovatel API data uchovává, a pokud ano, po jak dlouhou dobu a za jakým účelem.
+Zvláště citlivou oblastí je využití vstupních dat pro další trénování modelu.
+Někteří poskytovatelé to explicitně vylučují nebo umožňují opt-out, ale podmínky se mohou měnit a je nutné je průběžně sledovat.
+
+V rámci Evropské unie je při zpracování osobních údajů třetí stranou zpravidla nutné uzavřít smlouvu o zpracování osobních údajů (Data Processing Agreement).
+Pro školní prostředí tak cloudové API není automaticky nevhodné, ale vyžaduje právní ošetření ze strany instituce.
 \TODO{QUESTION: Doplnit GDPR? Záleži opravdu na tom? Nebo to jenom Beránek nechce dál publikovat.}
 
 \subsubsection*{Prompt injection jako bezpečnostní riziko}
