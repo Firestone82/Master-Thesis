@@ -1,0 +1,125 @@
+\section{Porovnání s tradičními statickými analyzátory}
+\label{sec:llm-vs-static}
+
+% https://agileseekers.com/blog/using-static-code-analysis-tools-as-part-of-sprint-reviews
+% https://blog.codacy.com/static-code-analysis-tools
+% https://okt.inf.szte.hu/tesztalap/gyakorlat/gyak07/
+
+Velké jazykové modely nejsou prvním nástrojem, jehož cílem je automatizovaná analýza kvality zdrojového kódu.
+Statická analýza kódu již existuje s desetiletou historií a bohatým ekosystémem nástrojů, která je dnes součástí standardní vývojové praxe v komerčním i akademickém prostředí.
+Zařazení LLM do školního systému Kelvin proto vyžaduje pečlivé pochopení toho, v čem se oba přístupy liší, kde se doplňují a kde každý z nich selhává.
+
+Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění.
+Tedy pouze na základě jeho struktury, syntaxe a datových závislostí.
+Analyzátor pracuje s formální reprezentací programu: zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory.
+Výsledkem je deterministická analýza: při identickém vstupu nástroj vždy poskytne identický výstup, nezávisle na jakémkoli náhodném prvku.
+
+LLM funguje na zcela odlišném principu.
+Nepracuje s formálními reprezentacemi programu, nespočítá AST a neprovádí průchody grafem toku.
+Místo toho generuje text na základě pravděpodobnostních vzorů naučených při trénování -- vzorů, které mimo jiné zahrnují tisíce příkladů zdrojového kódu, typických chyb, diskusí o programátorských praktikách a komentářů z code review.
+To vede k zásadně odlišným vlastnostem, možnostem i omezením.
+
+\subsection{Typy statických analyzátorů}
+\label{subsec:static-types}
+
+Statické analyzátory (SA) nejsou monolitická kategorie.
+Liší se hloubkou analýzy, rozsahem zachycených problémů a obtížností integrace.
+Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
+
+\begin{enumerate}
+    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy a bývá první linií obrany.
+    Kompilátory jako GCC nebo Clang generují při překladu upozornění (warnings) na potenciálně problematické konstrukce.
+    Typicky jde o detekci nevyužitých proměnných, potenciálně neinicializovaných proměnných, porušení typové bezpečnosti.
+%    \textit{Clang} navíc nabízí rozšířenou sadu upozornění a statický analyzátor přístupný, který dokáže sledovat toky dat a detekovat úniky paměti v jednodušších případech.
+
+    \item \textbf{Lintery a pokročilé statické analyzátory} rozšiřují základní kontrolu o rozsáhlejší sady pravidel zaměřených na dobrou programátorskou praxi, bezpečnost nebo konkrétní kódovací standardy.
+    Pro C++ jsou nejrozšířenějšími nástroji \texttt{clang-tidy} a \texttt{cppcheck}.
+%    \texttt{Clang-tidy} je modulární nástroj integrovaný do ekosystému LLVM, který umožňuje aplikovat checks z kategorií jako modernize (doporučení přechodu na moderní C++), readability (zlepšení čitelnosti), bugprone (detekce vzorů vedoucích k chybám) nebo cert (dodržování bezpečnostních doporučení standardu CERT).
+%    \texttt{Cppcheck} je přenositelný analyzátor zaměřený na detekci skutečných chyb -- přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti.
+
+    \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
+    SonarQube kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu -- takzvaného \emph{technical debt} -- a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
+    Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenziované.
+    Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
+\end{enumerate}
+
+\subsection{Zásadní rozdíly v přístupu}
+\label{subsec:static-vs-llm-differences}
+
+Klíčové rozdíly mezi statickými analyzátory a LLM lze shrnout do čtyř kategorii: determinismus výstupu, hloubka formální analýzy, práce s kontextem a srozumitelnost výstupů.
+
+\subsubsection*{Determinismus vs pravděpodobnost.}
+\label{subsubsec:determinism-vs-probability}
+
+Statický analyzátor je deterministický systém: identický vstup vždy produkuje identický výstup.
+To umožňuje přesnou reprodukovatelnost výsledků a snadné testování samotného nástroje.
+
+LLM je pravděpodobnostní systém: výstup závisí na parametrech inference (zejména teplotě) a není plně reprodukovatelný.
+Při nízké teplotě se modely výstupu přibližují, ale absolutní reprodukovatelnost není garantována.
+Pro systém poskytující automatizovanou zpětnou vazbu studentům to znamená, že výsledky analýzy pro dvě identická odevzdání se mohou v detailech lišit.
+
+\subsubsection*{Formální analýza vs heuristická interpretace.}
+\label{subsubsec:formal-vs-heuristic}
+
+Statický analyzátor provádí formálně definovanou analýzu nad přesnou strukturální reprezentací programu.
+Může dokazovat (v rámci svého modelu) přítomnost nebo absenci určitého vzoru.
+
+LLM provádí heuristickou interpretaci: jeho závěry jsou odhady odvozené ze statistických vzorů, nikoli z formálního průchodu strukturou programu.
+Z toho vyplývá, že LLM může chybět detekce vzoru, který statický analyzátor najde spolehlivě, a naopak -- LLM může upozornit na problém, který statická analýza vůbec nedokáže formalizovat.
+
+\subsubsection*{Kontext zadání a záměr.}
+\label{subsubsec:context}
+
+Toto je oblast, kde LLM přináší základně odlišnou hodnotu.
+Statický analyzátor nemá přístup k žádnému kontextu vně zdrojového kódu -- neví, jakou úlohu program řeší, jaké jsou požadavky na výkonnost nebo jaká jsou omezení implementace.
+LLM, který obdrží zadání úlohy jako součást promptu, dokáže posoudit, zda implementace odpovídá záměru: zda je zvolený algoritmus přiměřeně efektivní, zda jsou použity datové struktury vhodné pro požadovanou operaci nebo zda program zpracovává hraniční vstupy způsobem, který zadání předpokládá.
+Tato schopnost je pro hodnocení studentských prací velmi cenná, jde přesně o tu vrstvu, která vyžaduje lidský úsudek a nejvíce zatěžuje čas vyučujícího.
+
+\emph{Forma výstupů a srozumitelnost.}
+Statické analyzátory typicky produkují stručná technická hlášení vázaná na konkrétní řádek a pravidlo.
+Výstup \texttt{cppcheck} ve tvaru \texttt{[file.cpp:47]: (error) Memory leak: p} je precizní, avšak pro studenta, který nezná základy správy paměti, je pouze obtížně pochopitelný bod bez vysvětlení.
+LLM je schopen generovat vysvětlení přirozeným jazykem, které studentovi popíše, v čem spočívá problém, proč je nebezpečný a jak ho opravit.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Vlastnost} & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
+            \midrule
+            Deterministický výstupu             & Ano                         & Ne (pravděpodobnostní) \\
+            Formální verifikace pravidel        & Ano                         & Ne \\
+            Analýza řízení toku (CFG)           & Ano                         & Omezeně / heuristicky \\
+            Detekce syntaktických chyb          & Ano (spolehlivě)            & Omezeně \\
+            Práce s kontextem zadání úlohy      & Ne                          & Ano \\
+            Hodnocení vhodnosti algoritmu       & Ne                          & Ano (při znalosti zadání) \\
+            Hodnocení čitelnosti a stylu        & Omezeně (dle pravidel)      & Ano \\
+            Vysvětlení přirozeným jazykem       & Ne (technická hlášení)      & Ano \\
+            Škálovatelnost na libovolný kód     & Ano                         & Limitováno kontextem \\
+            Detekce bezpečnostních zranitelností & Ano (definované vzory)     & Omezeně \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Porovnání statických analyzátorů a velkých jazykových modelů při analýze zdrojového kódu}
+    \label{tab:llm-vs-static-summary}
+\end{table}
+
+\subsection{Možnost kombinace přístupů}
+\label{subsec:static-llm-combination}
+
+Z výše uvedeného srovnání vyplývá, že statické analyzátory a LLM by neměly být vnímány jako konkurenční, ale jako komplementární technologie.
+Každý z přístupů pokrývá oblast, kde druhý selhává nebo je slabší.
+
+Statická analýza je silná tam, kde je třeba formální, reprodukovatelná a úplná detekce přesně definovaných vzorů -- syntaktických chyb, jednoduchých úniků paměti, porušení kódovacích standardů.
+LLM je silný tam, kde je třeba kontextová interpretace, srozumitelné vysvětlení a hodnocení aspektů, které nejsou formalizovatelné jako pravidla -- adekvátnost algoritmu, celkový design řešení, koherence pojmenování nebo pochopení záměru zadání.
+
+V prostředí systému Kelvin je vhodné uvažovat o hybridním přístupu: automatické testy a statická analýza pokrývají vrstvu formální správnosti, zatímco LLM přidává vrstvu kontextového hodnocení a srozumitelné zpětné vazby.
+Výstupy statické analýzy mohou být navíc zahrnuty jako součást vstupu do LLM: model může být požádán, aby vysvětlil konkrétní upozornění \texttt{cppcheck} nebo navrhl způsob jeho opravy v kontextu celého řešení.
+Tímto způsobem LLM nezdvojuje práci statického analyzátoru, ale přidává vrstvu interpretace, která formálnímu nástroji chybí.
+
+Je však nutné zachovat realistická očekávání: ani kombinace obou přístupů nenahrazuje odborný úsudek vyučujícího.
+Statická analýza ani LLM nemohou zaručit, že odevzdané řešení je správné, efektivní nebo didakticky přínosné.
+Slouží jako podpůrné nástroje usnadňující orientaci v řešení -- \textbf{nikoli jako jeho hodnotitel}.
+
+\endinput
+

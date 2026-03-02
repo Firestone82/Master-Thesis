@@ -1,0 +1,292 @@
+\section{Základní principy LLM}
+\label{sec:llm-principles}
+
+Velké jazykové modely představují jednu z nejvýznamnějších technologických inovací posledního desetiletí v oblasti umělé inteligence.
+Jejich schopnost generovat koherentní, kontextově relevantní text otevřela nové možnosti v oblastech sahajících od zákaznické podpory přes automatické překlady až po analýzu a generování zdrojového kódu.
+Aby bylo možné zodpovědně posoudit jejich nasazení v konkrétním systému je nutné rozumět principům jejich fungování, způsobu, jakým se učí, a hranicím jejich schopností.
+
+\subsection{Co jsou LLM?}
+\label{subsec:llm-about}
+
+% https://www.redhat.com/en/topics/ai/what-are-large-language-models
+% https://arxiv.org/pdf/2503.17502
+
+Velký jazykový model (Large Language Model, LLM) je třída modelů strojového učení určená k modelování pravděpodobnostního rozdělení přirozeného jazyka.
+Formálně se model snaží odhadnout podmíněnou pravděpodobnost
+
+\begin{equation}
+    P(x_t \mid x_1, x_2, \ldots, x_{t-1}), \label{eq:llm-probability}
+\end{equation}
+
+tedy pravděpodobnost výskytu tokenu $x_t$ na dané pozici na základě všech předcházejících tokenů.
+Zjednodušeně řečeno: model se učí předpovídat, jaké slovo nebo symbol s největší pravděpodobností následuje za dosavadním textem.
+
+Označení \textit{velký} odráží historický vývoj: s rostoucím počtem parametrů modelu a objemem trénovaných dat se kvalita generovaného textu i schopnost zvládat složité úlohy výrazně zlepšují.
+Dnešní modely jsou již trénovány na stovkách miliard až trilionech tokenů a jejich parametry se pohybují v řádu miliard až stovek miliard hodnot.
+
+Klíčovou vlastností moderních LLM je, že nejde pouze o statistické modely jazyka v úzkém slova smyslu.
+Prostřednictvím rozsáhlého trénování a následného dolaďování modely implicitně absorbují encyklopedické znalosti, schopnost logického uvažování a dovednost řídit se instrukcemi formulovanými v přirozeném jazyce.
+
+\subsubsection*{Zdrojový kód jako jazyk}
+\label{subsubsec:code-as-language}
+
+Pro účely této práce je důležité, že zdrojový kód lze z pohledu jazykového modelu chápat jako specifický jazyk -- takový, který má přísnější syntaxi, formálnější sémantiku a výrazně nižší míru nejasnosti než přirozený jazyk.
+Přesto je zdrojový kód stále textem: zapisuje se lineárně, má pravidelnou strukturu a vykazuje statisticky předvídatelné vzory.
+
+Model trénovaný na velkém množství zdrojového kódu se implicitně naučí fráze programovacích jazyků, typické konstrukty a jejich správné použití, časté programátorské chyby i konvence pojmenování.
+Tato schopnost umožňuje LLM provádět nad kódem operace jako syntaktická analýza (rozpoznávání struktur, funkcí, tříd a proměnných), sémantická interpretace (pochopení záměru a účelu jednotlivých částí kódu), detekce potenciálních problémů (identifikace rizikových konstrukcí a neefektivních vzorů) a generování vysvětlení (popis chování kódu přirozeným jazykem srozumitelným i méně zkušeným studentům).
+
+Je však zásadní zdůraznit, co LLM \textbf{není}: není to formální verifikátor ani interpret.
+Negeneruje důkaz správnosti programu, nespouští kód a nevytváří abstraktní syntaktický strom v klasickém slova smyslu.
+Výsledek analýzy je vždy pravděpodobnostní odhad ze statistických vzorů, nikoli logicky zaručený závěr.
+
+\subsection{Historický vývoj}
+\label{subsec:llm-history}
+
+% https://www.geeksforgeeks.org/blogs/history-and-evolution-of-llms/
+% https://www.geeksforgeeks.org/artificial-intelligence/eliza-the-first-step-in-human-computer-interaction-through-natural-language-processing/
+% https://arxiv.org/abs/2206.08896 -- Evolution through Large Models
+% https://arxiv.org/abs/1706.03762 -- Attention is All You Need
+
+Dnešní LLM jsou výsledkem několika desetiletí výzkumu v oblasti zpracování přirozeného jazyka, neuronových sítí a strojového učení.
+Pochopení této vývojové linie pomáhá vysvětlit, proč jsou dnešní modely takové, jaké jsou, a jaké problémy se přitom řešily.
+
+\subsubsection*{Pravidlové systémy (60.--80. léta)}
+\label{subsubsec:llm-history-rules}
+
+Prvními systémy zpracování přirozeného jazyka byly programy pracující na bázi ručně definovaných pravidel a vzorů.
+Nejznámějším příkladem je chatbot ELIZA z roku 1966, který simuloval psychoterapeuta pomocí jednoduchých vzorů přepisování vstupních vět.
+ELIZA přes svou primitivnost vyvolávala v uživatelích dojem skutečného porozumění -- jev, který Joseph Weizenbaum nazval \textit{ELIZA effect}.
+Pravidlové systémy měly však zásadní omezení: každá nová situace vyžadovala nová explicitní pravidla a systém nedokázal generalizovat na neočekávané vstupy.
+
+\subsubsection*{Statistické jazykové modely a n-gramy (80.--2000. léta)}
+\label{subsubsec:llm-history-statistical}
+
+Přechod od pravidel ke statistickým přístupům přinesl výrazný posun.
+N-gramové modely odhadovaly pravděpodobnost výskytu slova na základě $n-1$ předcházejících slov, přičemž pravděpodobnosti byly odhadována z četností v trénovaným korpusu.
+Bigramový model například odhaduje $P(w_t \mid w_{t-1})$ a trigramový model rozšiřuje podmínění o jeden token zpět.
+
+Nevýhoda je zde: kontextové okno bylo omezeno na $n$ tokenů, přičemž při větším $n$ exponenciálně rostla potřeba dat pro spolehlivý odhad pravděpodobností.
+Model tak nemohl zachytit dlouhodobé závislosti v textu -- například to, čemu odkazuje zájmeno na konci věty.
+
+\subsubsection*{Neuronové jazykové modely a word embeddingy (2000.--2017)}
+\label{subsubsec:llm-history-neural}
+
+Nástup neuronových sítí přinesl dvě klíčové inovace.
+První z nich jsou \textit{word embeddingy}, husté vektorové reprezentace slov, ve kterých slova s podobným významem leží geometricky blízko sebe.
+Modely Word2Vec (2013) a GloVe (2014) ukázaly, že lze natrénovat reprezentace zachycující sémantické vztahy: král, můž, žena se blíží slovu královna.
+
+Druhou inovací jsou rekurentní neuronové sítě (RNN) a zejména jejich varianta LSTM (Long Short-Term Memory).
+LSTM zavedlo výpočetní brány, které modelu umožňují selektivně uchovávat informace z předchozích kroků, čímž byl z velké části vyřešen problém mizejícího gradientu (vanishing gradient), který brzdil trénování hlubokých rekurentních sítí.
+Přesto měly RNN a LSTM dvě přetrvávající omezení: zpracovávaly tokeny sekvenčně, což znemožňovalo efektivní paralelizaci, a v praxi měly obtíže se zachycením závislostí na velmi vzdálených tokenech.
+
+\subsubsection*{Architektura Transformer (2017)}
+\label{subsubsec:llm-history-transformer}
+
+Zásadní průlom nastal v roce 2017 s publikací práce \textit{Attention is All You Need} od výzkumníků z Google Brain \TODO{CITACE}.
+Transformer zcela nahradil rekurentní zpracování mechanismem \textit{self-attention}, který umožňuje modelu uvažovat o vztazích mezi \textit{všemi} tokeny vstupu najednou v jednom paralelním výpočtu.
+Tím byly odstraněny obě hlavní nevýhody RNN: výpočty bylo možné plně paralelizovat na GPU a model mohl přirozeně zachytit závislosti mezi libovolně vzdálenými tokeny.
+
+\subsubsection*{Éra předtrénovaných modelů a škálování (2018--současnost)}
+\label{subsubsec:llm-history-pretraining}
+
+Demonstrace síly předtrénování: model natrénovaný na velkém korpusu a následně doladěný na konkrétní úlohu dosahoval výsledků překonávajících dosavadní specializované přístupy.
+GPT-3 (2020, 175 miliard parametrů) ukázal, že se škálováním modelů objevují kvalitativně nové schopnosti.
+Od roku 2022 nastupuje éra instrukčního dolaďování a modelů trénovaných zpětnou vazbou od lidí (RLHF), jejichž výsledkem jsou asistenti jako ChatGPT, Claude nebo Llama.
+
+\TODO{QUESTION: Zjednodušit tuto celou historii, týká se to LLM a její historie, ale je to příliš detailní?}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Éra}  & \textbf{Klíčová technologie}    & \textbf{Zástupce}         \\
+            \midrule
+            60.--80. léta & Pravidlové systémy              & ELIZA (1966)              \\
+            80.--2000.    & N-gramové modely                & IBM Candide               \\
+            2000.--2013   & Neuronové sítě, word embeddingy & Word2Vec (2013)           \\
+            2013--2017    & RNN, LSTM                       & seq2seq (2014)            \\
+            2017--2020    & Transformer, předtrénování      & BERT (2018), GPT-2 (2019) \\
+            2020--2022    & Škálování, few-shot learning    & GPT-3 (2020)              \\
+            2022--dnes    & Instrukční ladění, RLHF         & ChatGPT, Claude, Llama    \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přehled klíčových etap vývoje jazykových modelů}
+    \label{tab:llm-history-summary}
+\end{table}
+
+% https://homel.vsb.cz/~vas218/matd_cz.html
+% https://homel.vsb.cz/~vas218/presentation-forecasting.pdf
+
+\subsection{Tokeny, parametry a kontext}
+\label{subsec:llm-tokens-parameters-context}
+
+Aby bylo možné text zpracovat neuronovou sítí, musí být nejprve převeden do numerické reprezentace.
+Tento proces se skládá ze dvou kroků: tokenizace a embeddingu.
+
+% Nečekal bych, že se mi MATD s Vašínkem bude hodit.
+
+\subsubsection*{Tokenizace}
+
+Tokenizace rozdělí vstupní text na diskrétní jednotky zvané tokeny, přičemž každý token je přiřazen číselnému identifikátoru ze slovníku modelu.
+Moderní tokenizace nepracují na úrovni slov ani jednotlivých písmen, ale využívají metodu \textit{subword tokenizace}.
+Nejrozšířenějším algoritmem je Byte Pair Encoding (BPE), který iterativně slučuje nejčastěji se vyskytující páry bajtů nebo znaků až do dosažení požadované velikosti slovníku.
+
+Výsledkem je, že běžná anglická slova jsou zpravidla zakódována jako jeden token, méně obvyklá slova jako více tokenů.
+Ve zdrojovém kódu jsou klíčová slova programovacích jazyků obvykle jednotlivými tokeny, delší identifikátory jsou rozděleny.
+
+\TODO{Lépe vyobrazit tokenizaci? V latexu to vypadá trošku ošklivě.}
+
+\begin{figure}[H]
+    \centering
+    \begin{verbatim}
+        Vstup:   std::vector<int> data = {1, 2, 3};
+        Tokeny:  ['std', '::', 'vector', '<', 'int', '>', ' data',
+                   ' =', ' {', '1', ',', ' 2', ',', ' 3', '};']
+    \end{verbatim}
+    \caption{Příklad tokenizace výrazu v jazyce C++}
+    \label{fig:tokenization-example}
+\end{figure}
+
+Z pohledu systému Kelvin má tokenizace přímý praktický dopad.
+A to, že délka zdrojového kódu v tokenech je vždy vyšší než počet slov, přičemž jako hrubé pravidlo platí, že jeden token odpovídá přibližně čtyřem znakům anglického textu.
+Pro zdrojový kód s delšími identifikátory a hustou syntaxí může být poměr ještě nižší.
+
+\subsubsection*{Embeddingy a poziční kódování}
+\label{subsubsec:embedding-positional-encoding}
+
+Každý token ze slovníku je mapován na hustý vektorový prostor pomocí \textit{embedding vrstvy}.
+Výsledný vektor $\mathbf{e}_t \in \mathbb{R}^d$ má typicky 768 až 8\,192 dimenzí v závislosti na velikosti modelu.
+Embedding vrstva je trénovaná společně se zbytkem modelu a kóduje sémantické a syntaktické vlastnosti tokenů: tokeny s podobnou funkcí nebo kontextem leží geometricky blízko sebe.
+
+Protože Transformer zpracovává tokeny paralelně bez pořadí, je k embeddingu přidáno \textit{poziční kódování} nesoucí informaci o pozici tokenu v sekvenci.
+Původní Transformer použil deterministické sinusové funkce.
+Ale moderní modely (LLaMA, Qwen a další) využívají \textit{rotační poziční kódování} (RoPE), které kóduje relativní vzdálenosti tokenů přímo do výpočtu attention a lépe generalizuje na kontexty delší, než model viděl při trénování.
+
+\subsubsection*{Parametry modelu}
+\label{subsubsec:model-parameters}
+
+Parametry modelu jsou \textit{rénovatelné váhy}, konkrétně hodnoty matic v attention vrstvách a feed-forward sítích architektury Transformer.
+Jejich počet určuje kapacitu modelu, kde větší modely dokáží zachytit složitější vzory a přirozeněji je zobecňovat.
+Škálovací zákony pak ukazují, že výkon roste jako mocninná funkce počtu parametrů, objemu trénovacích dat a výpočetního výkonu.
+Přičemž pro dosažení optimálního výkonu by počet trénovacích tokenů měl být přibližně dvacetinásobkem počtu parametrů.
+
+\subsubsection*{Kontextové okno}
+\label{subsubsec:context-window}
+
+Kontextové okno je maximální počet tokenů, které model zpracuje v jednom průchodu.
+jedná se tedy o tvrdé omezení, jehož překročení vede ke zkrácení vstupu nebo nutnosti zpracování v oddělených průchodech.
+Velikost okna vzrostla s vývojem modelů dramaticky: GPT-3 měl 2\,048 tokenů, moderní modely dosahují 128\,000 (GPT-4o) až 1\,000\,000 tokenů (Gemini 2.5 Pro).
+
+Pro analýzu studentských řešení v systému Kelvin jsou relevantní modely s oknem alespoň 16\,000 tokenů, které s rezervou pojmou systémový prompt, zadání úlohy i celý odevzdaný zdrojový kód.
+
+\subsection{Základní princip fungování modelů}
+\label{subsec:llm-functioning}
+
+Aby bylo možné posoudit, jak LLM generuje komentáře ke zdrojovému kódu, je nutné porozumět dvěma vzájemně propojeným procesům: architektuře, která tvoří základ výpočtu, a procesu trénování, při němž model získává své schopnosti.
+
+\subsubsection*{Architektura Transformer}
+\label{subsubsec:transformer-architecture}
+
+Transformer je neuronová síť navržená pro zpracování sekvencí, jejíž jádro tvoří mechanismus \textit{self-attention}.
+Ten umožňuje modelu pro každý token v sekvenci zjistit, jak relevantní jsou pro jeho interpretaci všechny ostatní tokeny, a to paralelně v jednom výpočtu.
+
+Formálně lze říci, že vstupní matice tokenu embeddingu $\mathbf{X} \in \mathbb{R}^{T \times d}$ je nejprve lineárními transformacemi promítnuta do tří prostorů: dotazů (queries $\mathbf{Q}$), klíčů (keys $\mathbf{K}$) a hodnot (values $\mathbf{V}$):
+
+\begin{equation}
+    \mathbf{Q} = \mathbf{X}\mathbf{W}^Q, \quad
+    \mathbf{K} = \mathbf{X}\mathbf{W}^K, \quad
+    \mathbf{V} = \mathbf{X}\mathbf{W}^V \label{eq:equations-qkv}
+\end{equation}
+
+Výstup attention mechanismu je pak:
+\begin{equation}
+    \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V})
+    = \text{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right)\mathbf{V} \label{eq:equation-attention}
+\end{equation}
+
+Výraz $\mathbf{Q}\mathbf{K}^\top$ produkuje matici skóre $T \times T$, kde prvek na pozici $(i, j)$ vyjadřuje relevanci tokenu $j$ pro token $i$.
+Softmax tato skóre normalizuje na pravděpodobnostní rozdělení, které se použije jako váhy pro lineární kombinaci hodnotových vektorů.
+V generačních modelech je navíc aplikována \textit{kauzální maska}: skóre pro všechny budoucí tokeny jsou nastavena na $-\infty$, čímž je garantováno, že model při predikci tokenu $t$ nemá přístup k tokenům na pozicích $t+1, t+2, \ldots$
+
+Namísto jednoho attention mechanismu používají Transformery \emph{multi-head attention}: $h$ paralelních attention hlav zpracovává vstup v různých pod prostorech, přičemž se každá hlava může specializovat na jiný typ závislosti (syntaktický vztah, sémantická vazba, vzdálenostní vzor apod.).
+Typicky moderní modely používají 32 až 96 attention hlav.
+
+Každý Transformer blok dále obsahuje dvojvrstvou \emph{feed-forward síť} aplikovanou na každý token nezávisle -- ta slouží jako adresovatelná paměť uchovávající faktické znalosti -- a reziduální spojení s vrstvou normalizací stabilizující trénink.
+Celý model sestává z desítek až stovky těchto bloků vrstvených za sebou.
+
+\subsubsection*{Trénování a dolaďování}
+\label{subsubsec:training-fine-tuning}
+
+Trénování LLM probíhá typicky ve třech fázích:
+
+\begin{itemize}
+    \item \textit{Předtrénování} (pre-training) -- je výpočetně nejnáročnější fází.
+    Model je trénován na stovkách miliard tokenů ze zdrojů jako jsou webové stránky, knihy, vědecké články nebo veřejné repositáře zdrojového kódu.
+    Cílem trénování je minimalizace záporné logaritmické věrohodnosti.
+
+    Model se snaží správně předpovídat každý token na základě předcházejícího kontextu:
+    \begin{equation}
+        \mathcal{L} = -\sum_{t} \log P_\theta(x_t \mid x_1, \ldots, x_{t-1}). \label{eq:training-loss}
+    \end{equation}
+    V rovnici jsou pak parametry aktualizovány algoritmem zpětného šíření chyby (backpropagation).
+
+    \item \textit{Instrukční dolaďování} (supervised fine-tuning, SFT) -- přizpůsobí model schopnosti řídit se pokyny.
+    Model je trénován na spojených párech instrukce--odpověď, čímž se naučí odpovídat ve formátu vhodném pro interakci s uživatelem.
+
+    \item \textit{RLHF} (Reinforcement Learning from Human Feedback) -- dále vylepšuje model na základě lidského hodnocení.
+    Nejprve je vytrénovaný \textit{reward model}, predikující lidské preference, poté je hlavní model optimalizován tak, aby maximalizoval tuto odměnu při zachování blízkosti k původnímu SFT modelu.
+    Výsledkem je model, jehož výstupy jsou věcnější, bezpečnější a lépe odpovídají záměru uživatele.
+\end{itemize}
+
+\subsubsection*{Inference a parametry generování}
+\label{subsubsec:inference-generation}
+
+Při inferenci model generuje výstup autoregresivně, v každém kroku predikuje pravděpodobnostní rozdělení přes celý slovník tokenů a vybere z něj jeden token, který přidá k dosavadní sekvenci.
+Způsob výběru tokenu určuje \textit{dekódovací strategie}:
+
+\begin{itemize}
+    \item \textbf{Greedy decoding} vždy vybere nejpravděpodobnější token -- je deterministické, avšak náchylné k opakování.
+    \item \textbf{Vzorkování s teplotou} vybírá token náhodně z rozdělení upraveného parametrem teploty $T$; nízká teplota ($T < 1$) zvyšuje pravděpodobnost nejpravděpodobnějšího tokenu, vysoká teplota ($T > 1$) rozdělení uhlazuje a zvyšuje variabilitu.
+    \item \textbf{Top-p (nucleus) sampling} vybírá token z nejmenší podmnožiny tokenů, jejichž kumulativní pravděpodobnost překračuje práh $p$, čímž zabraňuje výběru velmi nepravděpodobných tokenů při zachování jisté míry variability.
+\end{itemize}
+
+Pro analýzu zdrojového kódu ve školním prostředí je žádoucí konzistentnost a determinismus, kde cílem je diagnostika, nikoli kreativní generování.
+Proto se doporučuje nízká teplota v rozsahu $T = 0{,}1$ až $T = 0{,}3$ kombinovaná s top-p vzorkováním.
+\TODO{QUESTION: Zmínit toto až u implementace?}
+
+Důležitou optimalizací inference je \textit{KV cache}: klíče a hodnoty ($\mathbf{K}$, $\mathbf{V}$) pro tokeny vstupního prefixu jsou uloženy do cache a nepřepočítávají se při každém dalším generovacím kroku.
+Tím se drasticky snižuje výpočetní náročnost inference, avšak za cenu vyšší spotřeby paměti -- KV cache roste lineárně s délkou sekvence a počtem vrstev modelu.
+
+\subsubsection*{Zjednodušený přehled procesu}
+\label{subsubsec:llm-simplified-process}
+
+Prakticky lze z hlediska fungování modelu zjednodušit do následujících kroků:
+
+\begin{enumerate}
+    \item vstupní text je rozdělen na tokeny,
+    \item jednotlivé tokeny jsou převedeny na numerické reprezentace (embeddingy) včetně poziční informace,
+    \item data procházejí opakovaně několika bloky architektury Transformer (self-attention a feed-forward vrstvy),
+    \item výstupní vrstva vypočítá pravděpodobnostní rozdělení nad možnými dalšími tokeny,
+    \item na základě zvoleného dekódovacího mechanismu je vybrán konkrétní token,
+    \item proces se opakuje až do splnění ukončující podmínky (např.~ vygenerování speciálního koncového tokenu nebo dosažení maximální délky sekvence).
+\end{enumerate}
+
+\subsubsection*{Rozdělení podle způsobu trénování}
+\label{subsubsec:llm-training-types}
+
+Z hlediska trénování lze modely rozdělit do několika skupin:
+
+\begin{itemize}
+    \item \textbf{Předtrénované modely} – univerzální modely trénované na rozsáhlých datech, které lze použít pro široké spektrum úloh bez dalšího trénování.
+    \item \textbf{Jemně doladěné (fine-tuned) modely} – modely, které jsou dále specializovány na konkrétní úlohu nebo doménu pomocí dodatečných trénovaných dat.
+    \item \textbf{Multimodální modely} – modely schopné pracovat s více typy vstupních dat (např\. text a obraz).
+    \item \textbf{Doménově specifické modely} – modely optimalizované pro konkrétní průmyslové nebo odborné oblasti.
+\end{itemize}
+
+Z pohledu této diplomové práce jsou nejrelevantnější autoregresivní transformer modely, které umožňují generovat textové výstupy na základě vstupního zdrojového kódu.
+Tyto modely jsou vhodné pro generování komentářů, shrnutí řešení a identifikaci potenciálních problémů ve studentských úlohách.
+
+\endinput
