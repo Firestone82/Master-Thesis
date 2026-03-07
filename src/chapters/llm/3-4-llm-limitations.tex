@@ -10,7 +10,7 @@ Jak bylo popsáno v sekci~\ref{sec:llm-principles}, velké jazykové modely jsou
 Jejich výstup nepředstavuje formální důkaz správnosti, ale kvalifikovaný odhad založený na statistických vzorech naučených během trénování.
 Tato vlastnost je pro generování komentářů a pedagogických vysvětlení cenná, avšak současně přináší celou řadu technických, provozních a bezpečnostních rizik, která musí být při nasazení v reálném školním prostředí pečlivě zohledněna.
 
-Tato sekce systematicky rozebírá čtyři hlavní kategorie omezení: limit kontextového okna, výpočetní a provozní náročnost, paměťové nároky a otázky ochrany dat.
+Tato sekce systematicky rozebírá čtyři hlavní kategorie omezení: limit kontextového okna, výpočetní a provozní náročnost, paměťové nároky a otázky ochrany dat~\cite{ibm2024llmlimitations}.
 
 \subsection{Limit na počet tokenů}
 \label{subsec:llm-token-limit}
@@ -159,14 +159,14 @@ Klíčovou otázkou je, zda poskytovatel API data uchovává, a pokud ano, po ja
 Zvláště citlivou oblastí je využití vstupních dat pro další trénování modelu.
 Někteří poskytovatelé to explicitně vylučují nebo umožňují opt-out, ale podmínky se mohou měnit a je nutné je průběžně sledovat.
 
-V rámci Evropské unie je při zpracování osobních údajů třetí stranou zpravidla nutné uzavřít smlouvu o zpracování osobních údajů (Data Processing Agreement).
+V rámci Evropské unie je při zpracování osobních údajů třetí stranou zpravidla nutné uzavřít smlouvu o zpracování osobních údajů (Data Processing Agreement)~\cite{nist2023airmf}.
 Pro školní prostředí tak cloudové API není automaticky nevhodné, ale vyžaduje právní ošetření ze strany instituce.
 \TODO{QUESTION: Doplnit GDPR? Záleži opravdu na tom? Nebo to jenom Beránek nechce dál publikovat.}
 
 \subsubsection*{Prompt injection jako bezpečnostní riziko}
 \label{subsubsec:prompt-injection}
 
-Prompt injection je specifická třída bezpečnostních útoků cílená na systémy postavené na LLM.
+Prompt injection je specifická třída bezpečnostních útoků cílená na systémy postavené na LLM~\cite{owasp2024promptinjection}.
 Útočník, tomto případě potenciálně student, vloží do vstupu (zdrojového kódu) text formulovaný jako instrukce pro model.
 Cílem je přepsat nebo obejít systémový prompt a přimět model k chování, které nebylo zamýšleno.
 
