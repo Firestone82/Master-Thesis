@@ -1,0 +1,193 @@
+\section{Porovnání možností nasazení}
+\label{sec:selection-deployment}
+
+Jazykové modely lze do systému integrovat dvěma základními způsoby: prostřednictvím cloudového API nebo lokálním on-premise nasazením.
+Každý z přístupů s sebou nese vlastní sadu výhod, omezení a kompromisů.
+Tato sekce analyzuje obě varianty z hlediska hardwarových nároků, provozních limitů, ochrany dat a nákladů.
+
+\subsection{Cloudové API}
+\label{subsec:deployment-cloud}
+
+Cloudové API je způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
+Integrace probíhá prostřednictvím standardních HTTP volání -- vývojář odešle dotaz (prompt) na API endpoint poskytovatele a obdrží odpověď modelu.
+Výpočet probíhá plně na straně poskytovatele; provozovatel aplikace (v tomto případě systém Kelvin) nepotřebuje žádný specializovaný hardware.
+
+Mezi nejznámější poskytovatele cloudových API pro jazykové modely patří:
+\begin{itemize}
+    \item \textbf{OpenAI} -- poskytuje přístup k modelům řady GPT-4o a GPT-4o-mini přes API \cite{openai_api}.
+    \item \textbf{Anthropic} -- poskytuje přístup k modelům Claude~3.5 Sonnet a Claude~3.5 Haiku \cite{anthropic_api}.
+    \item \textbf{Google} -- přístup k modelům Gemini prostřednictvím Google AI Studio nebo Vertex AI \cite{google_vertex}.
+    \item \textbf{Mistral AI} -- poskytuje přístup k vlastním modelům Mistral Large a Mistral Nemo, které jsou k dispozici i jako open-source\footnote{Open-source zde znamená, že váhy modelu jsou volně dostupné ke stažení. Open-source LLM lze nasadit lokálně bez nutnosti platit za API přístupy.} ke stažení \cite{mistral2023}.
+\end{itemize}
+
+\subsubsection*{Hardwarové nároky}
+
+Z pohledu provozovatele systému Kelvin jsou hardwarové nároky cloudového API prakticky nulové.
+Veškerý výpočet probíhá na serverech poskytovatele; na straně Kelvinu je potřeba pouze stabilní internetové připojení a server, který zvládne odesílat HTTP požadavky na API endpoint.
+To je výrazná výhoda oproti on-premise nasazení, které vyžaduje specializovaný hardware.
+
+\subsubsection*{Limity}
+
+Cloudová API zavádějí několik typů omezení, která je nutné při návrhu systému zohlednit:
+
+\begin{itemize}
+    \item \textbf{Limit počtu tokenů v kontextu} -- každý model má maximální délku zpracovatelného vstupu i výstupu.
+    Toto omezení je zpravidla dostatečné (běžně 128\,000 tokenů nebo více), ale je třeba jej sledovat pro případ velmi rozsáhlých odevzdání.
+
+    \item \textbf{Rate limiting}\footnote{Rate limiting (omezení frekvence požadavků) je mechanismus, jímž poskytovatel API omezuje, kolik požadavků může klient odeslat za danou časovou jednotku. Typicky se udává jako RPM -- requests per minute.}
+    -- poskytovatelé omezují počet požadavků za minutu (RPM) a počet tokenů za minutu (TPM) pro každý API klíč.
+    V případě hromadného odevzdávání úloh před deadlinem, kdy mnoho studentů odešle řešení v krátkém časovém okně, může systém narazit na tyto limity a být nucen požadavky zpomalit nebo zařadit do fronty.
+
+    \item \textbf{Závislost na dostupnosti poskytovatele} -- pokud API poskytovatele není dostupné (výpadek, plánovaná odstávka), systém nemůže provádět analýzu.
+    Tento bod je zmírněn skutečností, že analýza v systému Kelvin probíhá asynchronně a není nutně vyžadována okamžitě při odevzdání.
+\end{itemize}
+
+\subsubsection*{Ochrana dat}
+
+Použití cloudového API znamená, že vstupní data -- mimo jiné zdrojové kódy studentů a zadání úloh -- jsou odesílána na servery externího poskytovatele a zde zpracovávána.
+To vyvolává otázky z hlediska ochrany osobních údajů a souladu s nařízením GDPR \cite{gdpr2016}.
+
+Klíčové otázky, které je nutné s poskytovatelem API vyřešit:
+\begin{itemize}
+    \item Jsou vstupní data uchovávána po zpracování, a pokud ano, jak dlouho?
+    \item Jsou data využívána pro trénování modelů? (Toto je pro ochranu soukromí studentů obzvláště citlivé.)
+    \item Kde fyzicky probíhá zpracování dat? Je zpracování realizováno na serverech v EHP?
+    \item Je poskytovatel ochoten uzavřít smlouvu o zpracování osobních údajů (Data Processing Agreement, DPA)?
+\end{itemize}
+
+Velcí poskytovatelé jako OpenAI a Anthropic nabízejí zákazníkům uzavření DPA a mají varianty API, u nichž se zavazují, že data nebudou použita pro trénování modelů.
+Záleží však na konkrétním smluvním uspořádání.
+Pro českou veřejnou vysokou školu tak cloudové API není automaticky nevhodné, ale vyžaduje právní ošetření ze strany institutu nebo školy \cite{gdpr2016}.
+
+\subsubsection*{Náklady}
+
+Náklady cloudových API jsou určeny cenovým modelem \emph{za token}.
+Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny jsou typicky dražší.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{llll}
+            \toprule
+            \textbf{Model}              & \textbf{Vstupní tokeny (\$/1M)} & \textbf{Výstupní tokeny (\$/1M)} & \textbf{Přibližný náklad / odevzdání} \\
+            \midrule
+            GPT-4o (OpenAI)             & 2,50                            & 10,00                            & $\sim$0,01--0,05 \$ \\
+            GPT-4o-mini (OpenAI)        & 0,15                            & 0,60                             & $\sim$0,001--0,005 \$ \\
+            Claude 3.5 Sonnet           & 3,00                            & 15,00                            & $\sim$0,01--0,06 \$ \\
+            Claude 3.5 Haiku            & 0,80                            & 4,00                             & $\sim$0,003--0,015 \$ \\
+            Gemini 1.5 Pro              & 1,25                            & 5,00                             & $\sim$0,005--0,025 \$ \\
+            Gemini 1.5 Flash            & 0,075                           & 0,30                             & $\sim$0,0003--0,001 \$ \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přibližné ceny vybraných cloudových API modelů (stav 2024--2025) \cite{openai_api, anthropic_api, google_vertex}. Náklady na jedno odevzdání jsou orientační výpočet pro vstup 4\,000 tokenů a výstup 1\,000 tokenů.}
+    \label{tab:cloud-api-costs}
+\end{table}
+
+Pro systém se stovkami odevzdání ročně jsou náklady za použití cenově dostupnějších modelů (GPT-4o-mini, Claude Haiku, Gemini Flash) velmi přijatelné -- v řádu jednotek dolarů za semestr.
+Při použití nejvýkonnějších modelů (GPT-4o, Claude Sonnet) mohou náklady vzrůst, avšak stále zůstávají v rozumných mezích pro akademické použití.
+
+\subsection{On-premise řešení}
+\label{subsec:deployment-on-premise}
+
+On-premise nasazení znamená provozování jazykového modelu přímo na serverech instituce, bez využití externích cloudových služeb.
+Pro tuto variantu existuje několik softwarových nástrojů usnadňujících správu a inferenci modelů:
+
+\begin{itemize}
+    \item \textbf{Ollama} \cite{ollama} -- nástroj umožňující snadné stažení a spuštění open-source jazykových modelů lokálně.
+    Poskytuje REST API kompatibilní s rozhraním OpenAI, což zjednodušuje migraci mezi cloudovým a lokálním nasazením.
+
+    \item \textbf{vLLM} \cite{vllm2023} -- výkonný inference server pro nasazení v produkčním prostředí.
+    Implementuje optimalizace jako \emph{PagedAttention}\footnote{PagedAttention je technika správy paměti pro KV cache, která ji rozděluje do stránek pevné velikosti podobně jako virtuální paměť v operačních systémech. To umožňuje efektivnější využití paměti GPU a výrazně vyšší propustnost při obsluze více souběžných požadavků.}, díky nimž dosahuje výrazně vyšší propustnosti než naivní implementace.
+    Je vhodný pro produkční nasazení s více souběžnými uživateli.
+
+    \item \textbf{llama.cpp} \cite{llamacpp} -- implementace inference v jazyce C++, schopná provozovat modely i na CPU nebo na méně výkonných GPU.
+    Podporuje kvantizaci\footnote{Kvantizace je technika komprese modelu, při níž jsou váhy sítě reprezentovány s menší přesností (například 4 nebo 8 bitů namísto 16). Tím se výrazně sníží paměťové nároky při zachování přijatelné kvality výstupů.} do formátů GGUF, díky níž lze modely provozovat na hardware s omezenou pamětí GPU.
+\end{itemize}
+
+\subsubsection*{Hardwarové nároky}
+
+Pro on-premise nasazení je zcela zásadní dostupnost vhodného hardware.
+Inference jazykových modelů je výpočetně náročná operace (viz sekce~\ref{subsec:llm-computational-cost}), proto je využití GPU\footnote{GPU (Graphics Processing Unit) -- grafický procesor s tisíci paralelními výpočetními jádry, vhodný pro maticové operace tvořící základ LLM inference.}
+s dostatečnou kapacitou paměti VRAM\footnote{VRAM (Video RAM) -- specializovaná paměť grafického procesoru, do níž musí být uloženy váhy celého modelu. Nedostatečná VRAM znemožňuje spuštění modelu.}
+téměř nezbytné pro přijatelné výkony.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lllll}
+            \toprule
+            \textbf{Model (velikost)} & \textbf{Přesnost FP16} & \textbf{Kvantizace Q8} & \textbf{Kvantizace Q4} & \textbf{Minimální GPU} \\
+            \midrule
+            7B parametrů   & $\sim$14 GB & $\sim$7 GB  & $\sim$4--5 GB & RTX 3080 / 4070 (10--12 GB) \\
+            13B parametrů  & $\sim$26 GB & $\sim$13 GB & $\sim$7--9 GB & RTX 3090 / 4090 (24 GB) \\
+            32B parametrů  & $\sim$64 GB & $\sim$32 GB & $\sim$18 GB   & A100 (40 GB) nebo 2× RTX 3090 \\
+            70B parametrů  & $\sim$140 GB & $\sim$70 GB & $\sim$40 GB  & A100 80 GB nebo více GPU \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přibližné hardwarové nároky open-source modelů pro on-premise nasazení. Hodnoty jsou orientační a závisí na konkrétní architektuře modelu. Nezahrnují paměť nutnou pro KV cache.}
+    \label{tab:on-premise-hardware}
+\end{table}
+
+\subsubsection*{Limity}
+
+On-premise nasazení přináší vlastní sadu omezení:
+
+\begin{itemize}
+    \item \textbf{Omezení dostupným hardware} -- kvalita a rychlost analýzy jsou přímou funkcí dostupného GPU.
+    Na nedostatečném hardware je nutné volit menší nebo silněji kvantizované modely, což může snižovat kvalitu výstupů.
+
+    \item \textbf{Škálovatelnost} -- cloudové API automaticky škáluje s nárůstem zátěže; lokální server má fixní kapacitu.
+    Při hromadném odevzdávání se požadavky řadí do fronty a čekají na zpracování.
+
+    \item \textbf{Správa modelu} -- nové verze modelů musí být ručně staženy a nasazeny.
+    Aktualizace nebo výměna modelu vyžaduje přímou intervenci správce systému.
+\end{itemize}
+
+\subsubsection*{Ochrana dat}
+
+Z pohledu ochrany dat je on-premise nasazení výrazně jednodušší situace.
+Studentské zdrojové kódy a zadání úloh nikdy neopustí infrastrukturu školy.
+Neexistuje třetí strana, které by musela být svěřena správa dat, a není potřeba uzavírat DPA s externím poskytovatelem.
+Z hlediska GDPR jde o přímočarou variantu: správce dat (škola) je totožný s provozovatelem infrastruktury.
+
+\subsubsection*{Náklady}
+
+Náklady on-premise nasazení mají odlišnou strukturu než u cloudového API:
+
+\begin{itemize}
+    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např. NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60\,000 Kč výše.
+    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200\,000--500\,000 Kč).
+
+    \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400 W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
+
+    \item \textbf{Nulové náklady za token} -- po zaplacení hardware jsou marginalní náklady na každé zpracované odevzdání prakticky nulové, bez ohledu na počet odevzdání.
+\end{itemize}
+
+Pro systém s malým počtem uživatelů a odevzdání může být on-premise pořizovací investice ekonomicky nevýhodná ve srovnání s cloudovým API.
+Naopak pro systém se stovkami studentů zpracovávajícími tisíce odevzdání ročně se on-premise investice může vyplatit v horizontu 1--2 let.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Vlastnost}           & \textbf{Cloudové API}                     & \textbf{On-premise nasazení} \\
+            \midrule
+            Hardwarové nároky            & Žádné (výpočet u poskytovatele)           & GPU server (10+ GB VRAM) \\
+            Pořizovací náklady           & Nulové                                    & Vysoké (GPU hardware) \\
+            Průběžné náklady             & Za token (opakující se)                   & Elektřina a správa \\
+            Škálovatelnost               & Automatická (rate limity)                 & Fixní kapacita \\
+            Ochrana dat                  & Data opouštějí školu (DPA nutné)          & Data zůstávají na škole \\
+            Kvalita modelů               & Nejnovější (GPT-4o, Claude Sonnet)        & Závisí na hardware \\
+            Latence                      & Závislá na internetu a zátěži API         & Závisí na hardware \\
+            Správa a aktualizace         & Automatická (poskytovatel)                & Manuální (správce) \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Srovnání cloudového API a on-premise nasazení jazykového modelu z hlediska klíčových vlastností}
+    \label{tab:deployment-comparison}
+\end{table}
+
+\endinput

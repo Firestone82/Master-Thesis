@@ -1,0 +1,122 @@
+\section{Kritéria výběru modelu}
+\label{sec:selection-criteria}
+
+Výběr vhodného jazykového modelu pro integraci do systému Kelvin není triviální rozhodnutí.
+Na trhu existují desítky modelů s různými vlastnostmi, způsoby nasazení a cenovými modely.
+Aby bylo možné provést strukturované srovnání, je nutné nejprve definovat kritéria, podle nichž budou modely posuzovány.
+Tato sekce popisuje čtyři klíčová kritéria relevantní pro konkrétní použití v kontextu analýzy studentských programátorských úloh.
+
+\subsection{Kvalita výstupů}
+\label{subsec:criteria-quality}
+
+Nejdůležitějším kritériem je schopnost modelu generovat výstupy, které jsou pro učitele i studenty skutečně užitečné.
+Kvalita výstupů v kontextu analýzy kódu zahrnuje několik dílčích vlastností:
+
+\begin{itemize}
+    \item \textbf{Věcná správnost} -- model musí identifikovat reálné problémy v kódu a nepřidávat falešné výstrahy (\emph{false positives}).
+    Falešný pozitivní nález (tedy upozornění na problém, který neexistuje) je pro studenta matoucí a pro učitele zbytečná zátěž.
+
+    \item \textbf{Relevance k zadání} -- model by měl posuzovat řešení s ohledem na konkrétní zadání úlohy, nejen na obecné programátorské principy.
+    Například to, zda je zvolený algoritmus přiměřený požadovaným omezením (velikost vstupu, požadavky na rychlost), není z kódu samotného zjistitelné bez kontextu zadání.
+
+    \item \textbf{Srozumitelnost a didaktická hodnota} -- výstupy musí být psány jazykem, kterému studenti rozumí.
+    Technické termíny jsou v pořádku, pokud jsou používány přesně, ale výstup nesmí být prázdnou formálností.
+    Model by měl vysvětlit \emph{proč} je daná část kódu problematická a navrhnout konkrétní způsob opravy.
+
+    \item \textbf{Konzistentnost} -- model by měl pro podobné vstupy generovat podobné výstupy.
+    Absolutní reprodukovatelnost není u pravděpodobnostních systémů realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáními zásadně lišit.
+\end{itemize}
+
+Pro objektivní porovnání kvality modelů existují standardizované benchmarky\footnote{Benchmark je soubor testovacích úloh sloužící k měření výkonu systému za kontrolovaných podmínek.}
+zaměřené na schopnost porozumění a generování kódu.
+Nejznámější z nich jsou:
+
+\begin{itemize}
+    \item \textbf{HumanEval} \cite{humaneval2021} -- sada 164 programátorských úloh v jazyce Python s automatickým ověřením správnosti generovaného kódu.
+    Výsledek (pass@1) udává, jak často model na první pokus vygeneruje správné řešení.
+
+    \item \textbf{MBPP} (Mostly Basic Python Problems) \cite{mbpp2021} -- podobný benchmark s důrazem na jednoduché úlohy vhodné pro začátečníky.
+
+    \item \textbf{LiveCodeBench} \cite{livecodebench2024} -- novější benchmark zahrnující úlohy z programátorských soutěží, které průběžně přibývají,
+    čímž snižuje riziko kontaminace trénovacích dat\footnote{Kontaminace trénovacích dat nastane, když jsou testovací úlohy obsaženy v datech, na nichž byl model trénován. V takovém případě model úlohu nemusí skutečně \uv{vyřešit} -- mohl ji memorovat.}.
+\end{itemize}
+
+Je důležité mít na paměti, že benchmarky měří především schopnost \emph{generovat} kód, nikoli schopnost \emph{analyzovat} a \emph{komentovat} existující kód.
+Pro systém Kelvin je cílem druhá jmenovaná schopnost.
+Benchmarky slouží jako orientační ukazatel kvality modelu, ale nelze z nich přímo vyvodit závěry o kvalitě generovaných code review komentářů.
+Proto jsou výsledky benchmarků v této kapitole doplněny o kvalitativní hodnocení na základě manuálního testování vybraných modelů na vzorku historických studentských odevzdání.
+
+\subsection{Dostupnost modelu}
+\label{subsec:criteria-availability}
+
+Dostupností se v tomto kontextu rozumí několik vzájemně propojených otázek:
+
+\begin{itemize}
+    \item \textbf{Způsob přístupu} -- je model dostupný jako cloudové API, nebo jako open-source model ke stažení a lokálnímu nasazení?
+    Cloudové API nabízí snadnou integraci bez hardwarových nároků, ale zavádí závislost na externím poskytovateli.
+    Open-source modely umožňují lokální nasazení a plnou kontrolu nad zpracováním dat.
+
+    \item \textbf{Licenční podmínky} -- pro akademické a potenciálně komerční použití v rámci instituce je nutné ověřit, zda licence modelu takové použití umožňuje.
+    Mnoho modelů je dostupných pod permisivními licencemi (Apache~2.0, MIT), ale některé mají omezení pro komerční použití nebo vyžadují uzavření samostatné licenční smlouvy.
+
+    \item \textbf{Geografická dostupnost a datová centra} -- pro českou akademickou instituci je relevantní, zda cloudová API zpracovávají data v rámci Evropského hospodářského prostoru (EHP).
+    Přenos osobních údajů studentů mimo EHP podléhá přísným podmínkám dle nařízení GDPR.
+
+    \item \textbf{Stabilita a podpora} -- cloudové API musí být spolehlivé a výrobce musí poskytovat průběžnou podporu.
+    Pro akademické použití je důležitá i předvídatelnost cenového modelu a garancí dostupnosti (SLA).
+\end{itemize}
+
+\subsection{Náročnost provozu}
+\label{subsec:criteria-operational-cost}
+
+Náročnost provozu určuje, jaké zdroje jsou potřeba k dlouhodobému provozování modelu v produkčním prostředí.
+Zahrnuje jak finanční náklady, tak nároky na infrastrukturu a údržbu.
+
+U cloudových API jsou náklady typicky určeny cenovými modely \emph{za token}\footnote{Token je základní jednotka textu, s níž modely pracují -- přibližně odpovídá čtyřem znakům nebo třičtvrtě slova v angličtině. Viz sekce~\ref{subsec:llm-tokens-parameters-context}.}.
+Pro typickou analýzu jednoho studentského odevzdání, zahrnující systémový prompt, zadání a zdrojový kód, je potřeba přibližně 2\,000--8\,000 vstupních tokenů a 500--2\,000 výstupních tokenů.
+Celkové náklady na jedno odevzdání tak závisí na zvoleném modelu a jeho cenové politice.
+
+Pro on-premise\footnote{On-premise (zkráceně on-prem) označuje řešení provozované na vlastní infrastruktuře instituce, nikoliv u externího poskytovatele.} nasazení jsou jednorázové náklady na pořízení GPU\footnote{GPU (Graphics Processing Unit) -- grafický procesor původně navržený pro zobrazování grafiky, ale díky svým masivně paralelním výpočetním schopnostem velmi vhodný i pro trénování a inferenci neuronových sítí.}
+serveru výrazně vyšší, avšak průběžné náklady (elektřina, chlazení, správa) jsou nižší než opakující se poplatky za API přístupy.
+
+\subsection{Schopnost pojmout celé studentské řešení}
+\label{subsec:criteria-context-window}
+
+Jak bylo popsáno v sekci~\ref{subsec:llm-token-limit}, každý model je omezen maximální délkou vstupu -- takzvaným \emph{kontextovým oknem}.
+Pro analýzu studentského řešení musí kontext pojmout:
+
+\begin{enumerate}
+    \item \textbf{Systémový prompt} -- instrukce definující roli modelu, požadovaný formát výstupu a obecné pokyny pro analýzu.
+    Typicky 200--800 tokenů.
+
+    \item \textbf{Zadání úlohy} -- popis úlohy, požadavky, vstupy a výstupy.
+    Typicky 100--500 tokenů, v případě obsáhlého zadání i více.
+
+    \item \textbf{Zdrojový kód studenta} -- samotné odevzdané řešení.
+    Pro typické úlohy z výuky programování v jazyce C++ se rozsah pohybuje od 50 do 500 řádků kódu.
+    Odpovídá přibližně 500 až 5\,000 tokenům (zdrojový kód je z hlediska tokenizace efektivnější než přirozený jazyk, protože identifikátory a klíčová slova jsou kratší).
+\end{enumerate}
+
+Pro standardní studentské odevzdání v systému Kelvin je tedy dostačující kontextové okno přibližně \textbf{8\,000 tokenů}.
+Aby byl systém schopen zvládnout i rozsáhlejší úlohy (větší projekty, vícesouborová řešení) a aby byl respektován princip dostatečné rezervy, je jako \textbf{minimální požadavek} stanoveno \textbf{16\,000 tokenů}.
+Moderní modely tuto hranici zpravidla bez problémů splňují -- většina aktuálně dostupných modelů nabízí kontextové okno 32\,000 až 128\,000 tokenů.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lp{9cm}l}
+            \toprule
+            \textbf{Kritérium}              & \textbf{Popis}                                                                 & \textbf{Minimální požadavek} \\
+            \midrule
+            Kvalita výstupů                 & Věcně správné, srozumitelné, relevantní komentáře                              & Vyšší než průměr \\
+            Dostupnost                      & Přístupný přes API nebo ke stažení; vhodná licence pro akademické použití      & Open-source nebo API s DPA \\
+            Náročnost provozu               & Přijatelné náklady na token nebo na hardware                                   & Viz tabulka~\ref{tab:deployment-comparison} \\
+            Kontextové okno                 & Schopnost zpracovat celé odevzdání včetně promptu                              & $\geq$ 16\,000 tokenů \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přehled kritérií výběru modelu a jejich minimálních požadavků}
+    \label{tab:selection-criteria}
+\end{table}
+
+\endinput

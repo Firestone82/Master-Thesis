@@ -1,4 +1,23 @@
 \chapter{Výběr modelů a vhodnost pro integraci}
 \label{ch:selection}
 
+Předcházející kapitola popsala velké jazykové modely z pohledu jejich principu fungování, možností analýzy kódu a hlavních rizik jejich nasazení.
+Tato kapitola na ni navazuje a přechází od obecného teoretického popisu k praktické otázce: \emph{který konkrétní model a jakým způsobem nasadit v systému Kelvin?}
+
+Výběr modelu pro produkční nasazení není triviální rozhodnutí.
+Na trhu dnes existují desítky modelů s různými vlastnostmi, způsoby přístupu, cenovými modely a licenčními podmínkami.
+Bez systematického přístupu k jejich porovnání hrozí, že bude zvoleno řešení, které sice technicky funguje, ale je příliš drahé, nedostatečně výkonné, nebo nevyhovuje požadavkům na ochranu dat.
+
+Kapitola je strukturována do šesti částí.
+Nejprve jsou definována kritéria výběru (\ref{sec:selection-criteria}), poté jsou porovnány způsoby nasazení (\ref{sec:selection-deployment}) a popsány technické nároky na inference (\ref{sec:selection-technical}).
+Jádro kapitoly tvoří přehled a analýza dostupných modelů (\ref{sec:selection-models}) a návrh promptové strategie (\ref{sec:selection-prompts}).
+Kapitolu uzavírá odůvodnění zvolené varianty (\ref{sec:selection-choice}).
+
+\input{chapters/selection/4-1-selection-criteria}
+\input{chapters/selection/4-2-selection-deployment}
+\input{chapters/selection/4-3-selection-technical}
+\input{chapters/selection/4-4-selection-models}
+\input{chapters/selection/4-5-selection-prompts}
+\input{chapters/selection/4-6-selection-choice}
+
 \endinput

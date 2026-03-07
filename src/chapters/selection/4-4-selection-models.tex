@@ -1,0 +1,185 @@
+\section{Analýza dostupných modelů}
+\label{sec:selection-models}
+
+Tato sekce přináší přehled jazykových modelů dostupných v době psaní této práce (2024--2025), které jsou relevantní pro analýzu zdrojového kódu.
+Modely jsou rozděleny do dvou skupin: modely specializované primárně na práci se zdrojovým kódem (code-first modely) a modely obecné povahy s rozsáhlými znalostmi kódu.
+Sekci uzavírá srovnávací tabulka klíčových vlastností.
+
+\subsection{Přehled dostupných modelů}
+\label{subsec:models-overview}
+
+Trh jazykových modelů se v posledních dvou letech (2023--2025) vyvíjí nebývale rychlým tempem.
+Nové modely nebo jejich aktualizované verze jsou vydávány každé týdny až měsíce.
+Tato dynamika ztěžuje trvalé srovnání, proto se tato sekce soustředí na modely, které v daném období prokázaly konzistentně dobré výsledky při práci s kódem, a na principy jejich hodnocení -- ty zůstanou relevantní i po vydání novějších verzí.
+
+Modely lze rozdělit podle způsobu přístupu:
+\begin{itemize}
+    \item \textbf{Proprietární (uzavřené) modely} -- dostupné pouze přes placené cloudové API; výrobci nezveřejňují váhy ani podrobnosti architektury. Typicky nabízejí nejvyšší kvalitu.
+    \item \textbf{Open-source modely} -- váhy jsou volně dostupné ke stažení a lokálnímu nasazení; výrobci zpravidla zveřejňují i technické detaily trénování.
+\end{itemize}
+
+\subsection{Modely zaměřené na zdrojový kód}
+\label{subsec:models-code-focused}
+
+Modely specializované na kód jsou trénovány na datasetech\footnote{Dataset je soubor dat použitý pro trénování nebo vyhodnocování modelu. Code-first modely jsou trénovány na datasetech složených převážně ze zdrojového kódu -- typicky z veřejných repozitářů jako GitHub.}
+s vyšším zastoupením zdrojového kódu oproti obecným textům.
+Díky tomu zpravidla dosahují lepších výsledků na programátorských benchmarcích, zejména na úlohách zahrnujících generování kódu.
+
+\subsubsection*{DeepSeek-Coder-V2}
+
+Model vyvinutý čínskou společností DeepSeek \cite{deepseekcoder2024}.
+Dostupný ve dvou variantách -- 16B a 236B parametrů -- pod licencí DeepSeek, která umožňuje akademické a komerční použití s určitými omezeními.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Vynikající výsledky na programátorských benchmarcích (HumanEval, LiveCodeBench), podpora 338 programovacích jazyků, kontextové okno 128\,000 tokenů.
+    \item \textbf{Slabé stránky:} Varianta 236B je paměťově velmi náročná pro lokální nasazení; varianta 16B je přijatelná. Čínský původ společnosti může být překážkou při posuzování závislosti na dodavateli (vendor lock-in\footnote{Vendor lock-in označuje situaci, kdy je zákazník závislý na jednom dodavateli a přechod ke konkurenci je obtížný nebo nákladný.}) nebo při interních politikách instituce.
+\end{itemize}
+
+\subsubsection*{Qwen2.5-Coder}
+
+Model vyvinutý společností Alibaba v rámci rodiny modelů Qwen \cite{qwen25coder2024}.
+Dostupný v několika velikostech (7B, 32B, 72B) pod licencí Apache~2.0 pro menší varianty, přičemž větší modely podléhají Qwen licenci.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Varianta 7B je výkonnostně srovnatelná s mnohem většími modely; velmi dobré výsledky na code review a code completion úlohách; kontextové okno 128\,000 tokenů; varianta 7B s Q4 kvantizací je provozovatelná i na spotřebitelském GPU s 8 GB VRAM.
+    \item \textbf{Slabé stránky:} Podobně jako DeepSeek jde o model čínské provenience; u větších variant (72B) jsou paměťové nároky velmi vysoké.
+\end{itemize}
+
+\subsubsection*{StarCoder2}
+
+Model vyvinutý komunitou BigCode \cite{starcoder22024} -- spoluprací akademických institucí a průmyslu pod záštitou organizace Hugging Face.
+Dostupný ve variantách 3B, 7B a 15B parametrů pod licencí BigCode OpenRAIL-M, která umožňuje akademické i komerční použití.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Otevřená komunita s transparentním popisem trénovacích dat; menší varianty jsou velmi nenáročné na hardware; vhodný pro institucemi spravované nasazení.
+    \item \textbf{Slabé stránky:} Výkonnostně zaostává za novějšími modely (DeepSeek, Qwen) na náročnějších úlohách; model byl od vydání (únor~2024) překonán novějšími alternativami.
+\end{itemize}
+
+\subsubsection*{CodeLlama}
+
+Model vyvinutý společností Meta \cite{codellama2023} jako specializovaná varianta Llama~2 pro práci s kódem.
+Dostupný ve variantách 7B, 13B, 34B a 70B parametrů.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Rozsáhlá komunita a dokumentace; velký výběr velikostí; podpora instrukčního módu (Instruct variant) vhodného pro code review.
+    \item \textbf{Slabé stránky:} Vydán v září 2023, v době psaní práce je překonán modernějšími alternativami (Qwen2.5-Coder, DeepSeek-Coder-V2) na většině benchmarků; kontextové okno je u starších verzí omezené na 16\,000 tokenů.
+\end{itemize}
+
+\subsection{Modely zaměřené na text (s rozsáhlými znalostmi kódu)}
+\label{subsec:models-general}
+
+Obecné modely nejsou primárně trénované na kódu, avšak díky rozsáhlým trénovacím datům (která vždy obsahují velké množství kódu z veřejných repozitářů) dosahují vynikajících výsledků i při práci se zdrojovým kódem.
+Jejich silnou stránkou je zároveň schopnost generovat kvalitní přirozený jazyk -- klíčová vlastnost pro generování srozumitelných komentářů pro studenty.
+
+\subsubsection*{GPT-4o (OpenAI)}
+
+Vlajkový model společnosti OpenAI \cite{openai_gpt4o}, dostupný výhradně přes cloudové API.
+Multimodální model (text, obraz, audio) s kontextovým oknem 128\,000 tokenů.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Nejlepší výsledky na jazykových i programátorských benchmarcích; vynikající schopnost sledovat komplexní instrukce; velmi kvalitní přirozený jazyk ve výstupech; spolehlivé strukturované výstupy (JSON).
+    \item \textbf{Slabé stránky:} Vyšší cena za token; data jsou zpracovávána na serverech OpenAI (nutné DPA pro GDPR soulad); není dostupný jako open-source pro lokální nasazení.
+\end{itemize}
+
+\subsubsection*{GPT-4o-mini (OpenAI)}
+
+Cenově dostupnější varianta GPT-4o \cite{openai_api} s výrazně nižší cenou za token.
+Kontextové okno 128\,000 tokenů.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Přibližně 15--20krát levnější než GPT-4o; stále kvalitní výstupy pro méně náročné úlohy; nízká latence.
+    \item \textbf{Slabé stránky:} Na komplexnějších úlohách zaostává za GPT-4o; stejné GDPR výhrady jako u GPT-4o.
+\end{itemize}
+
+\subsubsection*{Claude 3.5 Sonnet a Haiku (Anthropic)}
+
+Rodina modelů společnosti Anthropic \cite{anthropic_api}, dostupných výhradně přes API.
+Claude~3.5 Sonnet je vlajkový model; Claude~3.5 Haiku je cenově dostupná varianta.
+Kontextové okno obou modelů je 200\,000 tokenů.
+
+\begin{itemize}
+    \item \textbf{Silné stránky Claude~3.5 Sonnet:} Výjimečné schopnosti při analýze a vysvětlování kódu; velmi dobré výsledky na programátorských benchmarcích (srovnatelné nebo lepší než GPT-4o v řadě úloh); schopnost generovat podrobné, pedagogicky hodnotné komentáře; velmi velké kontextové okno (200\,000 tokenů).
+    Anthropic navíc explicitně zakazuje využití API dat pro trénování modelů bez souhlasu zákazníka, což zjednodušuje GDPR soulad.
+    \item \textbf{Silné stránky Claude~3.5 Haiku:} Výrazně nižší cena než Sonnet; nízká latence; stále kvalitní výstupy pro code review.
+    \item \textbf{Slabé stránky:} Data jsou zpracovávána na serverech Anthropic (API sídlí primárně v USA, i když Anthropic nabízí zpracování v EU).
+\end{itemize}
+
+\subsubsection*{Gemini 1.5 Pro a Flash (Google)}
+
+Rodina modelů společnosti Google \cite{google_vertex}, dostupná přes Google AI Studio a Vertex AI.
+Gemini~1.5 Pro disponuje kontextovým oknem až \textbf{1\,000\,000 tokenů} -- zdaleka největším na trhu.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Obrovské kontextové okno; silná integrace s Google Cloud (relevantní pro instituce již využívající Google infrastrukturu); Gemini Flash je velmi cenově dostupná varianta.
+    \item \textbf{Slabé stránky:} V code review úlohách mírně zaostává za GPT-4o a Claude~3.5 Sonnet; zpracování dat probíhá na serverech Google (nutné GDPR ošetření).
+\end{itemize}
+
+\subsubsection*{Llama 3.1 a 3.2 (Meta)}
+
+Rodina open-source modelů společnosti Meta \cite{llama3_2024}, dostupných ke stažení pod Llama~3 licencí\footnote{Llama~3 licence povoluje akademické i komerční použití s výjimkou subjektů s více než 700 miliony měsíčních aktivních uživatelů.}.
+Varianty 8B a 70B parametrů; model 405B je dostupný ve variantě Llama~3.1 jako největší open-source model.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Nejpopulárnější open-source model; rozsáhlá komunita a ekosystém nástrojů; varianta 8B je paměťově dostupná pro on-premise nasazení; kontextové okno 128\,000 tokenů.
+    \item \textbf{Slabé stránky:} Na code-specific úlohách zaostává za specializovanými modely (Qwen2.5-Coder, DeepSeek-Coder); varianta 70B vyžaduje výkonný hardware.
+\end{itemize}
+
+\subsubsection*{Phi-4 (Microsoft)}
+
+Malý ale výkonný model vyvinutý společností Microsoft \cite{phi4_2024} s pouhými 14 miliardami parametrů.
+Dostupný jako open-source pod licencí MIT.
+
+\begin{itemize}
+    \item \textbf{Silné stránky:} Překvapivě vysoká kvalita výstupů pro svou velikost; nízké paměťové nároky (Q4 kvantizace vyžaduje přibližně 8 GB VRAM); MIT licence je velmi permisivní.
+    \item \textbf{Slabé stránky:} Menší komunita a ekosystém; na složitějších kódových analýzách může zaostávat za většími modely.
+\end{itemize}
+
+\subsection{Srovnávací tabulka vlastností modelů}
+\label{subsec:models-comparison-table}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lllllll}
+            \toprule
+            \textbf{Model}           & \textbf{Typ}    & \textbf{Velikost} & \textbf{Kontext} & \textbf{HumanEval} & \textbf{Nasazení}   & \textbf{Cena / 1M in.tok.} \\
+            \midrule
+            GPT-4o                   & Proprietární    & Neznámá           & 128K             & $\sim$90 \%        & Cloudové API        & 2,50 \$ \\
+            GPT-4o-mini              & Proprietární    & Neznámá           & 128K             & $\sim$87 \%        & Cloudové API        & 0,15 \$ \\
+            Claude 3.5 Sonnet        & Proprietární    & Neznámá           & 200K             & $\sim$93 \%        & Cloudové API        & 3,00 \$ \\
+            Claude 3.5 Haiku         & Proprietární    & Neznámá           & 200K             & $\sim$88 \%        & Cloudové API        & 0,80 \$ \\
+            Gemini 1.5 Pro           & Proprietární    & Neznámá           & 1\,000K          & $\sim$84 \%        & Cloudové API        & 1,25 \$ \\
+            Gemini 1.5 Flash         & Proprietární    & Neznámá           & 1\,000K          & $\sim$74 \%        & Cloudové API        & 0,075 \$ \\
+            \midrule
+            DeepSeek-Coder-V2        & Open-source     & 16B / 236B        & 128K             & $\sim$90 \%        & On-premise / API    & 0,14 \$ (API) \\
+            Qwen2.5-Coder-7B         & Open-source     & 7B                & 128K             & $\sim$88 \%        & On-premise          & Zdarma (lokálně) \\
+            Qwen2.5-Coder-32B        & Open-source     & 32B               & 128K             & $\sim$92 \%        & On-premise / API    & Zdarma (lokálně) \\
+            Llama 3.1 8B             & Open-source     & 8B                & 128K             & $\sim$73 \%        & On-premise / API    & 0,05 \$ (API) \\
+            Llama 3.1 70B            & Open-source     & 70B               & 128K             & $\sim$83 \%        & On-premise / API    & 0,35 \$ (API) \\
+            CodeLlama 13B            & Open-source     & 13B               & 16K              & $\sim$62 \%        & On-premise          & Zdarma (lokálně) \\
+            StarCoder2-7B            & Open-source     & 7B                & 16K              & $\sim$51 \%        & On-premise          & Zdarma (lokálně) \\
+            Phi-4                    & Open-source     & 14B               & 16K              & $\sim$82 \%        & On-premise          & Zdarma (lokálně) \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Srovnání dostupných jazykových modelů vhodných pro analýzu zdrojového kódu (stav 2024--2025).
+    HumanEval skóre jsou orientační hodnoty převzaté z dostupných benchmarkových reportů \cite{humaneval2021, livecodebench2024}.
+    Ceny platí pro cloudová API a mohou se lišit v závislosti na poskytovateli a době přístupu.
+    Pro on-premise modely jsou průběžné náklady nulové (po pořízení hardware).}
+    \label{tab:models-comparison}
+\end{table}
+
+Z tabulky je patrné několik klíčových pozorování:
+
+\begin{itemize}
+    \item \textbf{Proprietární modely dosahují nejlepší kvality} na programátorských benchmarcích, přičemž Claude~3.5 Sonnet a GPT-4o jsou nejsilnějšími kandidáty pro cloud API nasazení.
+
+    \item \textbf{Qwen2.5-Coder-32B a DeepSeek-Coder-V2} jsou nejsilnějšími open-source alternativami a dosahují výsledků srovnatelných s proprietárními modely.
+    Varianta Qwen2.5-Coder-7B pak nabízí přijatelnou kvalitu i na hardware s omezenou VRAM.
+
+    \item \textbf{Starší code-specialized modely} (CodeLlama, StarCoder2) jsou v současném prostředí překonány a nelze je doporučit pro nové nasazení.
+
+    \item \textbf{Phi-4} je pozoruhodnou alternativou pro on-premise nasazení s omezeným hardware díky nízké velikosti a dobré kvalitě.
+\end{itemize}
+
+\endinput

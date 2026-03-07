@@ -1,0 +1,105 @@
+\section{Zvolená varianta a odůvodnění}
+\label{sec:selection-choice}
+
+Na základě analýzy kritérií (sekce~\ref{sec:selection-criteria}), porovnání způsobů nasazení (sekce~\ref{sec:selection-deployment}) a přehledu dostupných modelů (sekce~\ref{sec:selection-models}) tato sekce shrnuje trade-offs jednotlivých řešení a odůvodňuje volbu konkrétní varianty pro implementaci v systému Kelvin.
+
+\subsection{Trade-offs jednotlivých řešení}
+\label{subsec:choice-tradeoffs}
+
+Žádné z posuzovaných řešení není ideální ve všech ohledech.
+Každá volba s sebou přináší kompromisy mezi kvalitou, cenou, ochranou dat a složitostí nasazení.
+Klíčové trade-offs jsou shrnuty níže.
+
+\subsubsection*{Cloudové API s proprietárním modelem}
+
+Varianta využívající cloudové API (například GPT-4o nebo Claude~3.5 Sonnet) nabízí:
+\begin{itemize}
+    \item \textbf{Výhody:} Nejvyšší kvalita výstupů; nulové hardwarové nároky; jednoduché zahájení provozu; automatické aktualizace modelu; dostatečné kontextové okno.
+    \item \textbf{Nevýhody:} Průběžné náklady za token; závislost na externím poskytovateli; potřeba GDPR ošetření (DPA); potenciální výpadky API; výběr modelu omezen na nabídku poskytovatele.
+\end{itemize}
+
+\subsubsection*{On-premise nasazení open-source modelu}
+
+Varianta využívající lokálně nasazený open-source model (například Qwen2.5-Coder nebo DeepSeek-Coder-V2):
+\begin{itemize}
+    \item \textbf{Výhody:} Data zůstávají na školní infrastruktuře (GDPR přímočarý); nulové průběžné náklady za token; úplná kontrola nad modelem i infrastrukturou; možnost fine-tuningu\footnote{Fine-tuning je proces dodatečného doladění předtrénovaného modelu na specifickém datasetu, čímž lze zlepšit jeho výkony pro konkrétní úlohu nebo doménu.} na specifická data.
+    \item \textbf{Nevýhody:} Vysoké jednorázové náklady na GPU hardware; nižší kvalita výstupů oproti proprietárním modelům (zejména u menších variant); nutnost správy infrastruktury; zodpovědnost za bezpečnost a aktualizace.
+\end{itemize}
+
+\subsubsection*{Hybridní přístup}
+
+Hybridní přístup kombinuje obě varianty -- například cloudové API pro produkční provoz s možností přepnutí na on-premise model v případě potřeby:
+\begin{itemize}
+    \item \textbf{Výhody:} Flexibilita; ochrana před závislostí na jednom poskytovateli (vendor lock-in).
+    \item \textbf{Nevýhody:} Vyšší složitost implementace; nutnost udržovat dvě různé konfigurace.
+\end{itemize}
+
+\subsection{Odůvodnění volby konkrétního modelu}
+\label{subsec:choice-justification}
+
+Po zvážení všech výše zmíněných faktorů byla pro implementaci v systému Kelvin zvolena varianta využívající \textbf{cloudové API Anthropic s modelem Claude~3.5 Haiku} jako primárním modelem pro produkční provoz, s možností přepnutí na Claude~3.5 Sonnet pro kvalitnější analýzu v případě potřeby.
+
+Tato volba vychází z následujících důvodů:
+
+\begin{enumerate}
+    \item \textbf{Kvalita výstupů při analýze kódu.}
+    Modely Claude~3.5 od společnosti Anthropic dosahují na úlohách analýzy a code review výsledků srovnatelných s GPT-4o při přitom výhodné cenové politice.
+    V manuálním testování na vzorku historických studentských odevzdání z jazyka C++ generovaly modely Claude konzistentně přesné a pedagogicky hodnotné komentáře.
+
+    \item \textbf{Příznivé podmínky pro ochranu dat.}
+    Anthropic poskytuje zákazníkům uzavření DPA a výslovně uvádí, že data odesílaná přes API nejsou bez souhlasu zákazníka využívána pro trénování modelů \cite{anthropic_api}.
+    To výrazně zjednodušuje GDPR soulad oproti jiným poskytovatelům, kteří tento závazek neformulují tak jasně.
+    Anthropic navíc nabízí zpracování dat v EU regionu.
+
+    \item \textbf{Přijatelné náklady.}
+    Model Claude~3.5 Haiku je cenově dostupný (0,80 \$ za milion vstupních tokenů) a pro typický objem odevzdání v systému Kelvin (stovky až nízké tisíce odevzdání za semestr) jsou celkové náklady na API v řádu desítek dolarů za semestr -- zanedbatelné ve srovnání s náklady na hardware nutný pro on-premise nasazení.
+
+    \item \textbf{Velké kontextové okno.}
+    Kontextové okno 200\,000 tokenů modelů Claude~3.5 je výrazně nadlimitní pro jakékoli odevzdání v systému Kelvin.
+    Eliminuje nutnost řešit chunking nebo selektivní kontext i pro rozsáhlejší projekty.
+
+    \item \textbf{Nulové hardwarové nároky.}
+    Systém Kelvin nemá k dispozici dedikovaný GPU server vhodný pro on-premise inferenci.
+    Cloudové API umožňuje zahájit provoz bez pořizování hardware a je ekonomicky výhodné pro aktuální objem zpracování.
+
+    \item \textbf{Modulární architektura pro budoucí rozšíření.}
+    Implementace je navržena tak, aby byl model snadno vyměnitelný.
+    Systém komunikuje s modelem přes abstraktní rozhraní, které umožňuje přepnutí na libovolný jiný model kompatibilní s OpenAI API formátem -- ať už jiné cloudové API (OpenAI GPT-4o, Gemini) nebo on-premise model přes \texttt{Ollama}.
+    Pokud instituce v budoucnu pořídí GPU server, přechod na lokální open-source model (například Qwen2.5-Coder) bude vyžadovat minimální změny v kódu.
+\end{enumerate}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lcccc}
+            \toprule
+            \textbf{Kritérium}              & \textbf{Claude 3.5 Haiku} & \textbf{GPT-4o-mini} & \textbf{Qwen2.5-Coder 7B} & \textbf{Llama 3.1 8B} \\
+            \midrule
+            Kvalita code review             & $\bullet\bullet\bullet\circ$  & $\bullet\bullet\bullet\circ$  & $\bullet\bullet\circ\circ$   & $\bullet\bullet\circ\circ$ \\
+            Ochrana dat (GDPR)              & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\circ\circ$   & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ \\
+            Náklady (průběžné)              & $\bullet\bullet\bullet\circ$  & $\bullet\bullet\bullet\circ$  & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ \\
+            Náklady (pořizovací)            & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ & $\circ\circ\circ\circ$       & $\circ\circ\circ\circ$ \\
+            Kontextové okno                 & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ \\
+            Jednoduchost nasazení           & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\bullet\bullet$ & $\bullet\bullet\circ\circ$   & $\bullet\bullet\circ\circ$ \\
+            \midrule
+            \textbf{Celkové hodnocení}      & \textbf{Zvoleno}           & Alternativa           & Alternativa (GPU)         & Alternativa (GPU) \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Srovnání finálních kandidátů z hlediska klíčových kritérií ($\bullet$ = splňuje, $\circ$ = nesplňuje nebo nevýhoda). Hodnocení vychází z analýzy v sekcích~\ref{sec:selection-criteria}--\ref{sec:selection-models}.}
+    \label{tab:final-model-comparison}
+\end{table}
+
+\subsubsection*{Zhodnocení zvolené varianty}
+
+Je důležité přiznat limity zvolené varianty.
+Cloudové API Anthropic zavádí závislost na externím poskytovateli a průběžné náklady, které mohou při výrazném nárůstu objemu odevzdání být nezanedbatelné.
+Z pohledu ochrany dat je nutné udržovat platnou DPA a průběžně sledovat podmínky API (zejména zda a jakým způsobem jsou data zpracovávána).
+
+Z hlediska kvality výstupů je Claude~3.5 Haiku výkonnostně pod úrovní vlajkového modelu Claude~3.5 Sonnet.
+Pro případ, kdy je požadována vyšší kvalita analýzy (například pro závěrečné hodnocení rozsáhlého projektu), je systém navržen tak, aby bylo možné jednoduchou konfigurací přepnout na silnější model.
+
+Celkově je zvolená varianta správnou volbou pro aktuální fázi projektu -- nabízí přijatelnou rovnováhu mezi kvalitou, cenou a snadností nasazení bez nutnosti pořizovat specializovaný hardware.
+Implementace v systému Kelvin je pak popsána v kapitole~\ref{ch:implementation}.
+
+\endinput

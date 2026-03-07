@@ -1,0 +1,174 @@
+\section{Návrh práce s prompty}
+\label{sec:selection-prompts}
+
+Volba modelu je jen jednou z proměnných ovlivňujících kvalitu výstupů systému.
+Neméně důležitá je strategie pro formulaci vstupu (promptu) posílaného modelu.
+Špatně navržený prompt může vést k nestrukturovaným, neúplným nebo zavádějícím výstupům i u velmi výkonného modelu.
+Naopak precizně formulovaný prompt dokáže z průměrného modelu vytěžit překvapivě kvalitní výsledky.
+
+Tato sekce popisuje základní principy promptového inženýrství\footnote{Promptové inženýrství (prompt engineering) je disciplína zabývající se návrhem a optimalizací vstupních textů (promptů) pro jazykové modely s cílem dosáhnout požadovaných výstupů.}
+a jejich aplikaci v kontextu analýzy studentských řešení v systému Kelvin.
+
+\subsection{Struktura promptu}
+\label{subsec:prompts-structure}
+
+Moderní jazykové modely pracují s tzv. \emph{chat formátem}, kde konverzace je strukturována jako sekvence zpráv s rolemi.
+Typicky se rozlišují tři role:
+
+\begin{itemize}
+    \item \textbf{System} -- systémová zpráva obsahující instrukce pro model, definici jeho role a obecné pokyny.
+    Tato zpráva je skryta před uživatelem a model se ní řídí po celou dobu konverzace.
+
+    \item \textbf{User} -- zpráva uživatele (v systému Kelvin: obsah odevzdání -- zdrojový kód, zadání).
+
+    \item \textbf{Assistant} -- odpověď modelu, která v kontextu systému Kelvin obsahuje analýzu kódu.
+\end{itemize}
+
+\subsubsection*{Systémový prompt}
+
+Systémový prompt je nejdůležitější součástí promptové strategie.
+Definuje:
+
+\begin{enumerate}
+    \item \textbf{Roli modelu} -- kdo je model a co má dělat.
+    Například: \emph{"Jsi zkušený programátor a pedagogický asistent, který pomáhá učiteli programování hodnotit studentská řešení úloh v jazyce C++."}
+
+    \item \textbf{Kontext a cíl} -- proč analýza probíhá a k čemu slouží výstup.
+    Je důležité zdůraznit, že výstup je \emph{návrh} pro učitele, nikoli finální hodnocení.
+
+    \item \textbf{Požadovaný formát výstupu} -- jak má být odpověď strukturována.
+    Pro strojové zpracování výstupu systémem Kelvin je vhodné formátování jako JSON nebo Markdown s pevnou strukturou.
+
+    \item \textbf{Hranice a omezení} -- čemu se má model vyhnout.
+    Například: nesmí hodnotit studenta jako osobu, jen jeho řešení; nesmí vynášet absolutní soudy o správnosti kódu (není interpretem); musí vždy uvádět číslo řádku, ke kterému se komentář vztahuje.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \begin{verbatim}
+Jsi zkušený programátor a pedagogický asistent. Tvým úkolem je
+analyzovat zdrojový kód odevzdaný studentem v rámci programátorského
+kurzu. Tvůj výstup slouží jako návrh komentářů pro učitele -- není
+to finální hodnocení. Učitel si výstupy sám ověří a upraví.
+
+Analýzu proveď podle zadání úlohy. Zaměř se na:
+- správnost logiky a algoritmického přístupu,
+- práci s pamětí (úniky, přístupy mimo meze),
+- čitelnost a dodržování konvencí jazyka C++,
+- ošetření chybových stavů a okrajových případů.
+
+Výstup vrať jako JSON v následujícím formátu:
+{
+  "summary": "<celkové shrnutí řešení>",
+  "comments": [
+    { "line": <číslo_řádku>, "severity": "info|warning|error",
+      "message": "<komentář>" }
+  ]
+}
+    \end{verbatim}
+    \caption{Příklad systémového promptu pro analýzu studentského kódu v systému Kelvin}
+    \label{fig:system-prompt-example}
+\end{figure}
+
+\subsubsection*{Uživatelská zpráva}
+
+Uživatelská zpráva (user turn) obsahuje konkrétní data pro analýzu.
+Skládá se ze dvou částí:
+
+\begin{enumerate}
+    \item \textbf{Zadání úlohy} -- text popisující, co má student implementovat.
+    Je vhodné jej explicitně oddělit od zdrojového kódu pomocí strukturálních značek (XML tagů nebo Markdown bloků), aby model nezaměnil zadání s kódem.
+
+    \item \textbf{Zdrojový kód studenta} -- samotné odevzdané řešení.
+    Je doporučeno přidat čísla řádků přímo do textu kódu (formát \texttt{1: \#include <iostream>}), aby komentáře k řádkům byly adresovatelné a snáze ověřitelné.
+\end{enumerate}
+
+Striktní oddělení zadání a kódu je také základní obranou proti prompt injection útokům (viz sekce~\ref{subsubsec:prompt-injection}), kdy student vloží do komentářů kódu instrukce pro model.
+
+\subsection{Typy výstupů}
+\label{subsec:prompts-output-types}
+
+Jazykový model může v systému Kelvin generovat několik typů výstupů, každý s jiným účelem a formátem:
+
+\subsubsection*{Komentáře k řádkům kódu}
+
+Nejdůležitější typ výstupu z pohledu učitele.
+Každý komentář je vázán na konkrétní řádek nebo rozsah řádků kódu a obsahuje:
+\begin{itemize}
+    \item číslo řádku (nebo rozsah),
+    \item závažnost (informace, upozornění, chyba),
+    \item popis problému nebo pozitivního bodu a
+    \item případně návrh opravy.
+\end{itemize}
+
+Výhodou formátování komentářů jako JSON je možnost přímého zobrazení v uživatelském rozhraní systému Kelvin -- vedle příslušného řádku kódu, podobně jako to dělají review komentáře v platformách jako GitHub nebo GitLab.
+
+\subsubsection*{Celkové shrnutí řešení}
+
+Stručné shrnutí (typicky 2--5 vět) hodnotící řešení jako celek.
+Obsahuje:
+\begin{itemize}
+    \item celkový dojem z řešení (funkčnost, styl, přístup),
+    \item zmínku o nejzávažnějších problémech nebo naopak silných stránkách,
+    \item případné doporučení pro studenta (co se v příštím řešení zlepšit).
+\end{itemize}
+
+Shrnutí je cenné pro učitele jako rychlý orientační přehled před podrobným procházením kódu.
+
+\subsubsection*{Bodové hodnocení (volitelné)}
+
+Model může být vyzván, aby navrhl bodové nebo procentuální hodnocení řešení.
+Tento typ výstupu je kontroverzní a jeho použití v systému Kelvin musí být zvlášť pečlivé -- jak bylo zdůrazněno v sekci~\ref{subsubsec:llm-output-responsibility}, LLM neposkytuje formální záruku správnosti svých závěrů.
+Navržené bodové hodnocení musí být prezentováno výhradně jako orientační návrh vyžadující explicitní potvrzení učitelem, nikoliv jako automaticky přidělená hodnota.
+
+\subsection{Iterativní ladění promptu}
+\label{subsec:prompts-iterative}
+
+Výsledný systémový prompt není výsledkem jednorázového návrhu, ale iterativního procesu ladění na základě vyhodnocení kvality výstupů.
+Doporučený postup je:
+
+\begin{enumerate}
+    \item \textbf{Definice cílů a vzorových výstupů} -- před zahájením experimentů je vhodné připravit soubor vzorových studentských odevzdání a ručně napsat \uv{ideální} výstupy, které by model měl generovat.
+    Tyto vzory slouží jako referenční bod pro porovnání.
+
+    \item \textbf{Základní verze promptu} -- začínáme od minimálního promptu (jen definice role a formátu výstupu) a postupně přidáváme instrukce.
+
+    \item \textbf{Systematické testování} -- každou verzi promptu otestujeme na připraveném vzorku odevzdání a výstupy porovnáme s referenčními.
+    Sledujeme:
+    \begin{itemize}
+        \item zda model generuje všechny požadované sekce (shrnutí, komentáře),
+        \item zda jsou čísla řádků správná,
+        \item zda jsou komentáře věcně správné,
+        \item zda je formát JSON/Markdown strojově zpracovatelný.
+    \end{itemize}
+
+    \item \textbf{Identifikace slabých míst} -- pokud výstupy opakovaně vykazují konkrétní problém (například model ignoruje příkaz uvádět čísla řádků nebo generuje příliš stručné komentáře), přidáme do promptu explicitní instrukci nebo příklad tohoto chování.
+
+    \item \textbf{Few-shot příklady}\footnote{Few-shot learning je technika, při níž jsou do promptu vloženy 1--3 příklady dvojice vstup--výstup. Model se díky nim naučí formát a styl požadovaných výstupů bez nutnosti dodatečného trénování (fine-tuningu).}
+    -- pro komplexní formáty výstupů je efektivní vložit do promptu jeden kompletní příklad (vstup + vzorový výstup). Model se pak lépe přizpůsobí požadovanému stylu.
+
+    \item \textbf{Testování na produkčních datech} -- finální verzi promptu testujeme na reálných historických odevzdáních a výstupy hodnotí učitel.
+\end{enumerate}
+
+\subsubsection*{Parametry generování}
+
+Kromě textu promptu ovlivňují kvalitu výstupů i parametry generování (viz sekce~\ref{subsubsec:inference-generation}).
+Pro analýzu kódu v systému Kelvin je doporučeno:
+
+\begin{itemize}
+    \item \textbf{Nízká teplota} ($T = 0,1$ až $T = 0,3$) -- zajišťuje konzistentnost výstupů; model generuje determinističtější a méně \uv{kreativní} odpovědi, což je žádoucí pro analytické úkoly.
+
+    \item \textbf{Top-p = 0,9--0,95} -- omezuje výběr tokenů na nejpravděpodobnější podmnožinu, čímž zabraňuje generování zcela nepravděpodobného textu.
+
+    \item \textbf{Dostatečný limit výstupních tokenů} -- pro typické odevzdání by bylo dostatečné maximálně 2\,000 výstupních tokenů; pro rozsáhlejší analýzy je vhodné zvýšit na 4\,000.
+\end{itemize}
+
+\subsubsection*{Použití strukturovaných výstupů}
+
+Moderní cloudová API (OpenAI, Anthropic) nabízejí funkci \emph{structured outputs}\footnote{Structured outputs (strukturované výstupy) je funkce API, která garantuje, že model vygeneruje výstup přesně odpovídající zadanému JSON schématu. Tím je eliminováno riziko, že model vygeneruje validní JSON, který ale neodpovídá očekávané struktuře.},
+kde lze modelu předat JSON schéma a model garantuje generování výstupu přesně v souladu s tímto schématem.
+Tím se eliminuje potřeba robustního parsování a ošetření chybně formátovaných výstupů na straně backendu.
+
+Pro on-premise modely provozované přes \texttt{Ollama} nebo \texttt{vLLM} existují obdobné mechanismy (grammar-constrained generation, JSON mode), jejichž dostupnost závisí na konkrétní verzi nástroje a modelu.
+
+\endinput

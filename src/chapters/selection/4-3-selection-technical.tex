@@ -1,0 +1,102 @@
+\section{Technické nároky na inference}
+\label{sec:selection-technical}
+
+Tato sekce se věnuje technickým aspektům spouštění jazykových modelů, konkrétně rozdílu mezi využitím GPU a CPU, možnostem paralelizace a principu dávkového zpracování (batchování).
+Pochopení těchto principů je důležité pro správné dimenzování on-premise infrastruktury a pro odhad propustnosti systému při různé zátěži.
+
+\subsection{Rozdíl mezi použitím GPU a CPU}
+\label{subsec:technical-gpu-vs-cpu}
+
+Inference jazykového modelu je výpočetně náročná operace, jejíž jádro tvoří opakované násobení matic velkých rozměrů.
+Pro každý generovaný token musí model provést tento výpočet skrze desítky nebo stovky vrstev architektury Transformer.
+Způsob, na jakém hardware tento výpočet probíhá, zásadně ovlivňuje latenci (dobu zpracování jednoho dotazu) i celkovou propustnost systému.
+
+\subsubsection*{Proč je GPU vhodný pro inferenci}
+
+GPU (grafický procesor) jsou navrženy pro masivně paralelní výpočty.
+Moderní spotřebitelský GPU jako NVIDIA RTX 4090 obsahuje 16\,384 specializovaných výpočetních jader (CUDA\footnote{CUDA (Compute Unified Device Architecture) je paralelní výpočetní platforma a programovací model vyvinutý firmou NVIDIA. Umožňuje využití GPU pro obecné výpočty.} jader) optimalizovaných pro operace s maticemi a vektory.
+Výrobci GPU navíc implementují specializované hardwarové jednotky (Tensor Cores u NVIDIA), které dále akcelerují maticové výpočty potřebné při inferenci.
+
+Klíčovým faktorem pro rychlost inference je šířka pásma paměti\footnote{Šířka pásma paměti (memory bandwidth) udává, kolik dat za sekundu může procesor přenést z paměti do výpočetních jader. Při inferenci je hlavním úzkým hrdlem právě tento přenos, nikoli samotná výpočetní rychlost.}.
+GPU disponují typicky 500 až 2\,000 GB/s šířky pásma paměti, zatímco u serverových CPU je to 50 až 200 GB/s.
+Protože největším úzkým hrdlem inference je právě přenos vah modelu z paměti do výpočetních jader, tato asymetrie přímo ovlivňuje rychlost generování.
+
+Výsledek v praxi: model s 7 miliardami parametrů (7B) dokáže na moderním GPU typicky vygenerovat 20--80 tokenů za sekundu, zatímco na výkonném serverovém CPU je to zpravidla 1--5 tokenů za sekundu.
+
+\subsubsection*{CPU inference a její omezení}
+
+Provoz modelu na CPU je technicky možný, avšak výrazně pomalejší.
+Nástroje jako \texttt{llama.cpp} \cite{llamacpp} jsou optimalizovány pro CPU inference a využívají SIMD\footnote{SIMD (Single Instruction, Multiple Data) je technika paralelizace na úrovni instrukční sady procesoru, která umožňuje provést jedinou instrukci na více datech zároveň. Moderní CPU podporují instrukční sady AVX-512, které rozšiřují šířku SIMD registrů na 512 bitů.}
+instrukce pro urychlení maticových výpočtů.
+Přesto lze tímto způsobem dosáhnout přijatelné rychlosti jen u velmi malých nebo silně kvantizovaných modelů.
+
+Pro systém Kelvin, kde je analýza asynchronní a studenti nečekají na výsledek okamžitě, je CPU inference potenciálně přijatelná variantou při nízkém objemu odevzdání.
+Při hromadném odevzdávání úloh (desítky odevzdání za hodinu) by fronty zpracování narůstaly na nepřijatelné hodnoty.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Parametr}           & \textbf{GPU (RTX 4090)}           & \textbf{CPU (16jádrový server)} \\
+            \midrule
+            Rychlost generování         & 30--80 tokenů/s (7B model)        & 2--6 tokenů/s (7B, Q4) \\
+            Latence na 1 odevzdání      & 15--60 sekund                     & 3--15 minut \\
+            Cena hardware               & $\sim$50\,000--80\,000 Kč          & Součást standardního serveru \\
+            Paměť pro 7B model (Q4)     & 4--5 GB VRAM                      & 5--8 GB RAM \\
+            Souběžné požadavky          & Batchování (viz~\ref{subsec:technical-batching}) & Prakticky bez batchování \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Orientační srovnání GPU a CPU inference pro model třídy 7B parametrů s kvantizací Q4}
+    \label{tab:gpu-vs-cpu}
+\end{table}
+
+\subsection{Paralelizace zpracování}
+\label{subsec:technical-parallelism}
+
+V prostředí školního systému nepřicházejí požadavky na analýzu rovnoměrně.
+Typickým scénářem je hromadné odevzdání těsně před termínem (deadlinem), kdy desítky studentů odešlou řešení v řádu minut.
+V takovém případě vzniká fronta požadavků, které musí systém zpracovat.
+
+Existují dvě základní strategie paralelizace zpracování:
+
+\begin{enumerate}
+    \item \textbf{Sekvenční zpracování s frontou} -- požadavky jsou zpracovávány postupně jeden po druhém.
+    Tato varianta je nejjednodušší na implementaci, avšak studenti a učitelé musejí čekat, dokud nedojde na jejich požadavek.
+    Pro nízké objemy odevzdání je tento přístup dostačující.
+
+    \item \textbf{Paralelní zpracování} -- více požadavků je zpracováváno současně.
+    U cloudového API to znamená odesílání více souběžných HTTP požadavků -- API poskytovatele zpracovává požadavky paralelně na svých serverech.
+    U on-premise nasazení závisí na schopnostech inference serveru: \texttt{vLLM} \cite{vllm2023} je navržen tak, aby efektivně obsloužil desítky souběžných požadavků na jednom GPU.
+\end{enumerate}
+
+Pro systém Kelvin je klíčová skutečnost, že analýza je \textbf{asynchronní}: výsledky nejsou zobrazeny studentovi okamžitě, ale jsou k dispozici s určitým zpožděním (typicky v řádu minut).
+To výrazně snižuje tlak na okamžitou propustnost a umožňuje použití jednoduchého front-based přístupu s nižší složitostí implementace.
+
+\subsection{Batchování požadavků}
+\label{subsec:technical-batching}
+
+Batchování (dávkové zpracování) je technika, při níž jsou více požadavků zpracovány současně v jednom průchodu GPU.
+Moderní GPU jsou schopny efektivně zpracovávat dávky matic najednou, díky čemuž se celkový čas potřebný pro zpracování více požadavků může být výrazně nižší než součet časů jednotlivých zpracování.
+
+\subsubsection*{Jak batchování funguje}
+
+Klíčová operace při inferenci -- maticové násobení pro attention výpočet -- je přirozeně paralelizovatelná přes dávku požadavků.
+Místo toho, aby GPU provedl tuto operaci jednou pro jeden požadavek, provede ji jednou pro celou dávku, čímž efektivněji využije svou paralelní výpočetní kapacitu.
+Výsledkem je vyšší propustnost (více tokenů za sekundu celkově) při mírném nárůstu latence jednotlivých požadavků.
+
+\subsubsection*{Dynamické batchování ve vLLM}
+
+Nástroj \texttt{vLLM} implementuje tzv. \emph{continuous batching} \cite{vllm2023} -- mechanismus, který dynamicky sestavuje dávky z příchozích požadavků bez nutnosti čekat na naplnění dávky pevné velikosti.
+Díky tomu lze při hromadném odevzdávání výrazně zvýšit efektivitu využití GPU a zkrátit průměrnou dobu čekání.
+
+\subsubsection*{Relevance pro Kelvin}
+
+Pro systém Kelvin s asynchronním zpracováním jsou přínosy batchování nejvýraznější právě při hromadném odevzdávání.
+Například pokud třicet studentů odevzdá řešení v průběhu pěti minut, server s vLLM může tyto požadavky zpracovat v dávkách po 4--8 souběžných analýzách, čímž se celková doba zpracování celé skupiny zkrátí přibližně třikrát až čtyřikrát oproti sekvenčnímu přístupu.
+
+Při využití cloudového API je batchování interní záležitostí poskytovatele.
+Provozovatel Kelvinu vidí pouze API endpoint -- o interním dávkování se nestará a efektivitu využití serveru řídí poskytovatel.
+
+\endinput
