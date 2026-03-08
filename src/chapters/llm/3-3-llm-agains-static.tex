@@ -1,17 +1,13 @@
 \section{Porovnání s tradičními statickými analyzátory}
 \label{sec:llm-vs-static}
 
-% https://agileseekers.com/blog/using-static-code-analysis-tools-as-part-of-sprint-reviews
-% https://blog.codacy.com/static-code-analysis-tools
-% https://okt.inf.szte.hu/tesztalap/gyakorlat/gyak07/
-
 Velké jazykové modely nejsou prvním nástrojem, jehož cílem je automatizovaná analýza kvality zdrojového kódu.
 Statická analýza kódu již existuje s desetiletou historií a bohatým ekosystémem nástrojů, která je dnes součástí standardní vývojové praxe v komerčním i akademickém prostředí.
 Zařazení LLM do školního systému Kelvin proto vyžaduje pečlivé pochopení toho, v čem se oba přístupy liší, kde se doplňují a kde každý z nich selhává.
 
-Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění.
+Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění~\cite{codacy-staticanalysis}.
 Tedy pouze na základě jeho struktury, syntaxe a datových závislostí.
-Analyzátor pracuje s formální reprezentací programu: zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory.
+Analyzátor pracuje s formální reprezentací programu: zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory~\cite{agileseekers-staticanalysis}.
 Výsledkem je deterministická analýza: při identickém vstupu nástroj vždy poskytne identický výstup, nezávisle na jakémkoli náhodném prvku.
 
 LLM funguje na zcela odlišném principu.
