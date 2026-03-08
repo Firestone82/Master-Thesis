@@ -40,14 +40,14 @@ Django Ninja je moderní framework pro budování API nad Django, inspirovaný F
 
 Frontendová část systému je z technologického hlediska výrazně komplikovanější než backend, protože prošla historickým vývojem, který zanechal vrstvení tří různých technologií v jednom projektu.
 
-Nejstarší vrstvou jsou \emph{Django šablony} (Django templates) -- serverově generované HTML stránky, které byly původním způsobem tvorby uživatelského rozhraní.
+Nejstarší vrstvou jsou \textit{Django šablony} (Django templates) -- serverově generované HTML stránky, které byly původním způsobem tvorby uživatelského rozhraní.
 Django šablony jsou stále přítomny v systému u statičtějších částí rozhraní, kde není potřeba dynamického chování na straně klienta.
 
-Druhou vrstvou je \emph{Svelte} -- moderní JavaScript framework pro tvorbu reaktivních komponent na straně klienta.
+Druhou vrstvou je \textit{Svelte} -- moderní JavaScript framework pro tvorbu reaktivních komponent na straně klienta.
 V průběhu vývoje systému Kelvin byl Svelte adoptován jako primární framework pro dynamické části rozhraní, zejména pro zobrazení a přidávání komentářů ke zdrojovému kódu.
 Svelte komponenty jsou v produkci kompilovány do čistého JavaScriptu bez runtime knihovny, což zajišťuje rychlé načítání.
 
-Třetí a v současnosti preferovanou vrstvou je \emph{Vue.js} -- progresivní JavaScript framework, na který systém v současné době migruje.
+Třetí a v současnosti preferovanou vrstvou je \textit{Vue.js} -- progresivní JavaScript framework, na který systém v současné době migruje.
 Vue bylo zvoleno jako nástupce Svelte zejména z důvodu větší komunity, lepší dlouhodobé podpory a nižší vstupní bariéry pro nové přispěvatele.
 
 Výsledkem tohoto historického vývoje je stav, kdy se ve zdrojovém kódu systému souběžně nacházejí všechny tři frontendové technologie.

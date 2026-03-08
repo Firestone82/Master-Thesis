@@ -34,7 +34,7 @@ Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
 %    \texttt{Cppcheck} je přenositelný analyzátor zaměřený na detekci skutečných chyb -- přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti.
 
     \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
-    SonarQube kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu -- takzvaného \emph{technical debt} -- a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
+    SonarQube kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu -- takzvaného \textit{technical debt} -- a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
     Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenziované.
     Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
 \end{enumerate}
@@ -71,7 +71,7 @@ Statický analyzátor nemá přístup k žádnému kontextu vně zdrojového kó
 LLM, který obdrží zadání úlohy jako součást promptu, dokáže posoudit, zda implementace odpovídá záměru: zda je zvolený algoritmus přiměřeně efektivní, zda jsou použity datové struktury vhodné pro požadovanou operaci nebo zda program zpracovává hraniční vstupy způsobem, který zadání předpokládá.
 Tato schopnost je pro hodnocení studentských prací velmi cenná, jde přesně o tu vrstvu, která vyžaduje lidský úsudek a nejvíce zatěžuje čas vyučujícího.
 
-\emph{Forma výstupů a srozumitelnost.}
+\textit{Forma výstupů a srozumitelnost.}
 Statické analyzátory typicky produkují stručná technická hlášení vázaná na konkrétní řádek a pravidlo.
 Výstup \texttt{cppcheck} ve tvaru \texttt{[file.cpp:47]: (error) Memory leak: p} je precizní, avšak pro studenta, který nezná základy správy paměti, je pouze obtížně pochopitelný bod bez vysvětlení.
 LLM je schopen generovat vysvětlení přirozeným jazykem, které studentovi popíše, v čem spočívá problém, proč je nebezpečný a jak ho opravit.
