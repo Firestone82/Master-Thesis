@@ -69,20 +69,17 @@
 │     ├─ Limity
 │     ├─ Ochrana dat
 │     └─ Náklady
-├─ 4.3 Technické nároky
-│  ├─ Rozdíl mezi použitím GPU a CPU
-│  ├─ Paralelizace zpracování
-│  └─ Batchování požadavků
-├─ 4.4 Analýza dostupných modelů
+├─ 4.3 Analýza dostupných modelů
 │  ├─ Přehled dostupných modelů
 │  ├─ Modely zaměřené na zdrojový kód
 │  ├─ Modely zaměřené na text
 │  └─ Srovnávací tabulka vlastností modelů
-├─ 4.5 Návrh práce s prompty
+├─ 4.4 Návrh práce s prompty
 │  ├─ Struktura promptu
+│  ├─ One-shot (few-shot, zero-shot) vs chain-of-thought prompting
 │  ├─ Typy výstupů (komentáře k řádkům, shrnutí, hodnocení)
 │  └─ Iterativní ladění promptu
-└─ 4.6 Zvolená varianta a odůvodnění
+└─ 4.5 Zvolená varianta a odůvodnění
    ├─ Trade-offs jednotlivých řešení
    └─ Odůvodnění volby konkrétního modelu
 
