@@ -1,0 +1,63 @@
+\section{Kritéria výběru}
+\label{sec:selection-criteria}
+
+Aby bylo možné objektivně porovnat dostupné modely a způsoby nasazení, je třeba nejprve definovat kritéria, podle nichž bude hodnocení probíhat.
+Kritéria vycházejí z požadavků zadání diplomové práce, z technických omezení systému Kelvin a z praktických podmínek školního prostředí.
+
+\subsection{Kvalita výstupů}
+\label{subsec:criteria-quality}
+
+Primárním účelem nasazeného modelu je generovat komentáře ke studentskému zdrojovému kódu, které jsou věcně správné, relevantní ke konkrétnímu řešení a formulované tak, aby je vyučující mohl přímo využít jako základ zpětné vazby.
+Kvalita a relevance výstupu je proto nejdůležitějším kritériem.
+
+Z hlediska správnosti je klíčové, aby model identifikoval skutečné problémy v kódu a nenahlašoval falešné poplachy.
+Falešně pozitivní komentáře vyučujícího zdržují a snižují důvěru v celý systém.
+Stejně tak jsou problematické příliš obecné připomínky, které nenesou konkrétní informaci o tom, co a kde v kódu je problematické.
+
+Relevance výstupů úzce závisí na schopnosti modelu pracovat s kontextem zadání.
+Model, který vidí pouze zdrojový kód bez popisu úlohy, může identifikovat obecné stylové nedostatky, ale nedokáže posoudit, zda zvolená datová struktura odpovídá požadavkům zadání, nebo zda výstup programu splňuje specifikaci.
+
+\subsection{Schopnost pojmout celé studentské řešení}
+\label{subsec:criteria-context}
+
+Jak bylo vysvětleno v sekci~\ref{subsec:llm-tokens-parameters-context}, každý model má omezené kontextové okno dané maximálním počtem tokenů, které zpracuje v jednom průchodu.
+Pro analýzu studentských řešení je nutné, aby model v tomto limitu zvládl:
+
+\begin{itemize}
+    \item systémový prompt specifikující chování modelu a výstupní formát,
+    \item případné text zadání úlohy,
+    \item kompletní zdrojový kód odevzdaného řešení,
+    \item dostatečnou rezervu pro vygenerování odpovědi.
+\end{itemize}
+
+Typické studentské řešení domácí úlohy v jazyce C++ se pohybuje v rozsahu 100 až 500 řádků kódu.
+Po tokenizaci a s přidáním zadání a systémového promptu se celkový vstup obvykle vejde do 3\,000 až 5\,000 tokenů.
+Modely s kontextovým oknem alespoň 8\,000 tokenů jsou proto pro tento účel dostačující.
+Modely s výrazně menším oknem by vyžadovaly dělení vstupu na části, což komplikuje implementaci a snižuje kvalitu analýzy, protože model nemá přístup k celku řešení najednou.
+
+V případě odevzdání rozsáhlejšího projektu nebo sady souborů je nicméně vhodné mít k dispozici model s kontextem v řádu desítek tisíc tokenů, aby bylo možné tyto situace zvládnout bez nutnosti chunking strategie.
+
+\subsection{Dostupnost a udržovatelnost}
+\label{subsec:criteria-availability}
+
+Školní informační systém musí fungovat spolehlivě po dobu celého semestru, přičemž nejvyšší zátěž nastává před deadlinem odevzdání úloh.
+Zvolený model nebo způsob přístupu k němu musí zaručit dostatečnou dostupnost a stabilitu.
+
+U komerčních API je dostupnost garantována licencí a poskytovatelé mají typicky vysokou míru dostupnosti.
+Klíčové jsou však i podmínky, zejména to, zda mohou být výstupy modelu použity v prostředí školního hodnocení, a zda se podmínky API v čase nemění způsobem, který by narušil provoz systému.
+
+U open-source modelů nasazených lokálně závisí dostupnost na spolehlivosti vlastní infrastruktury.
+Výhodou je plná kontrola nad verzí modelu, model lze fixovat na konkrétní verzi a nevzniká riziko, že by poskytovatel model stáhl nebo výrazně změnil.
+
+Z pohledu udržovatelnosti je důležité i to, jak snadné je model aktualizovat nebo vyměnit za novější verzi.
+Integrace by měla být navržena tak, aby výměna modelu nevyžadovala žádné změny v kódu systému Kelvin.
+
+\subsection{Náročnost provozu}
+\label{subsec:criteria-operational}
+
+Provozní náklady a náročnost se liší podle zvoleného způsobu nasazení.
+Při cloudovém API jsou náklady přímou funkcí objemu zpracovaných tokenů -- za každý dotaz je účtován poplatek.
+Pro odhad nákladů je proto nutné znát přibližný počet odevzdání za semestr a průměrnou délku zpracovávaného vstupu.
+
+
+\endinput

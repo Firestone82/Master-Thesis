@@ -201,10 +201,10 @@ Výraz $\mathbf{Q}\mathbf{K}^\top$ produkuje matici skóre $T \times T$, kde prv
 Softmax tato skóre normalizuje na pravděpodobnostní rozdělení, které se použije jako váhy pro lineární kombinaci hodnotových vektorů.
 V generačních modelech je navíc aplikována \textit{kauzální maska}: skóre pro všechny budoucí tokeny jsou nastavena na $-\infty$, čímž je garantováno, že model při predikci tokenu $t$ nemá přístup k tokenům na pozicích $t+1, t+2, \ldots$
 
-Namísto jednoho attention mechanismu používají Transformery \emph{multi-head attention}: $h$ paralelních attention hlav zpracovává vstup v různých pod prostorech, přičemž se každá hlava může specializovat na jiný typ závislosti (syntaktický vztah, sémantická vazba, vzdálenostní vzor apod.).
+Namísto jednoho attention mechanismu používají Transformery \textit{multi-head attention}: $h$ paralelních attention hlav zpracovává vstup v různých pod prostorech, přičemž se každá hlava může specializovat na jiný typ závislosti (syntaktický vztah, sémantická vazba, vzdálenostní vzor apod.).
 Typicky moderní modely používají 32 až 96 attention hlav.
 
-Každý Transformer blok dále obsahuje dvojvrstvou \emph{feed-forward síť} aplikovanou na každý token nezávisle -- ta slouží jako adresovatelná paměť uchovávající faktické znalosti -- a reziduální spojení s vrstvou normalizací stabilizující trénink.
+Každý Transformer blok dále obsahuje dvojvrstvou \textit{feed-forward síť} aplikovanou na každý token nezávisle -- ta slouží jako adresovatelná paměť uchovávající faktické znalosti -- a reziduální spojení s vrstvou normalizací stabilizující trénink.
 Celý model sestává z desítek až stovky těchto bloků vrstvených za sebou.
 
 \subsubsection*{Trénování a dolaďování}
