@@ -1,7 +1,7 @@
 \section{Účel systému}
 \label{sec:kelvin-purpose}
 
-Hlavním účelem systému Kelvin je podpora výuky programování, především v jazycích C, C++, Python nebo Rust.
+Hlavním účelem systému Kelvin je podpora výuky programování především v jazycích C, C++, Python nebo Rust.
 Systém poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh.
 Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim zpětnou vazbu a udělovat bodové hodnocení.
 
@@ -10,27 +10,44 @@ Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim
 
 Cyklus jedné úlohy v systému Kelvin probíhá následovně:
 
-Vyučující nejprve vytvoří úlohu: zadá její textový popis, definuje testovací vstupy a očekávané výstupy a nastaví termín odevzdání.
-Úloha je pak zpřístupněna přihlášeným studentům okmažitě nebo v předem stanoveném čase.
+Vyučující nejprve vytvoří úlohu, kde zadá její textový popis, definuje testovací vstupy, očekávané výstupy a nastaví termín odevzdání.
+Úloha je pak zpřístupněna přihlášeným studentům okamžitě nebo v předem stanoveném čase.
 
-Student si zadání přečte, vypracuje řešení ve svém vývojovém prostředí a výsledný zdrojový kód odevzdá prostřednictvím webového rozhraní systému.
-Bezprostředně po odevzdání systém spustí automatizované testy: zdrojový kód je zkompilován, spuštěn proti připraveným testovacím vstupům a výsledky jsou porovnány s očekávanými výstupy.
-Student vidí výsledky testů okamžitě -- které testy prošly a které selhaly -- a může na základě zpětné vazby řešení opravit a odevzdat znovu.
+Student si zadání přečte, během času vypracuje řešení ve svém vývojovém prostředí a výsledný zdrojový kód odevzdá prostřednictvím webového rozhraní systému.
+Bezprostředně po odevzdání systém spustí automatizované testy.
+Systém zkompiluje zdrojový kód a spustí jej proti připraveným testovacím vstupům, následné výsledky jsou porovnány s očekávanými výstupy.
+Student okamžitě vidí výsledky testů které prošly i ty, které selhaly a následně může na základě zpětné vazby řešení opravit a odevzdat znovu.
 
 Po uzavření termínu odevzdání přistoupí vyučující k manuálnímu hodnocení.
-Prohlíží zdrojový kód odevzdaného řešení přímo v prostředí systému, přidává komentáře ke konkrétním řádkům nebo blokům kódu a na základě celkového posouzení udělí bodové hodnocení.
-Student hodnocení a komentáře obdrží a může na ně reagovat, čímž vzniká asynchronní diskuse nad zdrojovým kódem.
+Prohlíží zdrojový kód odevzdaného řešení přímo v prostředí systému, přidává podle svého hodnocení komentáře ke konkrétním řádkům nebo blokům kódu a na základě celkového posouzení udělí bodové hodnocení.
+Student hodnocení a komentáře obdrží a může na ně reagovat, čímž může vznikat diskuse nad zdrojovým kódem a jeho kvalitou.
 
-Systém Kelvin je rovněž využíván pro testy, kvízy a jiné formy hodnocení, které nemusí nutně zahrnovat zdrojový kód -- například pro testování teoretických znalostí nebo algoritmického myšlení prostřednictvím krátkých textových odpovědí.
+\subsection{Další formy hodnocení}
+\label{subsec:kelvin-other-assessments}
 
-\subsection{Řádkové komentáře jako klíčová funkce}
-\label{subsec:kelvin-line-comments}
+Systém Kelvin je rovněž využíván pro testy, kvízy a jiné formy hodnocení, které nemusí nutně zahrnovat zdrojový kód.
+Například pro testování teoretických znalostí nebo algoritmického myšlení prostřednictvím krátkých formulářových nebo textových odpovědí.
 
-Jednou z nejvýznamnějších funkcí systému z pohledu praxe je možnost přidávat komentáře přímo ke konkrétním řádkům zdrojového kódu.
-Vyučující může označit libovolný řádek nebo rozsah řádků a k němu připsat připomínku.
-Komentáře jsou studentovi zobrazeny přímo v kontextu kódu, takže okamžitě vidí, ke které konkrétní části řešení se zpětná vazba vztahuje.
+\subsection{Klíčové funkce systému}
+\label{subsec:kelvin-features}
 
-Tato vlastnost je z pohledu integrace LLM zcela zásadní, protože LLM generuje komentáře přirozeně ve formátu "k řádku X patří připomínka Y".
-Výstup modelu tak lze přímo mapovat na existující datový model systému Kelvin bez nutnosti zavádět nové typy entit.
+Systém Kelvin nabízí několik funkcí, které jsou podstatné jak pro běžný provoz, tak pro plánovanou integraci s LLM\@.
+
+\begin{itemize}
+    \item \textbf{Automatické evaluace} -- po každém odevzdání systém automaticky zkompiluje studentův kód, spustí jej proti sadě předpřipravených testovacích vstupů a porovná výstupy s očekávanými hodnotami.
+    Zdrojový kód je tak testován na jednotném prostředí, což zajišťuje spravedlivé hodnocení funkční správnosti.
+    Výsledky jednotlivých testů jsou studentovi zobrazeny okamžitě, což umožňuje rychlou iteraci nad řešením bez nutnosti čekat na zpětnou vazbu od vyučujícího.
+
+    \item \textbf{Automatické udělování bodů} -- na základě výsledků automatických testů může systém přidělit body automaticky podle poměru úspěšných testů.
+    Vyučující tak nemusí manuálně hodnotit funkční správnost a může se soustředit na kvalitativní aspekty řešení, jako je čitelnost kódu, vhodnost zvolené datové struktury nebo efektivita algoritmu.
+
+    \item \textbf{Řádkové komentáře} -- vyučující může označit libovolný řádek nebo rozsah řádků zdrojového kódu a připsat k němu připomínku.
+    Komentáře jsou studentovi zobrazeny přímo v kontextu kódu, takže okamžitě vidí, ke které konkrétní části řešení se zpětná vazba vztahuje.
+    Tato vlastnost je z pohledu integrace LLM zcela zásadní, protože LLM generuje komentáře přirozeně ve formátu \uv{k řádku X patří připomínka Y}.
+    Výstup modelu tak lze přímo mapovat na existující datový model systému bez nutnosti zavádět nové typy do databáze.
+
+    \item \textbf{Notifikace} -- systém informuje studenty o nově přidaných komentářích, uděleném hodnocení nebo blížících se termínech odevzdání.
+    Vyučující jsou naopak notifikováni o nových odevzdání.
+\end{itemize}
 
 \endinput
