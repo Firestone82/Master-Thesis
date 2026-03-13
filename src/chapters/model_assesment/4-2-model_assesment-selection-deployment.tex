@@ -31,15 +31,15 @@ Cloudové API zavádějí několik klíčových typů omezení, které je nutné
 
 \begin{enumerate}
     \item \textbf{Limit na počet tokenů v kontextu} -- každý model má maximální délku zpracovatelného vstupu i výstupu.
-    Toto omezení je zpravidla u nejmodernějších modelů (state-of-the-art models) dostatečné, běžně 128\,000 tokenů nebo více, ale je důležité zajistit, aby systém kelvin dokázal limitovat požadavky tak, aby nebyl limit překročen, což by vedlo k chybám a neúspěšným požadavkům.
+    Toto omezení je zpravidla u nejmodernějších modelů (state-of-the-art models) dostatečné, běžně 128~000 tokenů nebo více, ale je důležité zajistit, aby systém Kelvin dokázal limitovat požadavky tak, aby nebyl limit překročen -- překročení limitu API signalizuje chybovou odpovědí, která musí být na straně systému správně zachycena a ošetřena.
 
     \item \textbf{Limit na počet požadavků} -- poskytovatelé často zavádějí takzvané rate limits, které omezují počet požadavků, které lze poslat v určitém časovém období (například 100 požadavků za minutu).
-    Pro školní prostředí, kde může být v určitých časech (například před termínem odevzdání) zvýšený počet požadavků, je důležité tyto limity zohlednit a případně implementovat mechanismy pro řízení zátěže (rate limiting) na straně systému kelvin\@.
+    Pro školní prostředí, kde může být v určitých časech (například před termínem odevzdání) zvýšený počet požadavků, je důležité tyto limity zohlednit a případně implementovat mechanismy pro řízení zátěže (rate limiting) na straně systému Kelvin\@.
 
     \item \textbf{Finanční náklady} -- cloudové API jsou zpoplatněny na základě počtu zpracovaných tokenů, což může být pro rozsáhlé použití nákladné.
     Je důležité pečlivě odhadnout očekávané náklady na základě počtu studentů, frekvence odevzdání a průměrné velikosti odevzdání, aby bylo možné zajistit udržitelnost provozu.
 
-    \item \textbf{Závislost na třetí straně} -- použití cloudového API znamená, že systém kelvin bude závislý na dostupnosti a spolehlivosti služby poskytovatele.
+    \item \textbf{Závislost na třetí straně} -- použití cloudového API znamená, že systém Kelvin bude závislý na dostupnosti a spolehlivosti služby poskytovatele.
     V případě výpadku služby nebo změny v API může být funkčnost systému narušena, což je riziko, které je třeba zvážit.
 \end{enumerate}
 
@@ -47,11 +47,10 @@ Cloudové API zavádějí několik klíčových typů omezení, které je nutné
 
 Použití cloudového API se záměrem k ochraně dat studentů bylo rozebráno v sekci~\ref{subsubsec:gdpr-data-transfer}.
 Tato ochrana je často tak klíčová, že může být rozhodujícím faktorem pro volbu mezi cloudovým API a on-premise nasazením.
-\TODO{Co dále tady psát? Všechno by již mělo být rozebráno v té sekci, ale možná by se dalo ještě více zdůraznit?}
 
 \subsubsection*{Náklady}
 
-Náklady cloudových API jsou určeny cenovým modelem \emph{za token}.
+Náklady cloudových API jsou určeny cenovým modelem \textit{za token}.
 Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny jsou typicky dražší.
 
 \begin{table}[H]
@@ -59,22 +58,22 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
     \resizebox{\textwidth}{!}{%
         \begin{tabular}{llll}
             \toprule
-            \textbf{Model}              & \textbf{Vstupní tokeny (\$/1M)} & \textbf{Výstupní tokeny (\$/1M)} & \textbf{Přibližný náklad} \\
+            \textbf{Model}      & \textbf{Vstupní tokeny (\$/1M)} & \textbf{Výstupní tokeny (\$/1M)} & \textbf{Přibližný náklad} \\
             \midrule
-            GPT-5.4 (OpenAI)            & 2,50                            & 15,00                            & $\sim$\TODO{Naklady} \$ \\
-            GPT-5-mini (OpenAI)         & 0,25                            & 2,00                             & $\sim$\TODO{Naklady} \$ \\
-            GPT-5-nano (OpenAI)         & 0,05                            & 0,40                             & $\sim$\TODO{Naklady} \$ \\
-            Claude 4.6 Opus             & 5,00                            & 25,00                            & $\sim$\TODO{Naklady} \$ \\
-            Claude 4.6 Sonnet           & 3,00                            & 15,00                            & $\sim$\TODO{Naklady} \$ \\
-            Claude 3.5 Haiku            & 0,80                            & 4,00                             & $\sim$\TODO{Naklady} \$ \\
-            Claude 3.0 Haiku            & 0,25                            & 1,25                             & $\sim$\TODO{Naklady} \$ \\
-            Gemini 3.1 Pro              & 2,00/4,00                       & 5,00                             & $\sim$\TODO{Naklady} \$ \\
-            Gemini 3.1 Flash            & 0,50                            & 3,00                             & $\sim$\TODO{Naklady} \$ \\
-            Gemini 3 Flash              & 12,00/18,00                     & 0,30                             & $\sim$\TODO{Naklady} \$ \\
+            GPT-5.4 (OpenAI)    & 2,50                            & 15,00                            & $\sim$\TODO{Naklady} \$   \\
+            GPT-5-mini (OpenAI) & 0,25                            & 2,00                             & $\sim$\TODO{Naklady} \$   \\
+            GPT-5-nano (OpenAI) & 0,05                            & 0,40                             & $\sim$\TODO{Naklady} \$   \\
+            Claude 4.6 Opus     & 5,00                            & 25,00                            & $\sim$\TODO{Naklady} \$   \\
+            Claude 4.6 Sonnet   & 3,00                            & 15,00                            & $\sim$\TODO{Naklady} \$   \\
+            Claude 3.5 Haiku    & 0,80                            & 4,00                             & $\sim$\TODO{Naklady} \$   \\
+            Claude 3.0 Haiku    & 0,25                            & 1,25                             & $\sim$\TODO{Naklady} \$   \\
+            Gemini 3.1 Pro      & 2,00/4,00                       & 5,00                             & $\sim$\TODO{Naklady} \$   \\
+            Gemini 3.1 Flash    & 0,50                            & 3,00                             & $\sim$\TODO{Naklady} \$   \\
+            Gemini 3 Flash      & 12,00/18,00                     & 0,30                             & $\sim$\TODO{Naklady} \$   \\
             \bottomrule
         \end{tabular}
     }
-    \caption{Přibližné ceny vybraných cloudových API modelů \cite{openai_api, anthropic_api, google_vertex} pro odevzdání s $\sim$5\,000 vstupními tokeny a $\sim$1\,000 výstupními tokeny}
+    \caption{Přibližné ceny vybraných cloudových API modelů \cite{openai_api, anthropic_api, google_vertex} pro odevzdání s $\sim$5~000 vstupními tokeny a $\sim$1~000 výstupními tokeny}
     \label{tab:cloud-api-costs}
 \end{table}
 
@@ -151,8 +150,8 @@ Z hlediska GDPR jde o přímočarou variantu: správce dat (škola) je totožný
 Náklady on-premise nasazení mají odlišnou strukturu než u cloudového API:
 
 \begin{itemize}
-    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.\ NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60\,000 Kč výše.
-    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200\,000--500\,000 Kč).
+    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.\ NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60~000 Kč výše.
+    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200~000--500~000 Kč).
 
     \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400 W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
 
@@ -167,16 +166,16 @@ Naopak pro systém se stovkami studentů zpracovávajícími tisíce odevzdání
     \resizebox{\textwidth}{!}{%
         \begin{tabular}{lll}
             \toprule
-            \textbf{Vlastnost}           & \textbf{Cloudové API}                     & \textbf{On-premise nasazení} \\
+            \textbf{Vlastnost}   & \textbf{Cloudové API}              & \textbf{On-premise nasazení} \\
             \midrule
-            Hardwarové nároky            & Žádné (výpočet u poskytovatele)           & GPU server (10+ GB VRAM) \\
-            Pořizovací náklady           & Nulové                                    & Vysoké (GPU hardware) \\
-            Průběžné náklady             & Za token (opakující se)                   & Elektřina a správa \\
-            Škálovatelnost               & Automatická (rate limity)                 & Fixní kapacita \\
-            Ochrana dat                  & Data opouštějí školu                      & Data zůstávají na škole \\
-            Kvalita modelů               & Nejnovější (GPT-4o, Claude Sonnet)        & Závisí na hardware \\
-            Latence                      & Závislá na internetu a zátěži API         & Závisí na hardware \\
-            Správa a aktualizace         & Automatická (poskytovatel)                & Manuální (správce) \\
+            Hardwarové nároky    & Žádné (výpočet u poskytovatele)    & GPU server (10+ GB VRAM)     \\
+            Pořizovací náklady   & Nulové                             & Vysoké (GPU hardware)        \\
+            Průběžné náklady     & Za token (opakující se)            & Elektřina a správa           \\
+            Škálovatelnost       & Automatická (rate limity)          & Fixní kapacita               \\
+            Ochrana dat          & Data opouštějí školu               & Data zůstávají na škole      \\
+            Kvalita modelů       & Nejnovější (GPT-4o, Claude Sonnet) & Závisí na hardware           \\
+            Latence              & Závislá na internetu a zátěži API  & Závisí na hardware           \\
+            Správa a aktualizace & Automatická (poskytovatel)         & Manuální (správce)           \\
             \bottomrule
         \end{tabular}
     }

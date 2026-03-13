@@ -1,9 +1,10 @@
 \section{Účel systému}
 \label{sec:kelvin-purpose}
 
-Hlavním účelem systému Kelvin je podpora výuky programování především v jazycích C, C++, Python nebo Rust.
+Hlavním účelem systému Kelvin je podpora výuky, především programovacích předmětů v jazycích C, C++, Python nebo Rust, ale slouží také jako obecný systém pro odevzdávání úloh v dalších předmětech jakou jsou základy počítačové grafiky (ZPG), modelování v grafických aplikacích (MGA) a další.
 Systém poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh.
 Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim zpětnou vazbu a udělovat bodové hodnocení.
+Součástí systému jsou také moduly pro automatické přeložení odevzdaného kódu, jeho spuštění a ověření výstupů.
 
 \subsection{Typický scénář použití}
 \label{subsec:kelvin-workflow}
@@ -13,7 +14,7 @@ Cyklus jedné úlohy v systému Kelvin probíhá následovně:
 Vyučující nejprve vytvoří úlohu, kde zadá její textový popis, definuje testovací vstupy, očekávané výstupy a nastaví termín odevzdání.
 Úloha je pak zpřístupněna přihlášeným studentům okamžitě nebo v předem stanoveném čase.
 
-Student si zadání přečte, během času vypracuje řešení ve svém vývojovém prostředí a výsledný zdrojový kód odevzdá prostřednictvím webového rozhraní systému.
+Student si zadání přečte, během přiděleného času vypracuje řešení ve svém vývojovém prostředí a výsledný zdrojový kód odevzdá prostřednictvím webového rozhraní systému.
 Bezprostředně po odevzdání systém spustí automatizované testy.
 Systém zkompiluje zdrojový kód a spustí jej proti připraveným testovacím vstupům, následné výsledky jsou porovnány s očekávanými výstupy.
 Student okamžitě vidí výsledky testů které prošly i ty, které selhaly a následně může na základě zpětné vazby řešení opravit a odevzdat znovu.
