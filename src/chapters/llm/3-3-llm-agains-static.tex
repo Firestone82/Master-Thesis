@@ -3,40 +3,40 @@
 
 Velké jazykové modely nejsou prvním nástrojem, jehož cílem je automatizovaná analýza kvality zdrojového kódu.
 Statická analýza kódu již existuje s desetiletou historií a bohatým ekosystémem nástrojů, která je dnes součástí standardní vývojové praxe v komerčním i akademickém prostředí.
-Zařazení LLM do školního systému Kelvin proto vyžaduje pečlivé pochopení toho, v čem se oba přístupy liší, kde se doplňují a kde každý z nich selhává.
+Zařazení LLM do školního systému Kelvin proto vyžaduje pečlivé pochopení toho, v čem se oba přístupy liší, kde se doplňují a kde každý z nich selhává~\cite{moller-spa}.
 
-Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění~\cite{codacy-staticanalysis}.
+Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění.
 Tedy pouze na základě jeho struktury, syntaxe a datových závislostí.
-Analyzátor pracuje s formální reprezentací programu, zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory~\cite{agileseekers-staticanalysis}.
+Analyzátor pracuje s formální reprezentací programu, zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory.
 Výsledkem je deterministická analýza, kde při identickém vstupu nástroj vždy poskytne identický výstup, nezávisle na jakémkoli náhodném prvku.
 
 LLM funguje na zcela odlišném principu, nepracuje s formálními reprezentacemi programu, nespočítá AST a neprovádí průchody grafem toku.
 Místo toho generuje text na základě pravděpodobnostních vzorů naučených při trénování.
 Vzorů, které mimo jiné zahrnují tisíce příkladů zdrojového kódu, typických chyb, diskusí o programátorských praktikách a komentářů z code review.
+Někteří autoři a správci open-source projektů přitom výslovně nepřejí, aby byl jejich kód pro trénování jazykových modelů využíván, a existují iniciativy jako BigCode projekt umožňující vývojářům z trénovacích dat svůj kód odstranit~\cite{kocetkov-stack}.
 To vede k zásadně odlišným vlastnostem, možnostem i omezením.
 
 \subsection{Typy statických analyzátorů}
 \label{subsec:static-types}
 
-Statické analyzátory (SA) nejsou monolitická kategorie.
-Liší se hloubkou analýzy, rozsahem zachycených problémů a obtížností integrace.
+Pod pojmem statický analyzátor se skrývá široká škála nástrojů, které se liší hloubkou analýzy, rozsahem zachycených problémů a obtížností integrace.
 Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
 
 \begin{enumerate}
-    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy a bývá první linií obrany.
-    Kompilátory jako GCC nebo Clang generují při překladu varování na potenciálně problematické konstrukce.
-    Typicky jde o detekci nevyužitých proměnných, potenciálně neinicializovaných proměnných nebo třeba porušení typové bezpečnosti.
-    \textit{Clang} navíc nabízí rozšířenou sadu upozornění a statický analyzátor, který dokáže sledovat toky dat a detekovat úniky paměti v jednodušších případech.
+    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy a představuje první automatickou vrstvu kontroly kódu.
+     Kompilátory jako GCC nebo Clang\footnote{\url{https://clang.llvm.org/}} generují při překladu varování na potenciálně problematické konstrukce.
+     Typicky jde o detekci nevyužitých proměnných, potenciálně neinicializovaných proměnných nebo třeba porušení typové bezpečnosti.
+     \textit{Clang} navíc nabízí rozšířenou sadu upozornění a statický analyzátor, který dokáže sledovat toky dat a detekovat úniky paměti v jednodušších případech.
 
     \item \textbf{Lintery a pokročilé statické analyzátory} rozšiřují základní kontrolu o rozsáhlejší sady pravidel zaměřených na dobrou programátorskou praxi, bezpečnost nebo konkrétní kódovací standardy.
-    Pro C++ jsou nejrozšířenějšími nástroji \texttt{clang-tidy} a \texttt{cppcheck}.
-    \texttt{Clang-tidy} je modulární nástroj integrovaný do ekosystému LLVM, který umožňuje aplikovat kontroly z kategorií jako modernize (doporučení přechodu na moderní C++), readability (zlepšení čitelnosti), bugprone (detekce vzorů vedoucích k chybám) nebo cert (dodržování bezpečnostních doporučení standardu CERT).
-    \texttt{Cppcheck} je přenositelný analyzátor zaměřený na detekci skutečných chyb (přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti).
+     Pro C++ jsou nejrozšířenějšími nástroji \texttt{clang-tidy}\footnote{\url{https://clang.llvm.org/extra/clang-tidy/}} a \texttt{cppcheck}\footnote{\url{https://cppcheck.sourceforge.io/}}.
+     \texttt{Clang-tidy} je modulární nástroj integrovaný do ekosystému LLVM, který umožňuje aplikovat kontroly z kategorií jako modernize (doporučení přechodu na moderní C++), readability (zlepšení čitelnosti), bugprone (detekce vzorů vedoucích k chybám) nebo cert (dodržování bezpečnostních doporučení standardu CERT).
+     \texttt{Cppcheck} je přenositelný analyzátor, který se zaměřuje na detekci skutečných chyb (přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti).
 
     \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
-    SonarQube kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.\ \textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
-    Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenzované.
-    Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
+     SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}} kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.\ \textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
+     Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenzované.
+     Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
 \end{enumerate}
 
 \subsection{Zásadní rozdíly v přístupu}
@@ -84,16 +84,16 @@ LLM je schopen generovat vysvětlení přirozeným jazykem, které studentovi po
             \toprule
             \textbf{Vlastnost}                   & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
             \midrule
-            Deterministický výstupu              & Ano                          & Ne (pravděpodobnostní) \\
-            Formální verifikace pravidel         & Ano                          & Ne \\
-            Analýza řízení toku (CFG)            & Ano                          & Omezeně / heuristicky \\
-            Detekce syntaktických chyb           & Ano (spolehlivě)             & Omezeně \\
-            Práce s kontextem zadání úlohy       & Ne                           & Ano \\
-            Hodnocení vhodnosti algoritmu        & Ne                           & Ano (při znalosti zadání) \\
-            Hodnocení čitelnosti a stylu         & Omezeně (dle pravidel)       & Ano \\
-            Vysvětlení přirozeným jazykem        & Ne (technická hlášení)       & Ano \\
-            Škálovatelnost na libovolný kód      & Ano                          & Limitováno kontextem \\
-            Detekce bezpečnostních zranitelností & Ano (definované vzory)       & Omezeně \\
+            Deterministický výstupu              & Ano                          & Ne (pravděpodobnostní)        \\
+            Formální verifikace pravidel         & Ano                          & Ne                            \\
+            Analýza řízení toku (CFG)            & Ano                          & Omezeně / heuristicky         \\
+            Detekce syntaktických chyb           & Ano (spolehlivě)             & Omezeně                       \\
+            Práce s kontextem zadání úlohy       & Ne                           & Ano                           \\
+            Hodnocení vhodnosti algoritmu        & Ne                           & Ano (při znalosti zadání)     \\
+            Hodnocení čitelnosti a stylu         & Omezeně (dle pravidel)       & Ano                           \\
+            Vysvětlení přirozeným jazykem        & Ne (technická hlášení)       & Ano                           \\
+            Škálovatelnost na libovolný kód      & Ano                          & Limitováno kontextem          \\
+            Detekce bezpečnostních zranitelností & Ano (definované vzory)       & Omezeně                       \\
             \bottomrule
         \end{tabular}
     }
