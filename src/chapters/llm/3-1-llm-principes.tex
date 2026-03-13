@@ -151,7 +151,7 @@ Pro zdrojový kód s delšími identifikátory a hustou syntaxí může být pom
 \label{subsubsec:embedding-positional-encoding}
 
 Každý token ze slovníku je mapován na hustý vektorový prostor pomocí \textit{embedding vrstvy}.
-Výsledný vektor $\mathbf{e}_t \in \mathbb{R}^d$ má typicky 768 až 8\,192 dimenzí v závislosti na velikosti modelu.
+Výsledný vektor $\mathbf{e}_t \in \mathbb{R}^d$ má typicky 768 až 8~192 dimenzí v závislosti na velikosti modelu.
 Embedding vrstva je trénovaná společně se zbytkem modelu a kóduje sémantické a syntaktické vlastnosti tokenů: tokeny s podobnou funkcí nebo kontextem leží geometricky blízko sebe.
 
 Protože Transformer zpracovává tokeny paralelně bez pořadí, je k embeddingu přidáno \textit{poziční kódování} nesoucí informaci o pozici tokenu v sekvenci.
@@ -171,9 +171,9 @@ Přičemž pro dosažení optimálního výkonu by počet trénovaných tokenů 
 
 Kontextové okno určuje maximální počet tokenů, které model zpracuje v jednom průchodu.
 Jedná se tedy o tvrdé omezení, jehož překročení vede ke zkrácení vstupu nebo nutnosti zpracování v oddělených průchodech.
-Velikost okna vzrostla s vývojem modelů dramaticky, GPT-3 měl 2\,048 tokenů, moderní modely dosahují 128\,000 (GPT-4o) až 1\,000\,000 tokenů (Gemini 2.5 Pro).
+Velikost okna vzrostla s vývojem modelů dramaticky, GPT-3 měl 2~048 tokenů, moderní modely dosahují 128~000 (GPT-4o) až 1~000~000 tokenů (Gemini 2.5 Pro).
 
-Pro analýzu studentských řešení v systému Kelvin jsou relevantní modely s oknem alespoň 16\,000 tokenů, které s rezervou pojmou systémový prompt, zadání úlohy i celý odevzdaný zdrojový kód.
+Pro analýzu studentských řešení v systému Kelvin jsou relevantní modely s oknem alespoň 16~000 tokenů, které s rezervou pojmou systémový prompt, zadání úlohy i celý odevzdaný zdrojový kód.
 
 \subsection{Základní princip fungování modelů}
 \label{subsec:llm-functioning}
