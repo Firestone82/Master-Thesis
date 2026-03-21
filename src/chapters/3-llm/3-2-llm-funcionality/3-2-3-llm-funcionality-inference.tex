@@ -1,0 +1,53 @@
+\subsection{Inference a parametry generování}
+\label{subsec:inference-generation}
+
+Při inferenci model generuje výstup autoregresivně, v každém kroku predikuje pravděpodobnostní rozdělení přes celý slovník tokenů a vybere z něj jeden token, který přidá k dosavadní sekvenci.
+Způsob výběru tokenu určuje \textit{dekódovací strategie}:
+
+\begin{itemize}
+    \item \textbf{Greedy decoding} -- vždy vybere nejpravděpodobnější token.
+    Což je deterministické, avšak náchylné k opakování.
+
+    \item \textbf{Vzorkování s teplotou} -- vybírá token náhodně z rozdělení upraveného parametrem teploty $T$.
+    Nízká teplota ($T < 1$) zvyšuje pravděpodobnost nejpravděpodobnějšího tokenu, vysoká teplota ($T > 1$) rozdělení uhlazuje a zvyšuje variabilitu.
+
+    \item \textbf{Top-p (nucleus) sampling} -- vybírá token z nejmenší podmnožiny tokenů, jejichž kumulativní pravděpodobnost překračuje práh $p$, čímž zabraňuje výběru velmi nepravděpodobných tokenů při zachování jisté míry variability.
+\end{itemize}
+
+Pro analýzu zdrojového kódu ve školním prostředí je žádoucí konzistentnost a determinismus, kde cílem je diagnostika, nikoli kreativní generování.
+Proto se doporučuje nízká teplota v rozsahu $T = 0{,}1$ až $T = 0{,}3$ kombinovaná s top-p vzorkováním.
+
+Důležitou optimalizací inference je \textbf{KV cache}: klíče a hodnoty ($\mathbf{K}$, $\mathbf{V}$) pro tokeny vstupního prefixu jsou uloženy do cache a nepřepočítávají se při každém dalším generovacím kroku.
+Tím se drasticky snižuje výpočetní náročnost inference, avšak za cenu vyšší spotřeby paměti.
+KV cache roste lineárně s délkou sekvence a počtem vrstev modelu.
+
+\subsection*{Zjednodušený přehled procesu}
+\label{subsec:llm-simplified-process}
+
+Prakticky lze z hlediska fungování modelu proces zjednodušit do následujících kroků:
+
+\begin{enumerate}
+    \item vstupní text je rozdělen na tokeny,
+    \item jednotlivé tokeny jsou převedeny na numerické reprezentace (embeddingy) včetně poziční informace,
+    \item data procházejí opakovaně několika bloky architektury Transformer (self-attention a feed-forward vrstvy),
+    \item výstupní vrstva vypočítá pravděpodobnostní rozdělení nad možnými dalšími tokeny,
+    \item na základě zvoleného dekódovacího mechanismu je vybrán konkrétní token,
+    \item proces se opakuje až do splnění ukončující podmínky (např.~ vygenerování speciálního koncového tokenu nebo dosažení maximální délky sekvence).
+\end{enumerate}
+
+\subsection*{Rozdělení podle způsobu trénování}
+\label{subsec:llm-training-types}
+
+Z hlediska trénování lze modely rozdělit do několika skupin:
+
+\begin{itemize}
+    \item \textbf{Předtrénované modely} –- univerzální modely trénované na rozsáhlých datech, které lze použít pro široké spektrum úloh bez dalšího trénování.
+    \item \textbf{Jemně doladěné (fine-tuned) modely} –- modely, které jsou dále specializovány na konkrétní úlohu nebo doménu pomocí dodatečných trénovaných dat.
+    \item \textbf{Multimodální modely} –- modely schopné pracovat s více typy vstupních dat (např\. text a obraz).
+    \item \textbf{Doménově specifické modely} –- modely optimalizované pro konkrétní průmyslové nebo odborné oblasti.
+\end{itemize}
+
+Z pohledu této diplomové práce jsou nejrelevantnější autoregresivní transformer modely, které umožňují generovat textové výstupy na základě vstupního zdrojového kódu.
+Tyto modely jsou vhodné pro generování komentářů, shrnutí řešení a identifikaci potenciálních problémů ve studentských úlohách.
+
+\endinput
