@@ -1,0 +1,13 @@
+\subsection{Náročnost provozu}
+\label{subsec:criteria-operational}
+
+Náročnost provozu určuje, jaké zdroje jsou potřeba k dlouhodobému provozování modelu v produkčním prostředí.
+Zahrnuje jak finanční náklady, tak nároky na infrastrukturu a údržbu.
+
+U cloudových API jsou náklady typicky určeny cenovými modely a jak bylo popsáno v sekci~\ref{subsec:llm-tokens-parameters-context}, jsou založeny na počtu zpracovaných tokenů modelem.
+Pro typickou analýzu jednoho studentského odevzdání, zahrnující systémový prompt, zadání a zdrojový kód, je potřeba přibližně 2~000--8~000  vstupních tokenů a 500--2~000 výstupních tokenů. \TODO{Ověřit konkrétní hodnoty}
+Celkové náklady na jedno odevzdání tak závisí na zvoleném modelu a jeho cenové politice.
+
+Pro on-premise nasazení jsou náklady primárně jednorázové a zahrnují pořízení hardware, především tedy grafických karet s dostatečnou kapacitou VRAM pro efektivní inference, a náklady na údržbu a aktualizace modelu které jsou průběžně mnohem nižší než u cloudových API, ale vyžadují technickou odbornost pro správu a optimalizaci.
+
+\endinput
