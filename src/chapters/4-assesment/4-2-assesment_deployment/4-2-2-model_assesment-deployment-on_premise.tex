@@ -1,0 +1,101 @@
+\subsection{On-premise řešení}
+\label{subsec:deployment-on-premise}
+
+On-premise nasazení znamená provozování jazykového modelu přímo na lokálních serverech, bez využití externích cloudových služeb.
+V tomto případě je model hostován na serverové infrastruktuře a veškeré zpracování dat probíhá lokálně.
+
+Výhodou on-premise řešení je především nezávislost na externích poskytovatelích služeb a absence poplatků za jednotlivé API požadavky.
+Správci mají zároveň možnost plně kontrolovat konfiguraci modelu, způsob jeho aktualizace i způsob škálování výpočetních prostředků.
+Na druhou stranu je nutné zajistit dostatečné hardwarové prostředky, zejména výkonné grafické akcelerátory (GPU), dostatek operační paměti a vhodnou infrastrukturu pro provoz a správu modelů.
+
+Pro usnadnění provozu jazykových modelů v lokálním prostředí existuje několik softwarových nástrojů, které poskytují rozhraní pro jejich správu, spouštění a inferenci:
+
+\begin{itemize}
+    \item \textbf{Ollama}~\cite{ollama} -- nástroj zaměřený na jednoduché spouštění a správu jazykových modelů v lokálním prostředí.
+    Poskytuje jednotné rozhraní pro práci s různými modely a umožňuje jejich snadné stažení, spuštění i aktualizaci.
+    Součástí nástroje je také API, které umožňuje integraci modelů do externích aplikací.
+
+    \item \textbf{Groq}~\cite{groq} -- platforma zaměřená na vysoce výkonnou inferenci jazykových modelů.
+    Nabízí optimalizovanou infrastrukturu pro rychlé zpracování požadavků nad velkými modely.
+    Přestože je Groq často využíván jako cloudová služba, jeho technologie je založena na specializovaném hardwaru navrženém pro efektivní provoz modelů.
+
+    \item \textbf{vLLM}~\cite{vllm} -- knihovna určená pro efektivní provoz velkých jazykových modelů, která se zaměřuje zejména na optimalizaci paměťového využití a paralelního zpracování požadavků.
+    Využívá techniky jako \textit{PagedAttention}, které umožňují efektivně sdílet paměť mezi více požadavky a tím výrazně zvyšují propustnost systému.
+
+    \item \textbf{llama.cpp}~\cite{llamacpp} -- open-source implementace zaměřená na provoz modelů rodiny LLaMA a jejich variant i na běžných procesorech bez nutnosti využití GPU\@.
+    Nástroj umožňuje provoz kvantizovaných verzí modelů, což výrazně snižuje paměťové nároky a umožňuje nasazení i na méně výkonném hardwaru.
+\end{itemize}
+
+Volba konkrétního nástroje závisí především na dostupném hardwaru, požadované rychlosti inferenčního procesu a způsobu integrace do existující infrastruktury systému Kelvin.
+Zatímco nástroje jako \textit{vLLM} jsou vhodné pro provoz ve výkonném serverovém prostředí s GPU akcelerací, řešení jako \textit{llama.cpp} umožňují provoz modelů i na méně výkonném hardwaru.
+Nástroj \textit{Ollama} pak poskytuje kompromis mezi jednoduchostí nasazení a možností integrace do aplikací prostřednictvím API\@.
+
+\subsubsection*{Hardwarové nároky}
+
+Pro on-premise nasazení je zcela zásadní dostupnost vhodného hardware.
+Inference jazykových modelů je výpočetně náročná operace (viz sekce~\ref{subsec:llm-computational-cost}), proto je využití GPU s dostatečnou kapacitou paměti VRAM téměř nezbytné pro přijatelné výkony.
+přibližné nároky na hardware pro různé modely lze vidět v tabulce~\ref{tab:memory-requirements}.
+
+\TODO{Doplnit porovnání CPU vs GPU pro inferenci. Spustit ollama na argexu a změřit výkon pro různé modely.}
+
+\subsubsection*{Limity}
+
+On-premise nasazení přináší vlastní sadu omezení:
+
+\begin{itemize}
+    \item \textbf{Omezení dostupným hardware} -- kvalita a rychlost analýzy jsou přímou funkcí dostupného GPU.
+    Na nedostatečném hardware je nutné volit menší nebo silněji kvantizované modely, což může snižovat kvalitu výstupů.
+
+    \item \textbf{Škálovatelnost} -- cloudové API automaticky škáluje s nárůstem zátěže, kdežto lokální server má fixní kapacitu.
+    Při hromadném odevzdávání se požadavky řadí do fronty a čekají na zpracování.
+
+    \item \textbf{Správa modelu} -- nové verze modelů musí být ručně staženy a nasazeny.
+    Aktualizace nebo výměna modelu vyžaduje přímou intervenci správce systému.
+\end{itemize}
+
+\subsubsection*{Ochrana dat}
+
+Z pohledu ochrany dat je on-premise nasazení výrazně jednodušší situace.
+Studentské zdrojové kódy a zadání úloh nikdy neopustí infrastrukturu školy.
+Neexistuje třetí strana, které by musela být svěřena správa dat, a není potřeba uzavírat DPA s externím poskytovatelem.
+Z hlediska GDPR jde o přímočarou variantu: správce dat (škola) je totožný s provozovatelem infrastruktury.
+
+\subsubsection*{Náklady}
+
+Náklady on-premise nasazení mají odlišnou strukturu než u cloudového API:
+
+\begin{itemize}
+    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.\ NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60~000 Kč výše.
+    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200~000--500~000 Kč).
+
+    \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400 W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
+
+    \item \textbf{Nulové náklady za token} -- po zaplacení hardware jsou marginalní náklady na každé zpracované odevzdání prakticky nulové, bez ohledu na počet odevzdání.
+\end{itemize}
+
+Pro systém s malým počtem uživatelů a odevzdání může být on-premise pořizovací investice ekonomicky nevýhodná ve srovnání s cloudovým API\@.
+Naopak pro systém se stovkami studentů zpracovávajícími tisíce odevzdání ročně se on-premise investice může vyplatit v horizontu 1--2 let.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Vlastnost}   & \textbf{Cloudové API}              & \textbf{On-premise nasazení} \\
+            \midrule
+            Hardwarové nároky    & Žádné (výpočet u poskytovatele)    & GPU server (10+ GB VRAM)     \\
+            Pořizovací náklady   & Nulové                             & Vysoké (GPU hardware)        \\
+            Průběžné náklady     & Za token (opakující se)            & Elektřina a správa           \\
+            Škálovatelnost       & Automatická (rate limity)          & Fixní kapacita               \\
+            Ochrana dat          & Data opouštějí školu               & Data zůstávají na škole      \\
+            Kvalita modelů       & Nejnovější (GPT-4o, Claude Sonnet) & Závisí na hardware           \\
+            Latence              & Závislá na internetu a zátěži API  & Závisí na hardware           \\
+            Správa a aktualizace & Automatická (poskytovatel)         & Manuální (správce)           \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Srovnání cloudového API a on-premise nasazení jazykového modelu z hlediska klíčových vlastností}
+    \label{tab:deployment-comparison}
+\end{table}
+
+\endinput

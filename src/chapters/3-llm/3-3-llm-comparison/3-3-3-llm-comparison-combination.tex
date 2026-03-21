@@ -1,0 +1,19 @@
+\subsection{Možnost kombinace přístupů}
+\label{subsec:static-llm-combination}
+
+Z výše uvedeného srovnání vyplývá, že statické analyzátory a LLM by neměly být vnímány jako konkurenční, ale jako komplementární technologie.
+Každý z přístupů pokrývá oblast, kde druhý selhává nebo je slabší.
+
+Statická analýza je silná tam, kde je třeba formální, reprodukovatelná a úplná detekce přesně definovaných vzorů, jako jsou syntaktické chyby, jednoduché úniky paměti či porušení kódovacích standardů.
+LLM je naopak silný tam, kde je třeba kontextová interpretace, srozumitelné vysvětlení a hodnocení aspektů, které nejsou formalizovatelné jako pravidla.
+Mezi ně patří posouzení adekvátnosti algoritmu, celkového designu řešení, koherence pojmenování nebo pochopení záměru zadání.
+
+V prostředí systému Kelvin je vhodné uvažovat o hybridním přístupu, kde automatické testy a statická analýza pokrývají vrstvu formální správnosti, zatímco LLM přidává vrstvu kontextového hodnocení a srozumitelné zpětné vazby.
+Výstupy statické analýzy mohou být navíc zahrnuty jako součást vstupu do LLM: model může být požádán, aby vysvětlil konkrétní upozornění \texttt{cppcheck} nebo navrhl způsob jeho opravy v kontextu celého řešení.
+Tímto způsobem LLM nezdvojuje práci statického analyzátoru, ale přidává vrstvu interpretace, která formálnímu nástroji chybí.
+
+Je však nutné zachovat realistická očekávání, kde ani kombinace obou přístupů nenahrazuje odborný úsudek vyučujícího.
+Statická analýza ani LLM nemohou zaručit, že odevzdané řešení je správné, efektivní nebo didakticky přínosné.
+Slouží jako podpůrné nástroje usnadňující orientaci v řešení, \textbf{nikoli jako jeho hodnotitel}.
+
+\endinput

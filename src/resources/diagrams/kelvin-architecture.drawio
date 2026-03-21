@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="27.1.6">
+  <diagram name="Page-1" id="kqw8hui4gQIG87pAv6Bc">
+    <mxGraphModel dx="2305" dy="1103" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-2" value="&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 18px;&quot;&gt;&lt;b style=&quot;&quot;&gt;&amp;nbsp; Server&lt;/b&gt;&lt;/font&gt;&lt;div&gt;&lt;b&gt;&lt;font size=&quot;3&quot; style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot; size=&quot;3&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot; size=&quot;3&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot; size=&quot;3&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot; size=&quot;3&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=light-dark(#E6E6E6,#E6E6E6);" vertex="1" parent="1">
+          <mxGeometry x="140" y="440" width="420" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-33" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shape=flexArrow;fillColor=light-dark(#A9C4EB,#3399FF);" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="469.99629080118666" y="470" as="sourcePoint" />
+            <mxPoint x="470" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-35" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shape=flexArrow;fillColor=light-dark(#A9C4EB,#3399FF);exitX=0.976;exitY=0.625;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550.0000000000001" y="539" as="sourcePoint" />
+            <mxPoint x="630.08" y="539" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-36" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shape=flexArrow;fillColor=light-dark(#A9C4EB,#3399FF);" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="750" as="sourcePoint" />
+            <mxPoint x="710" y="580" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="710" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-37" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shape=flexArrow;fillColor=light-dark(#A9C4EB,#3399FF);exitX=0.976;exitY=0.625;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="540" as="sourcePoint" />
+            <mxPoint x="390" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-39" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;shape=flexArrow;fillColor=light-dark(#A9C4EB,#3399FF);" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="469.5" y="685" as="sourcePoint" />
+            <mxPoint x="469.5" y="585" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-3" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 14px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;font size=&quot;3&quot; style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;&lt;b&gt;JS Frontend&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#CCCCCC,#CCCCCC);" vertex="1" parent="1">
+          <mxGeometry x="160" y="505" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-40" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/internet_globe.svg;" vertex="1" parent="1">
+          <mxGeometry x="200" y="479" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-4" value="&lt;div&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 14px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font size=&quot;3&quot; style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;font size=&quot;3&quot; style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;&lt;b&gt;Django&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#CCCCCC,#CCCCCC);" vertex="1" parent="1">
+          <mxGeometry x="400" y="505" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-41" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/sql_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="451.73" y="479" width="46.97" height="61" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-16" value="&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 14px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;br&gt;PostgreSQL&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#E6E6E6,#CCCCCC);" vertex="1" parent="1">
+          <mxGeometry x="400" y="290" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-42" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/databases.svg;" vertex="1" parent="1">
+          <mxGeometry x="439.9" y="260" width="60.2" height="59" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-17" value="&lt;b&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 14px;&quot;&gt;&lt;br&gt;&lt;br&gt;Redis&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#E6E6E6,#CCCCCC);" vertex="1" parent="1">
+          <mxGeometry x="640" y="505" width="140" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-43" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/databases.svg;" vertex="1" parent="1">
+          <mxGeometry x="679.39" y="479" width="61.23" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-6" value="&lt;b&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0)); font-size: 14px;&quot;&gt;&lt;br&gt;&lt;br&gt;Queue worker N&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#E6E6E6,#CCCCCC);" vertex="1" parent="1">
+          <mxGeometry x="400" y="720" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9dC3A6iadAWyMK4YFFb_-44" value="" style="image;aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image=img/lib/active_directory/windows_server.svg;" vertex="1" parent="1">
+          <mxGeometry x="445.8" y="690" width="49.2" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,41 @@
+\subsection{Kvalita výstupů}
+\label{subsec:criteria-quality}
+
+Nejdůležitějším kritériem je schopnost modelu generovat výstupy, které jsou pro učitele i studenty skutečně užitečné.
+Kvalita výstupů v kontextu analýzy kódu zahrnuje několik dílčích vlastností:
+
+\begin{itemize}
+    \item \textbf{Správnost} -- model musí identifikovat reálné problémy v kódu a nepřidávat falešné výstrahy (\textit{false positives}).
+    Falešný pozitivní nález (tedy upozornění na problém, který neexistuje) je pro studenta matoucí a pro učitele zbytečná zátěž.
+
+    \item \textbf{Relevance k zadání} -- model, pokud můžou, by měl posuzovat řešení s ohledem na konkrétní zadání úlohy a ne jen na obecné programátorské principy.
+    Například to, zda jde o algoritmus vypisující text na obrazovku v specifickém formátu, není z kódu samotného zjistitelné bez kontextu zadání.
+
+    \item \textbf{Srozumitelnost a didaktická hodnota} -- výstupy musí být psány jazykem, kterému studenti rozumí.
+    Model by měl vysvětlit \textit{proč} je daná část kódu problematická a navrhnout konkrétní způsob opravy.
+
+    \item \textbf{Konzistentnost} -- model by měl pro podobné vstupy generovat podobné výstupy.
+    Absolutní reprodukovatelnost \textbf{není} u pravděpodobnostních systémů realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáním zásadně lišit.
+\end{itemize}
+
+Pro objektivní porovnání kvality modelů existují standardizované benchmarky, což jsou soubory testovacího úloh sloužící k měření výkonu systému za určitých podmínek.
+V oblasti generování kódu existuje několik dobře známých benchmarků, které jsou zaměřené na schopnost porozumění a generování kódu.
+Nejznámější z nich jsou:
+
+\begin{itemize}
+    \item \textbf{HumanEval}~\cite{humaneval} -- sada 164 programátorských úloh v jazyce Python s automatickým ověřením správnosti generovaného kódu.
+    Výsledek udává, jak často model na první pokus vygeneruje správné řešení.
+
+    \item \textbf{MBPP} (Mostly Basic Python Problems)~\cite{mbpp} -- podobný benchmark s důrazem na jednoduché úlohy vhodné pro začátečníky.
+
+    \item \textbf{LiveCodeBench}~\cite{livecodebench} -- novější benchmark zahrnující úlohy z programátorských soutěží, které průběžně přibývají,
+    čímž snižuje riziko kontaminace trénovaných dat, která nastává u starších benchmarků, které jsou veřejně dostupné již několik let.
+    Model by tak mohl mít v trénovaných datech přímo řešení těchto úloh, což by zkreslovalo výsledky.
+\end{itemize}
+
+Je důležité mít na paměti, že benchmarky měří především schopnost \textit{generovat} kód, nikoli schopnost \textit{analyzovat} a \textit{komentovat} existující kód.
+Proto je nutné, pro hodnocení kvality výstupy v kontextu systému kelvin zvolit jiné metriky, které lépe odrážejí požadavky na analýzu studentských řešení.
+
+\TODO{Doplnit metriky, pravděpodobně založené na hodnocení předešlých odevzdání učiteli a podle toho vyvodit výsledek. Ale nově jsem přidal i přístup, kdy výsledek je následně poslat do dalšího LLM na analýzu. Model ale musí být silnější, aby dokázal posoudit kvalitu výstupu toho prvního LLM.}
+
+\endinput

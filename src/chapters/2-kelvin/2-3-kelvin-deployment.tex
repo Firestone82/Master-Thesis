@@ -1,0 +1,12 @@
+\section{Nasazení a provoz systému}
+\label{sec:kelvin-deployment}
+
+Pro produkční nasazení je systém Kelvin distribuován pomocí kontejnerizační technologie Docker, přičemž jednotlivé části aplikace jsou spravovány nástrojem Docker Compose.
+Tento přístup umožňuje zajistit jednotné běhové prostředí pro vývoj i produkci a zároveň usnadňuje správu závislostí aplikace.
+
+Proces nasazení systému je automatizován pomocí nástroje GitHub Actions, který po každém úspěšném sloučení změn do hlavní větve repozitáře provede sestavení Docker image a jejich nasazení na produkční server.
+Automatizovaný deployment snižuje riziko chyb při manuálním nasazování a zajišťuje, že produkční prostředí odpovídá aktuálnímu stavu zdrojového kódu.
+
+Využití Docker a Docker Compose zároveň zjednodušuje provozní správu systému a umožňuje jeho další rozšiřování bez nutnosti zásadních změn v infrastruktuře.
+
+\endinput

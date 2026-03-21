@@ -1,0 +1,75 @@
+\chapter{Velké jazykové modely}
+\label{ch:llm}
+
+Tato kapitola se věnuje problematice velkých jazykových modelů (LLM) od jejich historických kořenů přes architektonické jádro \textit{Transformer} až po způsob trénování, fine-tuningu a nasazení.
+Cílem je poskytnout dostatečný teoretický základ pro pochopení vývojových rozhodnutí popsaných v následujících kapitolách.
+
+Druhá část kapitoly zasazuje LLM do kontextu analýzy zdrojového kódu.
+Popisuje, co je k takové analýze potřeba, jakým způsobem ji model provádí a v čem se od tradičních statických nástrojů liší.
+Na konci kapitoly je uzavřen přehled hlavních rizik a omezení, která je nutné zohlednit při nasazení v reálném školním prostředí.
+
+% =============================================================
+\section{Základní principy LLM}
+\label{sec:llm-principles}
+
+Velké jazykové modely představují jednu z nejvýznamnějších technologických inovací posledního desetiletí v oblasti umělé inteligence.
+Jejich schopnost generovat koherentní, kontextově relevantní text otevřela nové možnosti v oblastech sahajících od zákaznické podpory přes automatické překlady až po analýzu a generování zdrojového kódu.
+Aby bylo možné zodpovědně posoudit jejich nasazení v konkrétním systému je nutné rozumět principům jejich fungování, způsobu, jakým se učí, a hranicím jejich schopností.
+
+\input{chapters/3-llm/3-1-llm-principes/3-1-1-llm-principes-about}
+\input{chapters/3-llm/3-1-llm-principes/3-1-2-llm-principes-history}
+\input{chapters/3-llm/3-1-llm-principes/3-1-3-llm-principes-concepts}
+
+% =============================================================
+\section{Základní princip fungování modelů}
+\label{sec:llm-functioning}
+
+Aby bylo možné posoudit, jak LLM generuje komentáře ke zdrojovému kódu, je nutné porozumět dvěma vzájemně propojeným procesům.
+Architektuře která tvoří základ výpočtu a procesu trénování, při němž model získává své schopnosti.
+
+\input{chapters/3-llm/3-2-llm-funcionality/3-2-1-llm-functionality-transformer}
+\input{chapters/3-llm/3-2-llm-funcionality/3-2-2-llm-functionality-training}
+\input{chapters/3-llm/3-2-llm-funcionality/3-2-3-llm-funcionality-inference}
+
+% =============================================================
+\section{Porovnání s tradičními statickými analyzátory}
+\label{sec:llm-vs-static}
+
+Velké jazykové modely nejsou prvním nástrojem, jehož cílem je automatizovaná analýza kvality zdrojového kódu.
+Statická analýza kódu již existuje s desetiletou historií a bohatým ekosystémem nástrojů, která je dnes součástí standardní vývojové praxe v komerčním i akademickém prostředí.
+Zařazení LLM do školního systému Kelvin proto vyžaduje pečlivé pochopení toho, v čem se oba přístupy liší, kde se doplňují a kde každý z nich selhává~\cite{moller-spa}.
+
+Statická analýza kódu představuje techniku, při níž je zdrojový kód zkoumán bez jeho spuštění.
+Tedy pouze na základě jeho struktury, syntaxe a datových závislostí.
+Analyzátor pracuje s formální reprezentací programu, zpravidla s abstraktním syntaktickým stromem (AST) nebo kontrolním grafem toku (CFG), nad nimiž aplikuje přesně definovaná pravidla nebo vzory.
+Výsledkem je deterministická analýza, kde při identickém vstupu nástroj vždy poskytne identický výstup, nezávisle na jakémkoli náhodném prvku~\cite{agileseekers-staticanalysis}.
+
+LLM funguje na zcela odlišném principu, nepracuje s formálními reprezentacemi programu, nespočítá AST a neprovádí průchody grafem toku.
+Místo toho generuje text na základě pravděpodobnostních vzorů naučených při trénování.
+Vzorů, které mimo jiné zahrnují tisíce příkladů zdrojového kódu, typických chyb, diskusí o programátorských praktikách a komentářů z code review.
+Někteří autoři a správci open-source projektů přitom výslovně nepřejí, aby byl jejich kód pro trénování jazykových modelů využíván, a existují iniciativy jako BigCode projekt umožňující vývojářům z trénovaných dat svůj kód odstranit~\cite{kocetkov-stack}.
+To vede k zásadně odlišným vlastnostem, možnostem i omezením.
+
+\input{chapters/3-llm/3-3-llm-comparison/3-3-1-llm-comparison-types}
+\input{chapters/3-llm/3-3-llm-comparison/3-3-2-llm-comparison-differences}
+\input{chapters/3-llm/3-3-llm-comparison/3-3-3-llm-comparison-combination}
+
+% =============================================================
+\section{Rizika a omezení použití LLM}
+\label{sec:llm-limitations}
+
+Jak bylo popsáno v sekci~\ref{sec:llm-principles}, velké jazykové modely jsou pravděpodobnostní systémy.
+Jejich výstup nepředstavuje formální důkaz správnosti, ale kvalifikovaný odhad založený na statistických vzorech naučených během trénování.
+Tato vlastnost je pro generování komentářů a pedagogických vysvětlení cenná, avšak současně přináší celou řadu technických, provozních a bezpečnostních rizik, která musí být při nasazení v reálné školním prostředí pečlivě zohledněna.
+
+Tato sekce systematicky rozebírá čtyři hlavní kategorie omezení: limit kontextového okna, výpočetní a provozní náročnost, paměťové nároky a otázky ochrany dat~\cite{ibm-llmlimitations}.
+
+\input{chapters/3-llm/3-4-llm-limitations/3-4-1-llm-limitations-token_limit}
+\input{chapters/3-llm/3-4-llm-limitations/3-4-2-llm-limitations-compute_cost}
+\input{chapters/3-llm/3-4-llm-limitations/3-4-3-llm-limitations-memory_requirement}
+\input{chapters/3-llm/3-4-llm-limitations/3-4-4-llm-limitations-gdpr}
+\input{chapters/3-llm/3-4-llm-limitations/3-4-5-llm-limitations-prompt_injection}
+
+\endinput
+
+\endinput

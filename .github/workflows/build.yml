@@ -59,6 +59,29 @@ jobs:
           removeArtifacts: true
           artifacts: src/main.pdf
 
+  publish-revision-release:
+    needs: build-latex
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/revision-')
+    steps:
+      - name: Download PDF artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: thesis-pdf
+          path: src
+
+      - name: Publish PDF to revision release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: revision-latest
+          name: Latest Revision Thesis PDF
+          body: Automatically updated thesis PDF from `${{ github.ref_name }}`.
+          allowUpdates: true
+          removeArtifacts: true
+          artifacts: src/main.pdf
+          prerelease: true
+          makeLatest: false
+
   publish-pages:
     needs: build-latex
     runs-on: ubuntu-latest
