@@ -7,7 +7,7 @@ Probíhá typicky ve třech fázích, z nichž každá plní odlišnou roli.
 \subsubsection*{Předtrénování (pre-training).}
 Předtrénování je výpočetně nejnáročnější fází celého procesu.
 Model je trénován na stovkách miliard tokenů ze zdrojů jako jsou webové stránky, knihy, vědecké články nebo veřejné repositáře zdrojového kódu.
-Trénovací data jsou nejprve tokenizována, tedy převedena na sekvence celočíselných identifikátorů odpovídajících jednotlivým slovním jednotkám nebo jejich částem (viz sekce~\ref{subsubsec:tokenization}).
+Trénovací data jsou nejprve tokenizována, tedy převedena na sekvence celočíselných identifikátorů odpovídajících jednotlivým slovním jednotkám nebo jejich částem (viz \secref{subsubsec:tokenization}).
 
 Cílem předtrénování je minimalizace záporné logaritmické věrohodnosti.
 Model se snaží správně předpovídat každý token na základě předcházejícího kontextu:
@@ -47,6 +47,5 @@ Současně je udržována blízkost k původnímu SFT modelu pomocí penalizace 
 Tím se zabraňuje tzv.\ reward hackingu, tedy situaci, kdy by model nalezl způsob, jak dosáhnout vysoké odměny bez skutečného zlepšení kvality odpovědí.
 
 Výsledkem celého tří krokového procesu je model, jehož výstupy jsou věcnější, bezpečnější a lépe odpovídají záměru uživatele.
-\TODO{QUESTION: Zmínit tady i proč tedy není možné předtrénovat model v rámci této práce? Nebo až v implementaci?}
 
 \endinput
