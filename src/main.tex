@@ -14,7 +14,7 @@
 \usepackage{tikz} % For drawing in LaTeX
 \usepackage{amsmath} % For improved equation typesetting
 \usepackage{tablefootnote} % For footnotes in tables
-\usepackage{color} % For colored text (e.g., TODO notes)
+\usepackage{color} % For colored text (e.g., TO.DO notes)
 \usepackage{array} % For advanced table formatting
 \usepackage{amsfonts} % For additional math symbols
 \usepackage[cpp]{diplomalst}
@@ -31,17 +31,18 @@
 \ThesisSupervisor{Mgr. Ing. Michal Krumnikl, Ph.D.}
 \CzechThesisTitle{Integrace velkých jazykových modelů do systému Kelvin}
 \EnglishThesisTitle{Integrating Large Language Models into Kelvin}
-\SubmissionYear{2025}
+\SubmissionYear{2026}
 
 \ThesisAssignmentFileName{resources/ThesisSpecification_MIK0486.pdf}
 
+% TODO: Add abstracts and keywords
 \CzechAbstract{\TODO{Přidat český abstrakt práce}}
 \CzechKeywords{\TODO{Přidat řeské keywordy práce}}
 
 \EnglishAbstract{\TODO{Přidat anglický abstrakt práce}}
 \EnglishKeywords{\TODO{Přidat anglické keywordy práce}}
 
-% TODO: add acronyms used in the thesis
+% TODO: Add acronyms used in the thesis
 \AddAcronym{LLM}{Large Language Model}
 \AddAcronym{PR}{Pull Request}
 \AddAcronym{API}{Application Programming Interface}
@@ -52,7 +53,8 @@
 \AddAcronym{RNN}{Recurrent Neural Network}
 \AddAcronym{GPT}{Generative Pre-trained Transformer}
 
-\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla. \TODO: Doplnit konkrétní jména a poděkování.}
+% TODO: Add acknowledgements
+\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.~\TODO{Doplnit konkrétní jména a poděkování.}}
 
 \addbibresource{resources/sauce.bib}
 
@@ -65,7 +67,16 @@
     \fcolorbox{black}{codegray}{\texttt{#1}}%
 }
 
-\newcommand{\tableref}[1]{(\hyperref[#1]{Tabulka~\ref*{#1}})}
+% Custom commands for referencing tables and figures with the format "Tabulka X.Y" and "Obrázek X.Y"
+\newcommand{\tabref}[1]{(\hyperref[#1]{Tabulka~\ref*{#1}})}
+\newcommand{\figref}[1]{(\hyperref[#1]{Obrázek~\ref*{#1}})}
+
+% Custom command for mentioning sections, default to "Sekce X.Y" but can be overridden to "sekci X.Y" for better flow in the text
+\newcommand{\secref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+        {\hyperref[#2]{Sekce~\ref*{#2}}}%
+        {\hyperref[#2]{#1~\ref*{#2}}}%
+}
 
 %
 % ==] Main document [==
