@@ -34,7 +34,7 @@ Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
      \texttt{Cppcheck} je přenositelný analyzátor, který se zaměřuje na detekci skutečných chyb (přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti).
 
     \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
-     SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}} kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.\ \textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
+     SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}} kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.~\textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
      Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenzované.
      Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
 \end{enumerate}
@@ -72,7 +72,9 @@ Neví, jakou úlohu program řeší, jaké jsou požadavky na výkonnost nebo ja
 LLM, kterému je v promptu poskytnuto zadání úlohy, dokáže posoudit soulad implementace se zadáním, efektivitu zvoleného algoritmu, vhodnost použitých datových struktur i správné ošetření hraničních vstupů.
 Tato schopnost je pro hodnocení studentských prací velmi cenná, jde přesně o tu vrstvu, která vyžaduje lidský úsudek a nejvíce zatěžuje čas vyučujícího.
 
-\textit{Forma výstupů a srozumitelnost.}
+\subsubsection*{Forma výstupů a srozumitelnost.}
+\label{subsubsec:output-format}
+
 Statické analyzátory typicky produkují stručná technická hlášení vázaná na konkrétní řádek a pravidlo.
 Výstup \texttt{cppcheck} ve tvaru \texttt{[file.cpp:47]: (error) Memory leak: p} je precizní, avšak pro studenta, který nemusí znát základy správy paměti, je pouze obtížně pochopitelný bod bez vysvětlení.
 LLM je schopen generovat vysvětlení přirozeným jazykem, které studentovi popíše, v čem spočívá problém, proč je nebezpečný a jak ho opravit.
