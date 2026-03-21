@@ -1,0 +1,24 @@
+\subsection{Typy statických analyzátorů}
+\label{subsec:static-types}
+
+Pod pojmem statický analyzátor se skrývá široká škála nástrojů, které se liší hloubkou analýzy, rozsahem zachycených problémů a obtížností integrace.
+Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
+
+\begin{enumerate}
+    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy a představuje první automatickou vrstvu kontroly kódu.
+    Kompilátory jako GCC nebo Clang\footnote{\url{https://clang.llvm.org/}} generují při překladu varování na potenciálně problematické konstrukce.
+    Typicky jde o detekci nevyužitých proměnných, potenciálně neinicializovaných proměnných nebo třeba porušení typové bezpečnosti.
+    \textit{Clang} navíc nabízí rozšířenou sadu upozornění a statický analyzátor, který dokáže sledovat toky dat a detekovat úniky paměti v jednodušších případech.
+
+    \item \textbf{Lintery a pokročilé statické analyzátory} rozšiřují základní kontrolu o rozsáhlejší sady pravidel zaměřených na dobrou programátorskou praxi, bezpečnost nebo konkrétní kódovací standardy.
+    Pro C++ jsou nejrozšířenějšími nástroji \texttt{clang-tidy}\footnote{\url{https://clang.llvm.org/extra/clang-tidy/}} a \texttt{cppcheck}\footnote{\url{https://cppcheck.sourceforge.io/}}.
+    \texttt{Clang-tidy} je modulární nástroj integrovaný do ekosystému LLVM, který umožňuje aplikovat kontroly z kategorií jako modernize (doporučení přechodu na moderní C++), readability (zlepšení čitelnosti), bugprone (detekce vzorů vedoucích k chybám) nebo cert (dodržování bezpečnostních doporučení standardu CERT).
+    \texttt{Cppcheck} je přenositelný analyzátor, který se zaměřuje na detekci skutečných chyb (přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti).
+
+    \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
+    SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}} kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.~\textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
+    Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenzované.
+    Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
+\end{enumerate}
+
+\endinput
