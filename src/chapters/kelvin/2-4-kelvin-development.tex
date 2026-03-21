@@ -1,7 +1,7 @@
 \section{Vývojová omezení a proces}
 \label{sec:kelvin-development}
 
-Systém Kelvin vznikl původně jako školní projekt studenta Daniela Trnky \footnote[1]{https://github.com/trnela}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
+Systém Kelvin vznikl původně jako školní projekt studenta Daniela Trnky\footnote[1]{https://github.com/trnila}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
 Tento způsob vývoje bez jednotné dlouhodobé architektonické vize vedl ke vzniku technického dluhu, který se v systému projevuje například ve formě dlouhých a obtížně čitelných souborů, nedostatečného nebo chybějícího typování a míchání různých programátorských přístupů.
 Před přidáním nové aplikační logiky je proto často nutné provést částečný refaktoring existujícího kódu, aby byla zachována alespoň základní úroveň čitelnosti a udržovatelnosti systému.
 
@@ -10,8 +10,8 @@ Tato omezení mají přímý dopad na návrh i samotnou implementaci řešení p
 
 \subsection*{Atomicita změn a code review}
 
-Jedním z hlavních pravidel vývoje, zdokumentovaných v příručce pro rozšiřování systému \footnote{https://mrlvsb.github.io/kelvin/developers-guide/development\#contributing}, je požadavek na malé a atomické pull requesty.
-Každý pull request by měl obsahovat maximálně $\sim$~500 změněných řádků kódu a měl by se zaměřovat pouze na jednu konkrétní změnu nebo problém.
+Jedním z hlavních pravidel vývoje, zdokumentovaných v příručce pro rozšiřování systému\footnote{https://mrlvsb.github.io/kelvin/developers-guide/development\#contributing}, je požadavek na malé a atomické pull requesty.
+Každý pull request by měl obsahovat maximálně $\sim500$ změněných řádků kódu a měl by se zaměřovat pouze na jednu konkrétní změnu nebo problém.
 Cílem tohoto přístupu je zjednodušení procesu \uv{code review} a snížení rizika zavlečení chyb do produkčního systému.
 V praxi to však znamená nutnost rozdělovat i logicky související úpravy do více menších kroků, což může celý vývojový proces prodlužovat.
 
