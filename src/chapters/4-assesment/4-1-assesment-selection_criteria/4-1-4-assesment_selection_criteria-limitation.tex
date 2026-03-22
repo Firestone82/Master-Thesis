@@ -2,24 +2,23 @@
 \label{subsec:criteria-context-window}
 
 V \secref[Sekci]{subsec:llm-token-limit} byla popsána omezená kapacita kontextového okna LLM, která určuje, kolik tokenů může model zpracovat v jednom požadavku.
-Pro analýzu studentských řešení je klíčové, aby model dokázal pojmout celé odevzdání včetně zadání a zdrojového kódu, protože pouze tak může poskytnout relevantní a kontextově správnou zpětnou vazbu.
-Zároveň mu musí zůstat dostatek prostoru pro generování kvalitních komentářů.
-Je tedy nutné pojmout následující části:
+Pro analýzu studentských řešení je klíčové, aby model dokázal pojmout celé odevzdání včetně doprovodného kontextu v jednom požadavku, protože pouze tak může poskytnout kontextově přesnou zpětnou vazbu.
+Vstup modelu se typicky skládá z následujících částí:
 
 \begin{itemize}
-    \item \textbf{Systémový prompt} -- obsahuje instrukce pro model, které definují jeho roli, požadavky na formát výstupu a další klíčové parametry generování.
-    Typicky se jedná o několik strukturovaných vět s jasnými pokyny, které mohou zabrat 200--500 tokenů.
+    \item \textbf{Systémový prompt} -- instrukce definující roli modelu, požadavky na formát výstupu a další parametry generování.
+    Typicky 200--500 tokenů.
 
-    \item \textbf{Zadání úlohy} -- popis úlohy, kterou student řeší, včetně požadavků na vstupy, výstupy a případné specifické podmínky.
-    Zadání může být poměrně rozsáhlé, zejména pokud obsahuje příklady vstupů a výstupů, což může zabrat 500--1~000 tokenů.
+    \item \textbf{Zadání úlohy} -- popis úlohy včetně požadavků na vstupy, výstupy a případné specifické podmínky.
+    Může být poměrně rozsáhlé, zejména pokud obsahuje příklady vstupů a výstupů -- přibližně 500--1~000 tokenů.
 
-    \item \textbf{Zdrojový kód} -- samotné řešení, které student odevzdal.
-    Velikost zdrojového kódu se může velmi lišit, ale pro středně velkou úlohu může být v rozsahu 1~000--5~000 tokenů.
+    \item \textbf{Zdrojový kód} -- samotné řešení studenta.
+    Pro středně velkou úlohu se jedná o 1~000--5~000 tokenů.
 \end{itemize}
 
 Pro standardní studentské odevzdání v systému Kelvin je tedy dostačující kontextové okno přibližně \textbf{8~000 tokenů}.
-Aby byl systém schopen zvládnout i rozsáhlejší úlohy (větší projekty, více souborová řešení) a aby byl respektován princip dostatečné rezervy, je jako \textbf{minimální požadavek} stanoveno \textbf{16~000 tokenů}.
-Moderní modely tuto hranici zpravidla bez problémů splňují, většina aktuálně dostupných modelů nabízí kontextové okno 32~000 až 128~000 tokenů.
+S ohledem na rozsáhlejší úlohy (větší projekty, vícesouborová řešení) a princip dostatečné rezervy je jako \textbf{minimální požadavek} stanoven rozsah \textbf{16~000 tokenů}.
+Moderní modely tuto hranici zpravidla bez problémů splňují -- většina aktuálně dostupných modelů nabízí kontextové okno v rozsahu 32~000 až 128~000 tokenů.
 
 \begin{table}[H]
     \centering
