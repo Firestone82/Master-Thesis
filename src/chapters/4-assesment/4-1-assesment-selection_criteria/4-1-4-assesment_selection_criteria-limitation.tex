@@ -6,7 +6,7 @@ Pro analýzu studentských řešení je klíčové, aby model dokázal pojmout c
 Zároveň mu musí zůstat dostatek prostoru pro generování kvalitních komentářů.
 Je tedy nutné pojmout následující části:
 
-\begin{enumerate}
+\begin{itemize}
     \item \textbf{Systémový prompt} -- obsahuje instrukce pro model, které definují jeho roli, požadavky na formát výstupu a další klíčové parametry generování.
     Typicky se jedná o několik strukturovaných vět s jasnými pokyny, které mohou zabrat 200--500 tokenů.
 
@@ -15,10 +15,10 @@ Je tedy nutné pojmout následující části:
 
     \item \textbf{Zdrojový kód} -- samotné řešení, které student odevzdal.
     Velikost zdrojového kódu se může velmi lišit, ale pro středně velkou úlohu může být v rozsahu 1~000--5~000 tokenů.
-\end{enumerate} \TODO{Ověřit konkrétní hodnoty}
+\end{itemize}
 
 Pro standardní studentské odevzdání v systému Kelvin je tedy dostačující kontextové okno přibližně \textbf{8~000 tokenů}.
-Aby byl systém schopen zvládnout i rozsáhlejší úlohy (větší projekty, vícesouborová řešení) a aby byl respektován princip dostatečné rezervy, je jako \textbf{minimální požadavek} stanoveno \textbf{16~000 tokenů}.
+Aby byl systém schopen zvládnout i rozsáhlejší úlohy (větší projekty, více souborová řešení) a aby byl respektován princip dostatečné rezervy, je jako \textbf{minimální požadavek} stanoveno \textbf{16~000 tokenů}.
 Moderní modely tuto hranici zpravidla bez problémů splňují, většina aktuálně dostupných modelů nabízí kontextové okno 32~000 až 128~000 tokenů.
 
 \begin{table}[H]

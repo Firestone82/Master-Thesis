@@ -31,19 +31,24 @@ Zatímco nástroje jako \textit{vLLM} jsou vhodné pro provoz ve výkonném serv
 Nástroj \textit{Ollama} pak poskytuje kompromis mezi jednoduchostí nasazení a možností integrace do aplikací prostřednictvím API\@.
 
 \subsubsection*{Hardwarové nároky}
+\label{subsubsec:deployment-on-premise-hardware}
 
 Pro on-premise nasazení je zcela zásadní dostupnost vhodného hardware.
 Inference jazykových modelů je výpočetně náročná operace (viz \secref{subsec:llm-computational-cost}), proto je využití GPU s dostatečnou kapacitou paměti VRAM téměř nezbytné pro přijatelné výkony.
-přibližné nároky na hardware pro různé modely lze vidět v \tabref{tab:memory-requirements}.
+Přibližné nároky na hardware pro různé modely lze vidět v \tabref{tab:memory-requirements}.
 
-\TODO{Doplnit porovnání CPU vs GPU pro inferenci. Spustit ollama na argexu a změřit výkon pro různé modely.}
+
+Rozdíl ve výkonu mezi CPU a GPU je při inferenci značný.
+Při testování nástroje Ollama na lokálním stroji bylo zpracování zdrojového souboru o 107 řádcích metodou one-shot dokončeno za \textbf{7,5~s} při využití GPU (NVIDIA GeForce RTX 4070 Super), zatímco na procesoru AMD Ryzen~7~3800X (8~jader) trval stejný úkon \textbf{145~s} -- tedy přibližně 19$\times$ déle.
+Takový výkonnostní rozdíl je v praxi dobře patrný: odezva na GPU je srovnatelná s komerčními cloudovými API, kdežto čistě CPU inference je pro interaktivní použití jen obtížně přijatelná.
 
 \subsubsection*{Limity}
+\label{subsubsec:deployment-on-premise-limits}
 
 On-premise nasazení přináší vlastní sadu omezení:
 
 \begin{itemize}
-    \item \textbf{Omezení dostupným hardware} -- kvalita a rychlost analýzy jsou přímou funkcí dostupného GPU.
+    \item \textbf{Omezení dostupným hardware} -- kvalita a rychlost analýzy jsou přímou funkcí dostupného GPU\@.
     Na nedostatečném hardware je nutné volit menší nebo silněji kvantizované modely, což může snižovat kvalitu výstupů.
 
     \item \textbf{Škálovatelnost} -- cloudové API automaticky škáluje s nárůstem zátěže, kdežto lokální server má fixní kapacitu.
@@ -54,18 +59,20 @@ On-premise nasazení přináší vlastní sadu omezení:
 \end{itemize}
 
 \subsubsection*{Ochrana dat}
+\label{subsubsec:deployment-on-premise-data-protection}
 
 Z pohledu ochrany dat je on-premise nasazení výrazně jednodušší situace.
 Studentské zdrojové kódy a zadání úloh nikdy neopustí infrastrukturu školy.
 Neexistuje třetí strana, které by musela být svěřena správa dat, a není potřeba uzavírat DPA s externím poskytovatelem.
-Z hlediska GDPR jde o přímočarou variantu: správce dat (škola) je totožný s provozovatelem infrastruktury.
+Z hlediska GDPR jde o přímočarou variantu, tedy správce dat (škola) je totožný s provozovatelem infrastruktury.
 
 \subsubsection*{Náklady}
+\label{subsubsec:deployment-on-premise-costs}
 
 Náklady on-premise nasazení mají odlišnou strukturu než u cloudového API:
 
 \begin{itemize}
-    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.\ NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60~000 Kč výše.
+    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.~NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60~000 Kč výše.
     Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200~000--500~000 Kč).
 
     \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400 W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
