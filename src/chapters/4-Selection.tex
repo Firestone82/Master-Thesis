@@ -1,21 +1,20 @@
 \chapter{Výběr modelů a vhodnost pro integraci}
 \label{ch:selection}
 
-Předcházející kapitola popsala principy fungování velkých jazykových modelů, jejich schopnosti při analýze zdrojového kódu a klíčová omezení, která je nutné zohlednit při nasazení v reálném prostředí.
-Tato kapitola na tyto poznatky navazuje a zaměřuje se na praktickou otázku volby modelu a jakým způsobem nasadit v systému Kelvin tak, aby výsledek byl kvalitní, provozovatelný a udržovatelný.
+Kapitola~\ref{ch:llm} představila principy fungování velkých jazykových modelů, jejich schopnosti při analýze zdrojového kódu a omezení, která ovlivňují praktické nasazení.
+Tato kapitola na tyto poznatky přímo navazuje a zaměřuje se na otázku, jakým způsobem zvolit konkrétní model a formu jeho nasazení v systému Kelvin.
 
-Výběr modelu pro školní prostředí není pouze technické rozhodnutí.
-Vedle schopnosti generovat relevantní komentáře ke zdrojovému kódu hrají zásadní roli i provozní náklady, dostupnost infrastruktury, ochrana dat studentů a dlouhodobá udržovatelnost celého řešení.
-Kapitola proto začíná definicí konkrétních kritérií výběru, porovnává hlavní varianty nasazení, analyzuje dostupné modely a uzavírá zdůvodněnou volbou konkrétní varianty.
+Volba modelu pro školní prostředí nemá pouze technický rozměr.
+Kromě schopnosti generovat kvalitní komentáře ke zdrojovému kódu je nutné zohlednit provozní náklady, dostupnost infrastruktury, ochranu osobních údajů studentů a dlouhodobou udržitelnost celého řešení.
+Kapitola proto nejprve stanovuje kritéria, podle nichž budou modely a varianty nasazení posuzovány, a následně porovnává dvě základní možnosti nasazení -- cloudové API a on-premise řešení -- z pohledu technické realizace, nákladů, bezpečnosti dat a provozních omezení.
 
 % =============================================================
 \section{Kritéria výběru}
 \label{sec:selection-criteria}
 
-Výběr vhodného jazykového modelu pro integraci do systému Kelvin není triviální rozhodnutí.
-Na trhu existují stovky modelů s různými vlastnostmi, způsoby nasazení a cenovými modely.
-Aby bylo možné provést strukturované srovnání, je nutné nejprve definovat kritéria, podle nichž budou modely posuzovány.
-Tato sekce popisuje čtyři klíčová kritéria relevantní pro konkrétní použití v kontextu analýzy studentských programátorských úloh.
+Na trhu existují desítky modelů s odlišnými vlastnostmi, způsoby nasazení a cenovými modely.
+Pro strukturované srovnání je nezbytné nejprve definovat kritéria, která odrážejí specifické požadavky systému Kelvin na analýzu studentských programátorských řešení.
+Následující podsekce popisují čtyři klíčová kritéria: kvalitu výstupů, dostupnost modelu, náročnost provozu a schopnost pojmout celé studentské řešení.
 
 \input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-1-assesment_selection_criteria-quality}
 \input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-2-assesment_selection_criteria-availability}
@@ -26,8 +25,9 @@ Tato sekce popisuje čtyři klíčová kritéria relevantní pro konkrétní pou
 \section{Porovnání možností nasazení}
 \label{sec:selection-deployment}
 
-Jazykové modely lze do systému integrovat pomocí dvou hlavních přístupu, a to buď jako externí službu poskytovanou třetí stranou, nebo jako lokálně hostovaný model běžící přímo na infrastruktuře školy.
-Tato sekce tak analyzuje obě varianty z pohledu technické realizace, provozních nákladů, bezpečnosti dat a dlouhodobé udržitelnosti.
+Jazykové modely lze do systému Kelvin integrovat dvěma základními způsoby: jako externí službu poskytovanou prostřednictvím cloudového API, nebo jako lokálně hostovaný model provozovaný přímo na infrastruktuře školy.
+Každá z těchto variant přináší odlišné kompromisy mezi jednoduchostí integrace, provozními náklady, ochranou dat a kontrolou nad systémem.
+Následující podsekce obě varianty podrobně analyzují z pohledu výše stanovených kritérií.
 
 \input{chapters/4-assesment/4-2-assesment_deployment/4-2-1-model_assesment-deployment-cloud}
 \input{chapters/4-assesment/4-2-assesment_deployment/4-2-2-model_assesment-deployment-on_premise}

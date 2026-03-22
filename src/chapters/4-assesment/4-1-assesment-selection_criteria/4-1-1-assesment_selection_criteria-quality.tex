@@ -2,50 +2,44 @@
 \label{subsec:criteria-quality}
 
 Nejdůležitějším kritériem je schopnost modelu generovat výstupy, které jsou pro učitele i studenty skutečně užitečné.
-Kvalita výstupů v kontextu analýzy kódu zahrnuje několik dílčích vlastností:
+V kontextu analýzy zdrojového kódu zahrnuje kvalita výstupů několik vzájemně provázaných vlastností:
 
 \begin{itemize}
     \item \textbf{Správnost} -- model musí identifikovat reálné problémy v kódu a nepřidávat falešné výstrahy (\textit{false positives}).
-    Falešný pozitivní nález (tedy upozornění na problém, který neexistuje) je pro studenta matoucí a pro učitele zbytečná zátěž.
+    Falešný pozitivní nález je pro studenta matoucí a pro učitele představuje zbytečnou zátěž, protože musí ověřovat, zda jde o skutečný problém.
 
-    \item \textbf{Relevance k zadání} -- model, pokud může, by měl posuzovat řešení s ohledem na konkrétní zadání úlohy a ne jen na obecné programátorské principy.
-    Například to, zda algoritmus vypisující text na obrazovku v specifickém formátu je správný, není z samotného kódu zjistitelné bez kontextu zadání.
+    \item \textbf{Relevance k zadání} -- model by měl posuzovat řešení s ohledem na konkrétní zadání úlohy, nikoli pouze na obecné programátorské principy.
+    Například správnost výstupního formátu programu nelze posoudit bez kontextu zadání.
 
     \item \textbf{Srozumitelnost a didaktická hodnota} -- výstupy musí být psány jazykem, kterému studenti rozumí.
-    Model by měl vysvětlit \textbf{proč} je daná část kódu problematická a navrhnout konkrétní způsob opravy.
+    Model by měl vysvětlit, \textbf{proč} je daná část kódu problematická, a navrhnout konkrétní způsob opravy.
 
     \item \textbf{Konzistentnost} -- model by měl pro podobné vstupy generovat podobné výstupy.
-    Absolutní reprodukovatelnost \textbf{není} u pravděpodobnostních systémů realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáním zásadně lišit.
+    Absolutní reprodukovatelnost \textbf{není} u pravděpodobnostních systémů realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáními zásadně lišit.
 \end{itemize}
 
-Pro objektivní porovnání kvality modelů existují standardizované benchmarky, což jsou soubory testovacího úloh sloužící k měření výkonu systému za určitých podmínek.
-V oblasti generování kódu existuje několik dobře známých benchmarků, které jsou zaměřené na schopnost porozumění a generování kódu.
-Nejznámější z nich jsou:
+Pro objektivní porovnání kvality modelů existují standardizované benchmarky -- soubory testovacích úloh sloužící k měření výkonu systému za definovaných podmínek.
+V oblasti práce se zdrojovým kódem jsou nejznámější:
 
 \begin{itemize}
     \item \textbf{HumanEval}~\cite{humaneval} -- sada 164 programátorských úloh v jazyce Python s automatickým ověřením správnosti generovaného kódu.
     Výsledek udává, jak často model na první pokus vygeneruje správné řešení.
 
-    \item \textbf{MBPP} (Mostly Basic Python Problems)~\cite{mbpp} -- podobný benchmark s důrazem na jednoduché úlohy vhodné pro začátečníky.
+    \item \textbf{MBPP} (Mostly Basic Python Problems)~\cite{mbpp} -- obdobný benchmark s důrazem na jednoduché úlohy vhodné pro začátečníky.
 
-    \item \textbf{LiveCodeBench}~\cite{livecodebench} -- novější benchmark zahrnující úlohy z programátorských soutěží, které průběžně přibývají,
-    čímž snižuje riziko kontaminace trénovaných dat, která nastává u starších benchmarků, které jsou veřejně dostupné již několik let.
-    Model by tak mohl mít v trénovaných datech přímo řešení těchto úloh, což by zkreslovalo výsledky.
+    \item \textbf{LiveCodeBench}~\cite{livecodebench} -- novější benchmark zahrnující úlohy z programátorských soutěží, které průběžně přibývají.
+    Tím snižuje riziko kontaminace trénovaných dat, ke které u starších a veřejně dostupných benchmarků dochází.
 \end{itemize}
 
-Je důležité mít na paměti, že benchmarky měří především schopnost \textit{generovat} kód, nikoli schopnost \textit{analyzovat} a \textit{komentovat} existující kód.
-Proto je nutné, pro hodnocení kvality výstupy v kontextu systému kelvin zvolit jiné metriky, které lépe odrážejí požadavky na analýzu studentských řešení.
-Pro hodnocení kvality výstupů v kontextu systému Kelvin byly následně zvoleny dvě metriky:
+Tyto benchmarky však měří primárně schopnost \textit{generovat} kód, nikoli schopnost \textit{analyzovat} a \textit{komentovat} existující kód, což je hlavní úloha modelu v systému Kelvin.
+Pro hodnocení kvality výstupů v kontextu Kelvinu byly proto zvoleny dvě vlastní metriky, které lépe odpovídají požadavkům na analýzu studentských řešení:
 
 \begin{itemize}
-    \item \textbf{Relevance} -- metrika hodnotí, nakolik je identifikovaný problém významný vzhledem
-    ke konkrétnímu zadání úlohy a zdrojovému souboru jako celku.
-    Nález, který sice technicky správný, ale v kontextu zadání nevýznamný nebo irelevantní,
-    snižuje užitečnost výstupu pro studenta i učitele.
+    \item \textbf{Relevance} -- metrika hodnotí, nakolik je identifikovaný problém významný vzhledem ke konkrétnímu zadání úlohy a zdrojovému souboru jako celku.
+    Nález, který je sice technicky správný, ale v kontextu zadání nevýznamný nebo irelevantní, snižuje užitečnost výstupu pro studenta i učitele.
 
-    \item \textbf{Kvalita} -- metrika hodnotí, zda identifikovaný problém skutečně představuje
-    problém, nebo se jedná o falešný nález (\textit{false positive}).
-    Výstup s vysokou kvalitou přesně popisuje reálnou chybu či nedostatek v kódu studenta.
+    \item \textbf{Kvalita} -- metrika hodnotí, zda identifikovaný problém skutečně představuje chybu či nedostatek, nebo se jedná o falešný nález (\textit{false positive}).
+    Výstup s vysokou kvalitou přesně popisuje reálnou chybu v kódu studenta.
 \end{itemize}
 
 Tyto metriky tak následně budou použity pro objektivní porovnání kvality výstupů různých modelů v kontextu analýzy studentských řešení v systému Kelvin\@.
