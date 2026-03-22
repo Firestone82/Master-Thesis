@@ -19,12 +19,16 @@
 \usepackage{amsfonts} % For additional math symbols
 \usepackage[cpp]{diplomalst}
 \usepackage{fontspec}
+\usepackage{pgfmath}
 
 % Table of contents depth - TODO: Remove in final version!
 \setcounter{tocdepth}{3}
 
 \renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
 \newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
+
+\usetikzlibrary{fpu}
+
 
 % Required thesis metadata
 \ThesisAuthor{Bc. Pavel Mikula}
