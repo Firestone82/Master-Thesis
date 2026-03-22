@@ -1,55 +1,58 @@
 \subsection{Cloudové API}
 \label{subsec:deployment-cloud}
 
-Cloudové API je způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
-Integrace probíhá prostřednictvím HTTP požadavků, systém odešle dotaz na API endpoint a následně obdrží odpověď s vygenerovanou odpovědí.
-Výpočet tak probíhá úplně na straně poskytovatele, což znamená, že není potřeba žádná specializovaná hardware pro provoz modelu a škálování je zajištěno poskytovatelem služby.
+Cloudové API představuje způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
+Systém Kelvin komunikuje s modelem prostřednictvím HTTP požadavků, tedy odešle vstupní data (prompt, zadání a zdrojový kód) na API endpoint poskytovatele a obdrží vygenerovanou odpověď.
+Veškerý výpočet probíhá na straně poskytovatele, takže pro provoz není potřeba žádný specializovaný hardware na školní infrastruktuře.
 
-Mezi nejznámější poskytovatele cloudových API pro LLM patří:
+Mezi hlavní poskytovatele cloudových API pro velké jazykové modely patří:
 \begin{itemize}
-    \item \textbf{OpenAI} -- poskytuje přístup k modelům GPT-5.4, GPT-5-mini a mnohé další varianty\cite{openai_api}.
-    \item \textbf{Anthropic} -- nabízí jako hlavní modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5\cite{anthropic_api}.
-    \item \textbf{Google} -- přístup k modelům Geminy prostřednictvím Google AI Studio nebo Vertex AI~\cite{google_vertex}.
-    \item \textbf{Mistral AI} -- poskytuje přístup k vlastním modelům Mistral Large a Mistral Nemo, které jsou k dispozici i jako open-source ke stažení~\cite{mistral_api}.
+    \item \textbf{OpenAI} -- modely řady GPT-5.4, GPT-5-mini a další varianty\cite{openai_api}.
+    \item \textbf{Anthropic} -- modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5\cite{anthropic_api}.
+    \item \textbf{Google} -- modely Gemini dostupné prostřednictvím Google AI Studio nebo Vertex AI~\cite{google_vertex}.
+    \item \textbf{Mistral AI} -- modely Mistral Large a Mistral Nemo, přičemž některé jsou k dispozici i jako open-source ke stažení~\cite{mistral_api}.
 \end{itemize}
 
 \subsubsection*{Hardwarové nároky}
 \label{subsubsec:deployment-cloud-hardware}
 
-Z pohledu provozování systému kelvin jsou hardwarové nároky pro použití cloudového API prakticky nulové.
-Veškerý výpočet probíhá na serverech poskytovatele a na straně kelvinu je potřeba pouze stabilní internetové připojení a server, který zvládne tyto HTTP požadavky zpracovat.
-Jelikož školní infrastruktura leží na optické síti CETIN, není tak téměř žádný problém zajistit dostatečnou konektivitu pro komunikaci s cloudovým API\@.
+Z pohledu systému Kelvin jsou hardwarové nároky pro použití cloudového API prakticky nulové.
+Na straně Kelvinu je potřeba pouze stabilní internetové připojení a server schopný zpracovávat HTTP požadavky.
+Školní infrastruktura, která leží na optické síti CETIN, tuto podmínku bez problémů splňuje.
 
 \subsubsection*{Limity}
 \label{subsubsec:deployment-cloud-limits}
 
-Cloudové API zavádějí několik klíčových typů omezení, které je nutné při návrhu systému zohlednit:
+Cloudové API zavádějí několik typů omezení, které je nutné při návrhu systému zohlednit:
 
 \begin{enumerate}
     \item \textbf{Limit na počet tokenů v kontextu} -- každý model má maximální délku zpracovatelného vstupu i výstupu.
-    Toto omezení je zpravidla u nejmodernějších modelů (state-of-the-art models) dostatečné, běžně 128~000 tokenů nebo více, ale je důležité zajistit, aby systém Kelvin dokázal limitovat požadavky tak, aby nebyl limit překročen -- překročení limitu API signalizuje chybovou odpovědí, která musí být na straně systému správně zachycena a ošetřena.
+    U moderních modelů činí tento limit zpravidla 128~000 tokenů nebo více, což je pro potřeby Kelvinu dostatečné.
+    Systém však musí zajistit, aby požadavky nepřekročily tento limit, a případnou chybovou odpověď API korektně ošetřit.
 
-    \item \textbf{Limit na počet požadavků} -- poskytovatelé často zavádějí takzvané rate limits, které omezují počet požadavků, které lze poslat v určitém časovém období (například 100 požadavků za minutu).
-    Pro školní prostředí, kde může být v určitých časech (například před termínem odevzdání) zvýšený počet požadavků, je důležité tyto limity zohlednit a případně implementovat mechanismy pro řízení zátěže (rate limiting) na straně systému Kelvin\@.
+    \item \textbf{Limit na počet požadavků} -- poskytovatelé zavádějí takzvané \textit{rate limits}, které omezují počet požadavků v daném časovém období (například 100 požadavků za minutu).
+    V kontextu Kelvinu je toto omezení relevantní zejména v období před termínem odevzdání, kdy může počet současných požadavků výrazně vzrůst.
+    Systém proto musí implementovat mechanismus řízení zátěže.
 
-    \item \textbf{Finanční náklady} -- cloudové API jsou zpoplatněny na základě počtu zpracovaných tokenů, což může být pro rozsáhlé použití nákladné.
-    Je důležité pečlivě odhadnout očekávané náklady na základě počtu studentů, frekvence odevzdání a průměrné velikosti odevzdání, aby bylo možné zajistit udržitelnost provozu.
+    \item \textbf{Finanční náklady} -- cloudové API je zpoplatněno na základě počtu zpracovaných tokenů, což při rozsáhlém nasazení představuje opakující se výdaj.
+    Podrobná analýza nákladů pro jednotlivé modely je uvedena níže.
 
-    \item \textbf{Závislost na třetí straně} -- použití cloudového API znamená, že systém Kelvin bude závislý na dostupnosti a spolehlivosti služby poskytovatele.
-    V případě výpadku služby nebo změny v API může být funkčnost systému narušena, což je riziko, které je třeba zvážit.
+    \item \textbf{Závislost na třetí straně} -- systém Kelvin se stává závislým na dostupnosti a spolehlivosti poskytovatele.
+    Výpadek služby, změna API rozhraní nebo ukončení podpory konkrétního modelu mohou narušit funkčnost celého systému.
 \end{enumerate}
 
 \subsubsection*{Ochrana dat}
 \label{subsubsec:deployment-cloud-data-protection}
 
-Použití cloudového API se záměrem k ochraně dat studentů bylo rozebráno v \secref[Sekci]{subsubsec:gdpr-data-transfer}.
-Tato ochrana je často tak klíčová, že může být rozhodujícím faktorem pro volbu mezi cloudovým API a on-premise nasazením.
+Otázka ochrany dat studentů při použití cloudového API byla podrobně rozebrána v~\secref[Sekci]{subsubsec:gdpr-data-transfer}.
+V případě cloudového nasazení studentské zdrojové kódy a zadání úloh opouštějí školní infrastrukturu a jsou zpracovávány na serverech poskytovatele.
+Tato skutečnost může být rozhodujícím faktorem pro volbu mezi cloudovým API a on-premise nasazením.
 
 \subsubsection*{Náklady}
 \label{subsubsec:deployment-cloud-costs}
 
 Náklady cloudových API jsou určeny cenovým modelem \textit{za token}.
-Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny jsou typicky dražší.
+Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny bývají výrazně dražší.
 
 % ===================================================================
 %   Chain-of-thought přístup (3 kroky: Draft analysis, Critique analysis, Review analysis):
@@ -96,7 +99,7 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
         \begin{tabular}{lllll}
             \toprule
             & & & \multicolumn{2}{c}{\textbf{Náklady na odevzdání}} \\
-            \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-tough's (\$)} & \textbf{one-shot (\$)} \\
+            \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-thought (\$)} & \textbf{one-shot (\$)} \\
             \midrule
                 GPT-5.4\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{16.00}$ & $\sim\computeCostOS{2.50}{15.00}$ \\
                 GPT-5.4-mini\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostOS{0.75}{4.50}$ \\
@@ -110,7 +113,7 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
                 Gemini 3.1 Pro\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostOS{2.00}{12.00}$ \\
                 Gemini 3.1 Flash-Lite\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostOS{0.25}{1.50}$ \\
                 Gemini 3 Flash\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostOS{0.50}{3.00}$ \\
-                Geminy 2.5 Flash\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostOS{0.30}{2.50}$ \\
+                Gemini 2.5 Flash\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostOS{0.30}{2.50}$ \\
             \bottomrule
         \end{tabular}
     }
@@ -119,8 +122,8 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
 \end{table}
 
 Z pohledu nákladů se jako nejvýhodnější jeví modely GPT-5.4-nano a Claude 3.0 Haiku, které vychází na méně než \$0,002 za odevzdání při one-shot přístupu.
-Použití přístupu chain-of-thought se třemi kroky analýzy je výrazně nákladnější: modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vychází na \$0,028 až \$0,030 za odevzdání pro CoT přístup oproti méně než \$0,004 při one-shot přístupu.
-Výjimkou je Gemini 3.1 Flash-Lite, který i při CoT přístupu dosahuje nákladů pouze okolo \$0,01 za odevzdání.
+Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější: modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vychází na přibližně \$0,028--\$0,030 za odevzdání, oproti méně než \$0,004 při one-shot přístupu.
+Výjimkou je Gemini 3.1 Flash-Lite, který i při chain-of-thought přístupu dosahuje nákladů okolo \$0,01 za odevzdání.
 
 Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů \$0,174, což je pro rozsáhlé školní nasazení výrazně nákladnější.
 Pro konkrétní volbu modelu bude rozhodující výsledek srovnávacího testování kvality výstupů.
