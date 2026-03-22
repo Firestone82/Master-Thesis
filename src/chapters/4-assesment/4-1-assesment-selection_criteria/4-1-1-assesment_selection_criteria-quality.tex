@@ -8,11 +8,11 @@ Kvalita výstupů v kontextu analýzy kódu zahrnuje několik dílčích vlastno
     \item \textbf{Správnost} -- model musí identifikovat reálné problémy v kódu a nepřidávat falešné výstrahy (\textit{false positives}).
     Falešný pozitivní nález (tedy upozornění na problém, který neexistuje) je pro studenta matoucí a pro učitele zbytečná zátěž.
 
-    \item \textbf{Relevance k zadání} -- model, pokud můžou, by měl posuzovat řešení s ohledem na konkrétní zadání úlohy a ne jen na obecné programátorské principy.
-    Například to, zda jde o algoritmus vypisující text na obrazovku v specifickém formátu, není z kódu samotného zjistitelné bez kontextu zadání.
+    \item \textbf{Relevance k zadání} -- model, pokud může, by měl posuzovat řešení s ohledem na konkrétní zadání úlohy a ne jen na obecné programátorské principy.
+    Například to, zda algoritmus vypisující text na obrazovku v specifickém formátu je správný, není z samotného kódu zjistitelné bez kontextu zadání.
 
     \item \textbf{Srozumitelnost a didaktická hodnota} -- výstupy musí být psány jazykem, kterému studenti rozumí.
-    Model by měl vysvětlit \textit{proč} je daná část kódu problematická a navrhnout konkrétní způsob opravy.
+    Model by měl vysvětlit \textbf{proč} je daná část kódu problematická a navrhnout konkrétní způsob opravy.
 
     \item \textbf{Konzistentnost} -- model by měl pro podobné vstupy generovat podobné výstupy.
     Absolutní reprodukovatelnost \textbf{není} u pravděpodobnostních systémů realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáním zásadně lišit.
@@ -35,7 +35,19 @@ Nejznámější z nich jsou:
 
 Je důležité mít na paměti, že benchmarky měří především schopnost \textit{generovat} kód, nikoli schopnost \textit{analyzovat} a \textit{komentovat} existující kód.
 Proto je nutné, pro hodnocení kvality výstupy v kontextu systému kelvin zvolit jiné metriky, které lépe odrážejí požadavky na analýzu studentských řešení.
+Pro hodnocení kvality výstupů v kontextu systému Kelvin byly následně zvoleny dvě metriky:
 
-\TODO{Doplnit metriky, pravděpodobně založené na hodnocení předešlých odevzdání učiteli a podle toho vyvodit výsledek. Ale nově jsem přidal i přístup, kdy výsledek je následně poslat do dalšího LLM na analýzu. Model ale musí být silnější, aby dokázal posoudit kvalitu výstupu toho prvního LLM.}
+\begin{itemize}
+    \item \textbf{Relevance} -- metrika hodnotí, nakolik je identifikovaný problém významný vzhledem
+    ke konkrétnímu zadání úlohy a zdrojovému souboru jako celku.
+    Nález, který sice technicky správný, ale v kontextu zadání nevýznamný nebo irelevantní,
+    snižuje užitečnost výstupu pro studenta i učitele.
+
+    \item \textbf{Kvalita} -- metrika hodnotí, zda identifikovaný problém skutečně představuje
+    problém, nebo se jedná o falešný nález (\textit{false positive}).
+    Výstup s vysokou kvalitou přesně popisuje reálnou chybu či nedostatek v kódu studenta.
+\end{itemize}
+
+Tyto metriky tak následně budou použity pro objektivní porovnání kvality výstupů různých modelů v kontextu analýzy studentských řešení v systému Kelvin\@.
 
 \endinput
