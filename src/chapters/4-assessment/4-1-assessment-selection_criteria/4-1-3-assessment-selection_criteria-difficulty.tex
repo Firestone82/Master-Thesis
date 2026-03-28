@@ -3,18 +3,18 @@
 
 Náročnost provozu určuje, jaké zdroje jsou potřeba k dlouhodobému provozování modelu v produkčním prostředí systému Kelvin.
 Zahrnuje finanční náklady, nároky na infrastrukturu i lidskou práci spojenou s údržbou.
-
 Struktura nákladů se zásadně liší podle zvoleného způsobu nasazení.
+
 U cloudového API jsou náklady průběžné a přímo úměrné objemu zpracovaných dat.
-Jak bylo popsáno v~\secref[Sekci]{subsec:llm-tokens-parameters-context}, cenové modely poskytovatelů jsou založeny na počtu zpracovaných tokenů.
+Jak bylo popsáno v \secref[sekci]{subsec:llm-tokens-parameters-context}, cenové modely poskytovatelů jsou založeny na počtu zpracovaných tokenů.
 Pro typickou analýzu jednoho studentského odevzdání, zahrnující systémový prompt, zadání úlohy a zdrojový kód, je potřeba přibližně 2~000--4~000 vstupních tokenů a 500--2~000 výstupních tokenů při přístupu one-shot.
 Při použití chain-of-thought přístupu, který zahrnuje více kroků analýzy, se tyto počty zvyšují na přibližně 8~000--16~000 vstupních a 4~000--8~000 výstupních tokenů.
 Celkové náklady na jedno odevzdání jsou pak dány cenou za token konkrétního modelu.
 
-U on-premise nasazení jsou náklady primárně jednorázové -- zahrnují pořízení hardwaru, především grafických karet s dostatečnou kapacitou VRAM pro inferenci (viz~\secref[Sekci]{subsec:llm-computational-cost}).
+U on-premise nasazení jsou náklady primárně jednorázové -- zahrnují pořízení hardwaru, především grafických karet s dostatečnou kapacitou VRAM pro inferenci (viz \secref{subsec:llm-computational-cost}).
 Průběžné náklady tvoří elektřina, chlazení a lidská práce spojená se správou a aktualizací modelu.
 Na rozdíl od cloudového API jsou však marginální náklady na každé další zpracované odevzdání prakticky nulové, což činí on-premise řešení ekonomicky výhodnějším při velkém objemu požadavků.
 
-Podrobné srovnání nákladů obou přístupů je uvedeno v \secref[Sekci]{sec:selection-deployment}.
+Podrobné srovnání nákladů obou přístupů je uvedeno v \secref[sekci]{sec:selection-deployment}.
 
 \endinput
