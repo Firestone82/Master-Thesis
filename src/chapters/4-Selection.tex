@@ -16,10 +16,10 @@ Na trhu existují desítky modelů s odlišnými vlastnostmi, způsoby nasazení
 Pro strukturované srovnání je nezbytné nejprve definovat kritéria, která odrážejí specifické požadavky systému Kelvin na analýzu studentských programátorských řešení.
 Následující podsekce popisují čtyři klíčová kritéria: kvalitu výstupů, dostupnost modelu, náročnost provozu a schopnost pojmout celé studentské řešení.
 
-\input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-1-assesment_selection_criteria-quality}
-\input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-2-assesment_selection_criteria-availability}
-\input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-3-assesment_selection_criteria-difficulty}
-\input{chapters/4-assesment/4-1-assesment-selection_criteria/4-1-4-assesment_selection_criteria-limitation}
+\input{chapters/4-assessment/4-1-assessment-selection_criteria/4-1-1-assessment-selection_criteria-quality}
+\input{chapters/4-assessment/4-1-assessment-selection_criteria/4-1-2-assessment-selection_criteria-availability}
+\input{chapters/4-assessment/4-1-assessment-selection_criteria/4-1-3-assessment-selection_criteria-difficulty}
+\input{chapters/4-assessment/4-1-assessment-selection_criteria/4-1-4-assessment-selection_criteria-limitation}
 
 % =============================================================
 \section{Porovnání možností nasazení}
@@ -29,7 +29,29 @@ Jazykové modely lze do systému Kelvin integrovat dvěma základními způsoby:
 Každá z těchto variant přináší odlišné kompromisy mezi jednoduchostí integrace, provozními náklady, ochranou dat a kontrolou nad systémem.
 Následující podsekce obě varianty podrobně analyzují z pohledu výše stanovených kritérií.
 
-\input{chapters/4-assesment/4-2-assesment_deployment/4-2-1-model_assesment-deployment-cloud}
-\input{chapters/4-assesment/4-2-assesment_deployment/4-2-2-model_assesment-deployment-on_premise}
+\input{chapters/4-assessment/4-2-assessment-deployment/4-2-1-assessment-deployment-cloud}
+\input{chapters/4-assessment/4-2-assessment-deployment/4-2-2-assessment-deployment-on_premise}
+
+% =============================================================
+\section{Analýza dostupných modelů}
+\label{sec:selection-models}
+
+Na základě definovaných kritérií a porovnání způsobů nasazení je nyní možné přistoupit k analýze konkrétních modelů dostupných na trhu.
+Modely lze rozdělit do dvou kategorií: modely specializované na práci se zdrojovým kódem, které byly trénovány nebo dotrénované na velkém objemu kódu, a obecné jazykové modely, které sice nebyly primárně navrženy pro programování, ale díky svému rozsahu dosahují v úlohách souvisejících s kódem rovněž kvalitních výsledků.
+
+\input{chapters/4-assessment/4-3-assessment-models/4-3-1-assessment-models-code}
+\input{chapters/4-assessment/4-3-assessment-models/4-3-2-assessment-models-general}
+
+% =============================================================
+\section{Návrh práce s prompty}
+\label{sec:selection-prompts}
+
+Kvalita výstupů jazykového modelu závisí nejen na samotném modelu, ale do značné míry i na tom, jakým způsobem je formulován vstupní prompt.
+Vhodně navržený prompt může výrazně zvýšit relevanci a přesnost generovaných komentářů, zatímco špatně strukturovaný prompt může vést k nekonzistentním nebo irelevantním výstupům i u jinak kvalitního modelu~\cite{white-prompt}.
+Tato sekce popisuje strukturu promptu, dostupné strategie promptování a typy výstupů relevantních pro systém Kelvin.
+
+\input{chapters/4-assessment/4-4-assessment-prompts/4-4-1-assessment-prompts-structure}
+\input{chapters/4-assessment/4-4-assessment-prompts/4-4-2-assessment-prompts-strategies}
+\input{chapters/4-assessment/4-4-assessment-prompts/4-4-3-assessment-prompts-output}
 
 \endinput
