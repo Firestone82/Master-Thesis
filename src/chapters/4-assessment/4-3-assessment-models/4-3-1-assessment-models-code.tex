@@ -1,31 +1,31 @@
 \subsection{Modely zaměřené na zdrojový kód}
 \label{subsec:models-code}
 
-První skupinu tvoří modely, které byly od počátku navrženy nebo dodatečně dotrénované (fine-tuned) specificky pro práci se zdrojovým kódem.
+První skupinu tvoří modely, které byly od počátku navrženy nebo dodatečně dotrénované (\textit{fine-tuned}) specificky pro práci se zdrojovým kódem.
 Tyto modely mají oproti obecným jazykovým modelům výhodu v tom, že jejich trénovací data obsahují výrazně vyšší podíl zdrojového kódu, dokumentace k API a diskusí o programátorských problémech včetně potenciálních chyb.
 Díky tomu lépe rozumí syntaktickým konstrukcím, standardním vzorům a typickým chybám v různých programovacích jazycích.
 
 \begin{itemize}
     \item \textbf{Code Llama}~\cite{codellama} je rodina modelů od společnosti Meta, odvozená z obecného modelu LLaMA~2.
     Modely byly dále trénovány na 500 miliardách tokenů zdrojového kódu a jsou k dispozici ve velikostech 7B, 13B, 34B a 70B parametrů.
-    Varianta \textit{Code Llama -- Instruct} je optimalizována pro sledování instrukcí, což je pro účely analýzy kódu na základě zadaného promptu obzvláště relevantní.
-    Na benchmarku HumanEval dosahuje varianta 34B přibližně 48\,\% úspěšnosti (pass@1).
+    Varianta \textit{Code Llama Instruct} je optimalizována pro sledování instrukcí, což je pro účely analýzy kódu na základě zadaného promptu obzvláště relevantní.
+    Na benchmarku HumanEval~\cite{humaneval} dosahuje varianta 34B přibližně 48\,\% úspěšnosti (pass@1).
 
     \item \textbf{DeepSeek Coder}~\cite{deepseek-coder} je rodina modelů trénovaných od základu na 2 bilionech tokenů, z nichž 87\,\% tvoří zdrojový kód a zbývajících 13\,\% přirozený jazyk.
     Modely jsou dostupné ve velikostech od 1,3B do 33B parametrů.
-    Na benchmarku HumanEval dosahuje varianta 33B--Instruct přibližně 79\,\% úspěšnosti, což z ní činí jeden z nejvýkonnějších open-source modelů pro generování kódu.
+    Na benchmarku HumanEval dosahuje varianta 33B Instruct přibližně 79\,\% úspěšnosti, což z ní činí jeden z nejvýkonnějších open-source modelů pro generování kódu.
 
-    \item \textbf{StarCoder~2}~\cite{starcoder2} vznikl v rámci projektu BigCode jako plně otevřený model trénovaný na datové sadě The Stack~v2 o rozsahu 3,3 bilionu tokenů.
+    \item \textbf{StarCoder~2}~\cite{starcoder2} vznikl v rámci projektu BigCode jako plně otevřený model trénovaný na datové sadě The Stack v2~\cite{kocetkov-stack} o rozsahu 3,3 bilionu tokenů.
     Je k dispozici ve velikostech 3B, 7B a 15B parametrů.
     Největší varianta dosahuje na HumanEval přibližně 46\,\% úspěšnosti.
-    Výhodou StarCoderu~2 je transparentnost trénovaných dat, vývojáři mohou ověřit, zda byl jejich kód použit pro trénování, případně požádat o jeho vyřazení.
+    Výhodou StarCoderu~2 je transparentnost trénovaných dat, takže vývojáři mohou ověřit, zda byl jejich kód použit pro trénování, případně požádat o jeho vyřazení.
 
     \item \textbf{Qwen2.5-Coder}~\cite{qwen25-coder} je model od společnosti Alibaba, který patří do rodiny Qwen a je specializovaný na práci s kódem.
     Byl trénován na 5,5 bilionu tokenů zdrojového kódu pokrývajících více než 90 programovacích jazyků.
-    Model je dostupný ve velikostech od 0,5B do 32B parametrů a na HumanEval dosahuje varianta 32B--Instruct přibližně 92\,\% úspěšnosti, čímž se řadí mezi nejlepší open-source modely v oblasti generování a analýzy kódu.
+    Model je dostupný ve velikostech od 0,5B do 32B parametrů a na HumanEval dosahuje varianta 32B Instruct přibližně 92\,\% úspěšnosti, čímž se řadí mezi nejlepší open-source modely v oblasti generování a analýzy kódu.
     Navazující verze \textbf{Qwen3-Coder}~\cite{qwen3-coder} přináší další vylepšení v oblasti porozumění kontextu a podpory pro více programovacích jazyků.
 \end{itemize}
 
-Společným znakem všech uvedených modelů je, že jsou dostupné jako open-source a lze je provozovat lokálně prostřednictvím nástrojů popsaných v \secref[Sekci]{subsec:deployment-on-premise}.
+Společným znakem všech uvedených modelů je, že jsou dostupné jako open-source a lze je provozovat lokálně prostřednictvím nástrojů popsaných v \secref[sekci]{subsec:deployment-on-premise}.
 
 \endinput

@@ -33,11 +33,11 @@ Každý problém v seznamu (\texttt{issues}) je reprezentován objektem \texttt{
 \begin{itemize}
     \item \textbf{file} určuje název souboru, ve kterém byl problém identifikován.
 
-    \item \textbf{severity} vyjadřuje závažnost nálezu pomocí čtyřstupňové škály: \texttt{critical} pro chyby, které zásadně narušují funkčnost programu, \texttt{high} pro závažné problémy ovlivňující správnost, \texttt{medium} pro nedostatky v~kvalitě kódu a \texttt{low} pro drobné stylistické připomínky.
+    \item \textbf{severity} vyjadřuje závažnost nálezu pomocí čtyřstupňové škály: \texttt{critical} pro chyby, které zásadně narušují funkčnost programu, \texttt{high} pro závažné problémy ovlivňující správnost, \texttt{medium} pro nedostatky v kvalitě kódu a \texttt{low} pro drobné stylistické připomínky.
 
     \item \textbf{line} obsahuje číslo řádku, na kterém se problém nachází.
     Schéma explicitně instruuje model, aby uváděl řádek prvního tokenu přímo zodpovědného za daný problém, nikoli uzavírací závorku, prázdný řádek nebo komentář.
-    Pokud se problém týká více řádků, uvede se nejranější příčinný řádek a ostatní jsou zmíněny v~textovém vysvětlení.
+    Pokud se problém týká více řádků, uvede se nejranější příčinný řádek a ostatní jsou zmíněny v textovém vysvětlení.
 
     \item \textbf{explanation} obsahuje stručný popis problému: co je chybou, proč je to problém a jak jej opravit.
     Schéma vyžaduje, aby model odkazoval na konkrétní názvy proměnných a funkcí a vyhýbal se obecným frázím bez informační hodnoty.

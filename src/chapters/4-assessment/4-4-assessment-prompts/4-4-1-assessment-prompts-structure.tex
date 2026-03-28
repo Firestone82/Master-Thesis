@@ -14,10 +14,10 @@ V kontextu analýzy studentského kódu v systému Kelvin se prompt skládá z n
 
     \item \textbf{Zdrojový kód studenta} je hlavní analyzovaný vstup.
     Model obdrží kompletní obsah odevzdaného souboru včetně komentářů a prázdných řádků.
-    V případě bez těchto řádků by model špatně referoval problémy a výstup by byl na pohled matoucí.
+    Zachování těchto řádků je důležité, protože bez nich by model špatně odkazoval na konkrétní místa v kódu a výstup by byl matoucí.
 
     \item \textbf{Specifikace výstupního formátu} definuje, v jaké struktuře má model vrátit výsledky analýzy.
-    Pro strojové zpracování na straně systému Kelvin je vhodný strukturovaný formát JSON, který obsahuje seznam nalezených problémů s uvedením čísla řádku, popisu problému a důležitosti problému.
+    Pro strojové zpracování na straně systému Kelvin je vhodný strukturovaný formát JSON, který obsahuje seznam nalezených problémů s uvedením čísla řádku, popisu problému a důležitosti.
     Tato specifikace je součástí systémového promptu a zajišťuje, že výstup modelu lze programově zpracovat bez dodatečného parsování volného textu.
 \end{enumerate}
 

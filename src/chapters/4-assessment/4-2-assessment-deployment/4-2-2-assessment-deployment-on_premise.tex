@@ -6,7 +6,7 @@ Model je hostován na školní serverové infrastruktuře a veškeré zpracován
 
 Hlavní výhodou tohoto přístupu je nezávislost na externích poskytovatelích a absence průběžných poplatků za jednotlivé požadavky.
 Správci mají plnou kontrolu nad konfigurací modelu, jeho aktualizacemi i způsobem škálování výpočetních prostředků.
-Nevýhodou je nutnost zajistit dostatečný hardware -- zejména grafické akcelerátory (GPU) s dostatečnou kapacitou VRAM -- a technickou odbornost pro správu a údržbu systému.
+Nevýhodou je nutnost zajistit dostatečný hardware, zejména grafické akcelerátory (GPU) s dostatečnou kapacitou VRAM a technickou odbornost pro správu a údržbu systému.
 
 Pro usnadnění nasazení jazykových modelů v lokálním prostředí existuje několik softwarových nástrojů:
 
@@ -17,27 +17,30 @@ Pro usnadnění nasazení jazykových modelů v lokálním prostředí existuje 
 
     \item \textbf{vLLM}~\cite{vllm} -- knihovna optimalizovaná pro efektivní provoz velkých jazykových modelů na GPU serverech.
     Využívá techniku \textit{PagedAttention}, která umožňuje efektivně sdílet paměť mezi více souběžnými požadavky a tím výrazně zvyšuje propustnost systému.
-    Vhodná pro prostředí s vyšší zátěží.
+    Je vhodná pro prostředí s vyšší zátěží.
 
     \item \textbf{llama.cpp}~\cite{llamacpp} -- open-source implementace umožňující provoz kvantizovaných modelů i na běžných procesorech bez GPU\@.
     Výrazně snižuje paměťové nároky, čímž umožňuje nasazení i na méně výkonném hardwaru, ovšem za cenu výrazně pomalejší inference.
+
+    \item \textbf{Hugging Face Transformers}~\cite{huggingface-transformers} -- široce používaná knihovna pro práci s jazykovými modely, která podporuje různé frameworky (PyTorch, TensorFlow) a nabízí rozsáhlou sbírku předtrénovaných modelů.
 \end{itemize}
 
 Volba konkrétního nástroje závisí na dostupném hardwaru, požadované rychlosti inference a způsobu integrace do systému Kelvin.
 Nástroj \textit{vLLM} je vhodný pro serverové prostředí s GPU akcelerací a vyšší propustností.
 Řešení \textit{llama.cpp} umožňuje provoz modelů i bez GPU, ale s výrazně nižší rychlostí.
 Nástroj \textit{Ollama} poskytuje kompromis -- jednoduché nasazení s možností integrace prostřednictvím API\@.
+Knihovna \textit{Hugging Face Transformers} je vhodná pro vývoj a testování modelů, ale pro produkční nasazení může být méně optimalizovaná než specializované nástroje.
 
 \subsubsection*{Hardwarové nároky}
 \label{subsubsec:deployment-on-premise-hardware}
 
 Pro on-premise nasazení je dostupnost vhodného hardwaru zcela zásadní.
 Inference jazykových modelů je výpočetně náročná operace (viz~\secref{subsec:llm-computational-cost}), proto je využití GPU s dostatečnou kapacitou VRAM téměř nezbytné pro dosažení přijatelné rychlosti odezvy.
-Přibližné nároky na hardware pro různé velikosti modelů jsou uvedeny v~\tabref{tab:memory-requirements}.
+Přibližné nároky na hardware pro různé velikosti modelů jsou uvedeny v \tabref{tab:memory-requirements}.
 
 Rozdíl ve výkonu mezi CPU a GPU je při inferenci značný.
-Při testování nástroje Ollama na lokálním stroji bylo zpracování zdrojového souboru o~107~řádcích metodou one-shot dokončeno za \textbf{7,5~s} při využití GPU (NVIDIA GeForce RTX 4070 Super), zatímco na procesoru AMD Ryzen~7~3800X (8~jader) trval stejný úkon \textbf{145~s} -- tedy přibližně 19$\times$ déle.
-Odezva na GPU je tak srovnatelná s komerčními cloudovými API, zatímco čistě CPU inference je pro interaktivní použití obtížně přijatelná.
+Při testování nástroje Ollama na lokálním stroji bylo zpracování zdrojového souboru o 107 řádcích metodou one-shot dokončeno za \textbf{7,5 s} při využití GPU (NVIDIA GeForce RTX 4070 Super), zatímco na procesoru AMD Ryzen 7~3800X (8 jader) trval stejný úkon \textbf{145 s} -- tedy přibližně 19$\times$ déle.
+Odezva na GPU je tak v jisté míře srovnatelná s komerčními cloudovými API, zatímco čistě CPU inference je pro interaktivní použití obtížně přijatelná.
 
 \subsubsection*{Limity}
 \label{subsubsec:deployment-on-premise-limits}
@@ -69,16 +72,19 @@ Z hlediska GDPR jde o přímočarou variantu, tedy správce dat (škola) je toto
 Náklady on-premise nasazení mají odlišnou strukturu než u cloudového API:
 
 \begin{itemize}
-    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.~NVIDIA RTX 4090 s 24~GB VRAM) se pohybuje v ceně od přibližně 60~000~Kč výše.
-    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200~000--500~000~Kč).
+    \item \textbf{Jednorázové pořizovací náklady} -- GPU server vhodný pro inferenci (např.~NVIDIA RTX 4090 s 24 GB VRAM) se pohybuje v ceně od přibližně 60~000 Kč výše.
+    Pro výkonnější varianty (NVIDIA A100) jsou náklady řádově vyšší (200~000--500~000 Kč).
 
-    \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400~W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
+    \item \textbf{Průběžné provozní náklady} -- elektřina (moderní GPU má spotřebu 150--400 W při zatížení), chlazení serverovny a lidská práce nutná pro správu a aktualizaci systému.
 
     \item \textbf{Nulové náklady za token} -- po pořízení hardwaru jsou marginální náklady na každé zpracované odevzdání prakticky nulové, bez ohledu na objem požadavků.
 \end{itemize}
 
 Pro systém s malým počtem uživatelů a odevzdání může být on-premise investice ekonomicky nevýhodná ve srovnání s cloudovým API\@.
-Naopak pro systém se stovkami studentů zpracovávajícími tisíce odevzdání ročně se investice do vlastního hardwaru může vrátit v horizontu jednoho až dvou let.
+Naopak pro systém se stovkami studentů zpracovávajícími tisíce odevzdání za semestr se investice do vlastního hardwaru může vrátit v horizontu jednoho až dvou let.
+Konkrétní analýza objemu odevzdání v systému Kelvin, která je podkladem pro toto rozhodnutí, je uvedena v \secref[sekci]{sec:selection-choice}.
+
+\tabref{tab:deployment-comparison} shrnuje klíčové rozdíly obou přístupů.
 
 \begin{table}[H]
     \centering

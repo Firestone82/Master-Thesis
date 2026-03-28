@@ -1,7 +1,7 @@
 \subsection{Schopnost pojmout celé studentské řešení}
 \label{subsec:criteria-context-window}
 
-V \secref[Sekci]{subsec:llm-token-limit} byla popsána omezená kapacita kontextového okna LLM, která určuje, kolik tokenů může model zpracovat v jednom požadavku.
+V \secref[sekci]{subsec:llm-token-limit} byla popsána omezená kapacita kontextového okna LLM, která určuje, kolik tokenů může model zpracovat v jednom požadavku.
 Pro analýzu studentských řešení je klíčové, aby model dokázal pojmout celé odevzdání včetně doprovodného kontextu v jednom požadavku, protože pouze tak může poskytnout kontextově přesnou zpětnou vazbu.
 Vstup modelu se typicky skládá z následujících částí:
 
@@ -18,7 +18,7 @@ Vstup modelu se typicky skládá z následujících částí:
 
 Pro standardní studentské odevzdání v systému Kelvin je tedy dostačující kontextové okno přibližně \textbf{8~000 tokenů}.
 S ohledem na rozsáhlejší úlohy (větší projekty, vícesouborová řešení) a princip dostatečné rezervy je jako \textbf{minimální požadavek} stanoven rozsah \textbf{16~000 tokenů}.
-Moderní modely tuto hranici zpravidla bez problémů splňují -- většina aktuálně dostupných modelů nabízí kontextové okno v rozsahu 32~000 až 128~000 tokenů.
+Moderní modely tuto hranici zpravidla bez problémů splňují, jelikož většina aktuálně dostupných modelů nabízí kontextové okno v rozsahu 32~000 až 128~000 tokenů.
 
 \begin{table}[H]
     \centering
