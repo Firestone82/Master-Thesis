@@ -75,10 +75,6 @@
     url = {https://arxiv.org/abs/2503.17502},
 }
 
-% ============================================================
-% Historické zdroje
-% ============================================================
-
 @article{weizenbaum-eliza,
     author = {Weizenbaum, Joseph},
     title = {{ELIZA} -- A Computer Program for the Study of Natural Language Communication Between Man and Machine},
@@ -210,7 +206,7 @@
 }
 
 % ============================================================
-% Výběr modelů
+% Analýza modelů
 % ============================================================
 
 @article{humaneval,
@@ -243,7 +239,9 @@
     urldate = {2025-01-15},
 }
 
+% ============================================================
 % Zdroje LLM
+% ============================================================
 
 @online{openai_api,
     author = {{OpenAI}},
@@ -279,7 +277,9 @@
     urldate = {2025-01-15},
 }
 
-% --- Individuální citace modelů ---
+% ============================================================
+% Individuální citace modelů
+% ============================================================
 
 @online{gpt-5.4,
     author = {{OpenAI}},
@@ -362,7 +362,57 @@
     urldate = {2025-12-01},
 }
 
-% Náastroje LLM
+@article{codellama,
+    author = {Rozière, Baptiste and Gehring, Jonas and Gloeckle, Fabian and Sootla, Sten and Gat, Itai and Tan, Xiaoqing Ellen and Adi, Yossi and Liu, Jingyu and Sauvestre, Romain and Remez, Tal and Rapin, Jérémy and Kozhevnikov, Artyom and Evtimov, Ivan and Bitton, Joanna and Bhatt, Manish and Ferber, Cristian Canton and Grattafiori, Aaron and Xiong, Wenhan and Défossez, Alexandre and Copet, Jade and Azhar, Faisal and Touvron, Hugo and Martin, Louis and Usunier, Nicolas and Scialom, Thomas and Synnaeve, Gabriel},
+    title = {Code Llama: Open Foundation Models for Code},
+    journal = {arXiv preprint arXiv:2308.12950},
+    year = {2023},
+    url = {https://arxiv.org/abs/2308.12950},
+}
+
+@article{deepseek-coder,
+    author = {Guo, Daya and Zhu, Qihao and Yang, Dejian and Xie, Zhenda and Dong, Kai and Zhang, Wentao and Chen, Guanting and Bi, Xiao and Wu, Y. and Li, Y. K. and Luo, Fuli and Xiong, Yaying and Liang, Wenfeng},
+    title = {{DeepSeek-Coder}: When the Large Language Model Meets Programming -- The Rise of Code Intelligence},
+    journal = {arXiv preprint arXiv:2401.14196},
+    year = {2024},
+    url = {https://arxiv.org/abs/2401.14196},
+}
+
+@article{starcoder2,
+    author = {Lozhkov, Anton and Li, Raymond and Allal, Loubna Ben and Cassano, Federico and Lamy-Poirier, Joel and Tazi, Nouamane and Tang, Ao and Pykhtar, Dmytro and Liu, Jiawei and Wei, Yuxiang and others},
+    title = {{StarCoder} 2 and The Stack v2: The Next Generation},
+    journal = {arXiv preprint arXiv:2402.19173},
+    year = {2024},
+    url = {https://arxiv.org/abs/2402.19173},
+}
+
+@article{qwen25-coder,
+    author = {Hui, Binyuan and Yang, Jian and Cui, Zeyu and Yang, Jiaxi and Liu, Dayiheng and Zhang, Lei and Liu, Tianyu and Zhang, Jiajun and Yu, Bowen and Dang, Kai and others},
+    title = {{Qwen2.5-Coder} Technical Report},
+    journal = {arXiv preprint arXiv:2409.12186},
+    year = {2024},
+    url = {https://arxiv.org/abs/2409.12186},
+}
+
+@online{qwen3-coder,
+    author = {{Qwen Team}},
+    title = {{Qwen3-Coder}: A Code-Specialized Large Language Model},
+    year = {2025},
+    url = {https://qwenlm.github.io/blog/qwen3-coder/},
+    urldate = {2026-03-15},
+}
+
+@article{llama3,
+    author = {Grattafiori, Aaron and Dubey, Abhimanyu and Jauhri, Abhinav and Pandey, Abhinav and Kadian, Abhishek and Al-Dahle, Ahmad and Letman, Aiesha and Mathur, Akhil and Schelten, Alan and others},
+    title = {The {Llama} 3 Herd of Models},
+    journal = {arXiv preprint arXiv:2407.21783},
+    year = {2024},
+    url = {https://arxiv.org/abs/2407.21783},
+}
+
+% ============================================================
+%  Náastroje LLM
+% ============================================================
 
 @online{ollama,
     author = {{Ollama}},
@@ -372,11 +422,11 @@
     urldate = {2025-01-15},
 }
 
-@online{groq,
-    author = {{Groq}},
-    title = {Groq -- Run Large Language Models at Scale},
+@online{huggingface-transformers,
+    author = {{Hugging Face}},
+    title = {Transformers -- State-of-the-Art Natural Language Processing},
     year = {2024},
-    url = {https://www.groq.com},
+    url = {https://huggingface.co/docs/transformers/index},
     urldate = {2025-01-15},
 }
 
@@ -395,4 +445,34 @@
     year = {2023},
     url = {https://github.com/ggml-org/llama.cpp},
     urldate = {2025-01-15},
+}
+
+% ============================================================
+% Prompt engineering
+% ============================================================
+
+@article{white-prompt,
+    author = {White, Jules and Fu, Quchen and Hays, Sam and Sandborn, Michael and Olea, Carlos and Gilbert, Henry and Elnashar, Ashraf and Spencer-Smith, Jesse and Schmidt, Douglas C.},
+    title = {A Prompt Pattern Catalog to Enhance Prompt Engineering with {ChatGPT}},
+    journal = {arXiv preprint arXiv:2302.11382},
+    year = {2023},
+    url = {https://arxiv.org/abs/2302.11382},
+}
+
+@inproceedings{kojima-zeroshot,
+    author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
+    title = {Large Language Models are Zero-Shot Reasoners},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {35},
+    year = {2022},
+    url = {https://arxiv.org/abs/2205.11916},
+}
+
+@inproceedings{wei-cot,
+    author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed H. and Le, Quoc V. and Zhou, Denny},
+    title = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {35},
+    year = {2022},
+    url = {https://arxiv.org/abs/2201.11903},
 }

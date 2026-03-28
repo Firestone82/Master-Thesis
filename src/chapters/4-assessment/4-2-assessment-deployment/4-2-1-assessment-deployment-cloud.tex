@@ -2,15 +2,15 @@
 \label{subsec:deployment-cloud}
 
 Cloudové API představuje způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
-Systém Kelvin komunikuje s modelem prostřednictvím HTTP požadavků, tedy odešle vstupní data (prompt, zadání a zdrojový kód) na API endpoint poskytovatele a obdrží vygenerovanou odpověď.
-Veškerý výpočet probíhá na straně poskytovatele, takže pro provoz není potřeba žádný specializovaný hardware na školní infrastruktuře.
+Systém Kelvin v tomto případě komunikuje s modelem prostřednictvím HTTP požadavků -- odešle vstupní data (prompt, zadání a zdrojový kód) na API endpoint poskytovatele a obdrží vygenerovanou odpověď.
+Veškerý výpočet probíhá na straně poskytovatele, takže na školní infrastruktuře není potřeba žádný specializovaný hardware.
 
 Mezi hlavní poskytovatele cloudových API pro velké jazykové modely patří:
 \begin{itemize}
-    \item \textbf{OpenAI} -- modely řady GPT-5.4, GPT-5-mini a další varianty\cite{openai_api}.
-    \item \textbf{Anthropic} -- modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5\cite{anthropic_api}.
-    \item \textbf{Google} -- modely Gemini dostupné prostřednictvím Google AI Studio nebo Vertex AI~\cite{google_vertex}.
-    \item \textbf{Mistral AI} -- modely Mistral Large a Mistral Nemo, přičemž některé jsou k dispozici i jako open-source ke stažení~\cite{mistral_api}.
+    \item \textbf{OpenAI}~\cite{openai_api} -- modely řady GPT-5.4, GPT-5.4-mini a další varianty.
+    \item \textbf{Anthropic}~\cite{anthropic_api} -- modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5.
+    \item \textbf{Google}~\cite{google_vertex} -- modely Gemini dostupné prostřednictvím Google AI Studio nebo Vertex AI\@.
+    \item \textbf{Mistral AI}~\cite{mistral_api} -- modely Mistral Large a Mistral Nemo, přičemž některé jsou k dispozici i jako open-source ke stažení.
 \end{itemize}
 
 \subsubsection*{Hardwarové nároky}
@@ -44,7 +44,7 @@ Cloudové API zavádějí několik typů omezení, které je nutné při návrhu
 \subsubsection*{Ochrana dat}
 \label{subsubsec:deployment-cloud-data-protection}
 
-Otázka ochrany dat studentů při použití cloudového API byla podrobně rozebrána v~\secref[Sekci]{subsubsec:gdpr-data-transfer}.
+Otázka ochrany dat studentů při použití cloudového API byla podrobně rozebrána v~\secref[sekci]{subsubsec:gdpr-data-transfer}.
 V případě cloudového nasazení studentské zdrojové kódy a zadání úloh opouštějí školní infrastrukturu a jsou zpracovávány na serverech poskytovatele.
 Tato skutečnost může být rozhodujícím faktorem pro volbu mezi cloudovým API a on-premise nasazením.
 
@@ -93,6 +93,9 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
   \computecost{#1}{#2}{\oneshotInToks}{\oneshotOutToks}%
 }
 
+Pro orientační porovnání nákladů byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a one-shot s jedním voláním.
+Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
+
 \begin{table}[H]
     \centering
     \resizebox{\textwidth}{!}{%
@@ -101,32 +104,32 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
             & & & \multicolumn{2}{c}{\textbf{Náklady na odevzdání}} \\
             \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-thought (\$)} & \textbf{one-shot (\$)} \\
             \midrule
-                GPT-5.4\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{16.00}$ & $\sim\computeCostOS{2.50}{15.00}$ \\
-                GPT-5.4-mini\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostOS{0.75}{4.50}$ \\
-                GPT-5.4-nano\cite{gpt-5.4-nano}                     & 0.20  & 1.25   & $\sim\computeCostCOT{0.20}{1.25}$  & $\sim\computeCostOS{0.20}{1.25}$ \\
+                GPT-5.4~\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{16.00}$ & $\sim\computeCostOS{2.50}{15.00}$ \\
+                GPT-5.4-mini~\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostOS{0.75}{4.50}$ \\
+                GPT-5.4-nano~\cite{gpt-5.4-nano}                     & 0.20  & 1.25   & $\sim\computeCostCOT{0.20}{1.25}$  & $\sim\computeCostOS{0.20}{1.25}$ \\
             \midrule
-                Claude 4.6 Opus\cite{claude-opus-4.6}               & 5.00  & 25.00  & $\sim\computeCostCOT{5.00}{25.00}$ & $\sim\computeCostOS{5.00}{25.00}$ \\
-                Claude 4.6 Sonnet\cite{claude-sonnet-4.6}           & 3.00  & 15.00  & $\sim\computeCostCOT{3.00}{15.00}$ & $\sim\computeCostOS{3.00}{15.00}$ \\
-                Claude 3.5 Haiku\cite{claude-3.5}                   & 0.80  & 4.00   & $\sim\computeCostCOT{0.80}{4.00}$  & $\sim\computeCostOS{0.80}{4.00}$ \\
-                Claude 3.0 Haiku\cite{claude-3}                     & 0.25  & 1.25   & $\sim\computeCostCOT{0.25}{1.25}$  & $\sim\computeCostOS{0.25}{1.25}$ \\
+                Claude 4.6 Opus~\cite{claude-opus-4.6}               & 5.00  & 25.00  & $\sim\computeCostCOT{5.00}{25.00}$ & $\sim\computeCostOS{5.00}{25.00}$ \\
+                Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & 3.00  & 15.00  & $\sim\computeCostCOT{3.00}{15.00}$ & $\sim\computeCostOS{3.00}{15.00}$ \\
+                Claude 3.5 Haiku~\cite{claude-3.5}                   & 0.80  & 4.00   & $\sim\computeCostCOT{0.80}{4.00}$  & $\sim\computeCostOS{0.80}{4.00}$ \\
+                Claude 3.0 Haiku~\cite{claude-3}                     & 0.25  & 1.25   & $\sim\computeCostCOT{0.25}{1.25}$  & $\sim\computeCostOS{0.25}{1.25}$ \\
             \midrule
-                Gemini 3.1 Pro\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostOS{2.00}{12.00}$ \\
-                Gemini 3.1 Flash-Lite\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostOS{0.25}{1.50}$ \\
-                Gemini 3 Flash\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostOS{0.50}{3.00}$ \\
-                Gemini 2.5 Flash\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostOS{0.30}{2.50}$ \\
+                Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostOS{2.00}{12.00}$ \\
+                Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostOS{0.25}{1.50}$ \\
+                Gemini 3 Flash~\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostOS{0.50}{3.00}$ \\
+                Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostOS{0.30}{2.50}$ \\
             \bottomrule
         \end{tabular}
     }
-    \caption{Přibližné ceny vybraných cloudových API modelů. Náklady jsou vypočítány pro dva přístupy: chain-of-thought (CoT) a one-shot (OS), na základě průměrného počtu vstupních a výstupních tokenů pro jedno odevzdání.}
+    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání. Náklady jsou vypočítány pro dva přístupy: chain-of-thought (CoT) a one-shot (OS), na základě průměrného počtu vstupních a výstupních tokenů.}
     \label{tab:cloud-api-costs}
 \end{table}
 
-Z pohledu nákladů se jako nejvýhodnější jeví modely GPT-5.4-nano a Claude 3.0 Haiku, které vychází na méně než \$0,002 za odevzdání při one-shot přístupu.
-Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější: modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vychází na přibližně \$0,028--\$0,030 za odevzdání, oproti méně než \$0,004 při one-shot přístupu.
+Z pohledu nákladů vycházejí jako nejvýhodnější modely GPT-5.4-nano a Claude 3.0 Haiku, u kterých cena za jedno odevzdání při one-shot přístupu klesá pod \$0,002.
+Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější -- modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vycházejí přibližně na \$0,028--\$0,030 za odevzdání, oproti méně než \$0,004 při one-shot přístupu.
 Výjimkou je Gemini 3.1 Flash-Lite, který i při chain-of-thought přístupu dosahuje nákladů okolo \$0,01 za odevzdání.
 
-Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů \$0,174, což je pro rozsáhlé školní nasazení výrazně nákladnější.
-Pro konkrétní volbu modelu bude rozhodující výsledek srovnávacího testování kvality výstupů.
-Z pohledu nákladů vychází nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky je dostatečná.
+Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů přibližně \$0,174.
+Pro rozsáhlé školní nasazení jsou tyto modely výrazně nákladnější.
+Konkrétní volba modelu tak bude záviset na výsledku srovnávacího testování kvality výstupů -- z~čistě cenového hlediska vycházejí nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky bude dostatečná.
 
 \endinput
