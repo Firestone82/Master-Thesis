@@ -1,0 +1,28 @@
+\subsection{Obecné modely s podporou analýzy kódu}
+\label{subsec:models-general}
+
+Druhou skupinu tvoří obecné jazykové modely, které nebyly primárně navrženy pro práci s kódem, ale díky svému rozsahu a kvalitě trénovaných dat dosahují v úlohách spojených s analýzou a generováním kódu velmi dobrých výsledků.
+Tyto modely jsou zpravidla výrazně větší než specializované varianty a jejich trénování vyžadovalo řádově vyšší výpočetní prostředky.
+
+\begin{itemize}
+    \item \textbf{GPT-5.4}~\cite{gpt-5.4} od společnosti OpenAI je proprietární model dostupný výhradně prostřednictvím cloudového API\@.
+    Přestože není specializován na kód, dosahuje na benchmarku HumanEval výsledků přesahujících 90\%.
+    Menší varianty GPT-5.4-mini~\cite{gpt-5.4-mini} a GPT-5.4-nano~\cite{gpt-5.4-nano} nabízejí kompromis mezi cenou a výkonem.
+    Kontextové okno všech variant je minimálně 128~000 tokenů.
+
+    \item \textbf{Claude 4.6}~\cite{claude-opus-4.6,claude-sonnet-4.6} od společnosti Anthropic nabízí silné analytické schopnosti a detailní porozumění instrukcím.
+    Řada modelů zahrnuje varianty Opus (nejvyšší kvalita), Sonnet (vyvážený poměr ceny a kvality) a Haiku (nejrychlejší a nejlevnější).
+    Modely Claude jsou rovněž proprietární a dostupné pouze přes API\@.
+
+    \item \textbf{Gemini}~\cite{geminy-3.1-pro,geminy-3-flash} od společnosti Google nabízí modely s velkými kontextovými okny (až 1~000~000 tokenů u vybraných variant), což může být výhodné pro analýzu rozsáhlejších studentských projektů.
+    Řada zahrnuje varianty Pro (nejvyšší kvalita), Flash (rychlý a levný) a Flash Lite (nejlevnější).
+
+    \item \textbf{LLaMA~3.1}~\cite{llama3} od společnosti Meta je obecný open-source model dostupný ve velikostech 8B, 70B a 405B parametrů.
+    Na benchmarku HumanEval dosahuje varianta 70B přibližně 80\% úspěšnosti.
+    Model je plně otevřený a lze jej provozovat lokálně, čímž představuje alternativu ke komerčním API pro případy, kdy je vyžadována obecná jazyková schopnost v kombinaci s lokálním nasazením.
+
+    \item \textbf{Mistral}~\cite{mistral_api} nabízí modely dostupné jak prostřednictvím API, tak jako open-source ke stažení.
+    Model Mistral~7B patří k nejefektivnějším modelům své velikostní kategorie a je vhodný pro nasazení na méně výkonném hardware.
+\end{itemize}
+
+\endinput
