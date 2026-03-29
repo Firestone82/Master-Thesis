@@ -3,7 +3,6 @@
 
 % Custom command for inline code snippets
 % Usage: \code{print("Hello, World!")}
-\definecolor{codegray}{gray}{0.95}
 \newcommand{\code}[1]{%
     \fcolorbox{black}{codegray}{\texttt{#1}}%
 }
@@ -30,5 +29,11 @@
 \newcommand{\secref}[2][]{%
     \ifthenelse{\equal{#1}{}}%
     {\hyperref[#2]{Sekce~\ref*{#2}}}%
+    {\hyperref[#2]{#1~\ref*{#2}}}%
+}
+
+\newcommand{\lstref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+    {\hyperref[#2]{Zdrojový kód~\ref*{#2}}}%
     {\hyperref[#2]{#1~\ref*{#2}}}%
 }
