@@ -1,0 +1,51 @@
+\subsection{Zvolené prompty}
+\label{subsec:choice-prompts}
+
+Prompty jsou v souladu se strukturou popsanou v \secref[sekci]{subsec:prompts-structure} sestaveny z role modelu, pravidel pro výběr nálezů a pokynů pro formát výstupu.
+Jsou psány v angličtině, protože jazykové modely dosahují konzistentněji kvalitních výsledků s anglickými instrukcemi.
+
+\subsubsection*{One-shot prompt}
+\label{subsubsec:choice-prompts-oneshot}
+
+Při one-shot přístupu je analýza provedena jediným voláním modelu.
+Níže uvedený systémový prompt definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi.
+
+\lstinputlisting[
+    caption={One-shot systémový prompt pro analýzu studentského kódu},
+    label={lst:prompt-oneshot},
+    language=Markdown,
+    basicstyle=\ttfamily\scriptsize,
+    frame=single
+]{resources/prompts/simple-prompt.txt}
+
+\subsubsection*{Chain-of-thought prompty}
+\label{subsubsec:choice-prompts-cot}
+
+Při chain-of-thought přístupu jsou volání modelu tři.
+Každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu.
+
+\lstinputlisting[
+    caption={Chain-of-thought krok 1: hrubá analýza (\textit{draft analysis})},
+    label={lst:prompt-cot-draft},
+    language=Markdown,
+    basicstyle=\ttfamily\scriptsize,
+    frame=single
+]{resources/prompts/chain-of-thought-draft.txt}
+
+\lstinputlisting[
+    caption={Chain-of-thought krok 2: kritická revize (\textit{critique analysis})},
+    label={lst:prompt-cot-critique},
+    language=Markdown,
+    basicstyle=\ttfamily\scriptsize,
+    frame=single
+]{resources/prompts/chain-of-thought-critique.txt}
+
+\lstinputlisting[
+    caption={Chain-of-thought krok 3: finální přehled (\textit{review analysis})},
+    label={lst:prompt-cot-review},
+    language=Markdown,
+    basicstyle=\ttfamily\scriptsize,
+    frame=single
+]{resources/prompts/chain-of-thought-review.txt}
+
+\endinput
