@@ -1,0 +1,10 @@
+\subsection{Zvolený model}
+\label{subsec:choice-model}
+
+Pro on-premise nasazení byl zvolen model \textbf{Qwen3-Coder:30B}.
+Jde o variantu z rodiny Qwen3-Coder, která dosahuje kvalitních výsledků v úlohách analýzy zdrojového kódu při paměťových nárocích přijatelných pro dostupný GPU server.
+Experimentální měření popsané v \secref[sekci]{subsec:choice-strategies} bylo provedeno právě s tímto modelem a potvrdilo jeho schopnost identifikovat relevantní problémy ve studentských řešeních.
+
+Pro případ využití cloudového API jsou z hlediska poměru ceny a výkonu vhodnými kandidáty modely \textbf{GPT-5.4-mini}, \textbf{Gemini 3.1 Flash-Lite} nebo \textbf{Claude 3.0 Haiku}, jejichž náklady za odevzdání při one-shot přístupu klesají pod~\$0,002 (viz \tabref{tab:cloud-api-costs}).
+
+\endinput
