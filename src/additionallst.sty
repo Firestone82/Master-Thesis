@@ -3,53 +3,13 @@
 
 \definecolor{darkgreen}{rgb}{0,0.6,0}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
-
-\lstdefinelanguage{CSS}{
-    sensitive=true,
-    keywords={color:, background-color:, margin:, padding:, font:, weight:, display:, position:, top:, left:, right:, bottom:, list:, style:, border:},
-    morecomment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morestring=[b]',
-    morestring=[b]",
-    alsoletter={:},
-    alsodigit={-}
-}
-
-\lstdefinelanguage{HTML} {
-    sensitive=true,
-    keywords={html,head,title,meta,script,style,link,body,h1,h2,h3,h4,h5,h6,p,div,span,a,img,ul,ol,li,table,th,tr,td,thead,tbody,tfoot,form,input,button,select,option,label,textarea},
-    morecomment=[s]{<!--}{-->}
-}
-
-\lstdefinelanguage{JavaScript} {
-    sensitive=true,
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, import, from},
-    morecomment=[s]{/*}{*/},
-    morecomment=[l]//,
-    morestring=[b]",
-    morestring=[b]'
-}
-
-\lstdefinelanguage{TypeScript} {
-    sensitive=true,
-    keywords={typeof, new, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, export, class, public, const, constructor, private, console},
-    morecomment=[s]{/*}{*/},
-    morecomment=[l]//,
-    morestring=[b]",
-    morestring=[b]',
-    morestring=[b]`,
-}
+\definecolor{codegray}{gray}{0.95}
 
 \lstdefinelanguage{Markdown}{
-    morekeywords={\#,##,###,####,#####},
     sensitive=false,
     morecomment=[l]{>},
     morestring=[b]`,
-}
-
-\lstdefinelanguage{JSON} {
-    morestring=[b]",
-    morestring=[b]'
+    moredelim=[l][\color{blue}\bfseries]{\#},
 }
 
 \lstset{

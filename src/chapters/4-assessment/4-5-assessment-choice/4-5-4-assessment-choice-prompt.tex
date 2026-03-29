@@ -4,11 +4,14 @@
 Prompty jsou v souladu se strukturou popsanou v \secref[sekci]{subsec:prompts-structure} sestaveny z role modelu, pravidel pro výběr nálezů a pokynů pro formát výstupu.
 Jsou psány v angličtině, protože jazykové modely dosahují konzistentněji kvalitních výsledků s anglickými instrukcemi.
 
+% TODO: FIX THIS CRAP
+\TODO{QUESTION: Pokud to přemístím do appendixu, nebude to až moc krátké? Nevím co s tím, ale v textu to vypadá blbě.}
+
 \subsubsection*{One-shot prompt}
 \label{subsubsec:choice-prompts-oneshot}
 
 Při one-shot přístupu je analýza provedena jediným voláním modelu.
-Níže uvedený systémový prompt definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi.
+Níže uvedený systémový prompt definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi což teoreticky míchá \lstref{lst:prompt-cot-draft} doplněn o formátování z \lstref{lst:prompt-cot-review}.
 
 \lstinputlisting[
     caption={One-shot systémový prompt pro analýzu studentského kódu},
@@ -16,7 +19,7 @@ Níže uvedený systémový prompt definuje roli modelu, typy hledaných problé
     language=Markdown,
     basicstyle=\ttfamily\scriptsize,
     frame=single
-]{resources/prompts/simple-prompt.txt}
+]{resources/prompts/zero-shot.txt}
 
 \subsubsection*{Chain-of-thought prompty}
 \label{subsubsec:choice-prompts-cot}
