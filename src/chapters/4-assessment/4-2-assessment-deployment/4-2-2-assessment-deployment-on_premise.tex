@@ -25,6 +25,24 @@ Pro usnadnění nasazení jazykových modelů v lokálním prostředí existuje 
     \item \textbf{Hugging Face Transformers}~\cite{huggingface-transformers} -- široce používaná knihovna pro práci s jazykovými modely, která podporuje různé frameworky (PyTorch, TensorFlow) a nabízí rozsáhlou sbírku předtrénovaných modelů.
 \end{itemize}
 
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{llll}
+            \toprule
+            \textbf{Nástroj}          & \textbf{Zaměření}                   & \textbf{Typické použití}           & \textbf{Požadavky} \\
+            \midrule
+            Ollama                    & Jednoduché lokální spouštění modelů & Lokální vývoj, prototypování       & CPU nebo GPU       \\
+            vLLM                      & Vysoce výkonný inference server     & Produkční nasazení, více uživatelů & GPU server         \\
+            llama.cpp                 & Lehká implementace s kvantizací     & Edge zařízení, CPU inference       & CPU / menší GPU    \\
+            Hugging Face Transformers & Framework pro práci s modely        & Vývoj a experimentování            & GPU / Python stack \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Srovnání nástrojů pro on-premise provoz jazykových modelů}
+    \label{tab:onpremise-tools-comparison}
+\end{table}
+
 Volba konkrétního nástroje závisí na dostupném hardwaru, požadované rychlosti inference a způsobu integrace do systému Kelvin.
 Nástroj \textit{vLLM} je vhodný pro serverové prostředí s GPU akcelerací a vyšší propustností.
 Řešení \textit{llama.cpp} umožňuje provoz modelů i bez GPU, ale s výrazně nižší rychlostí.
@@ -91,16 +109,16 @@ Konkrétní analýza objemu odevzdání v systému Kelvin, která je podkladem p
     \resizebox{\textwidth}{!}{%
         \begin{tabular}{lll}
             \toprule
-            \textbf{Vlastnost}   & \textbf{Cloudové API}              & \textbf{On-premise nasazení} \\
+            \textbf{Vlastnost}   & \textbf{Cloudové API}             & \textbf{On-premise nasazení} \\
             \midrule
-            Hardwarové nároky    & Žádné (výpočet u poskytovatele)    & GPU server (10+ GB VRAM)     \\
-            Pořizovací náklady   & Nulové                             & Vysoké (GPU hardware)        \\
-            Průběžné náklady     & Za token (opakující se)            & Elektřina a správa           \\
-            Škálovatelnost       & Automatická (rate limity)          & Fixní kapacita (fronta)      \\
-            Ochrana dat          & Data opouštějí školu               & Data zůstávají na škole      \\
-            Kvalita modelů       & Nejnovější modely                  & Závisí na hardware           \\
-            Latence              & Závislá na internetu a zátěži API  & Závislá na hardware          \\
-            Správa a aktualizace & Automatická (poskytovatel)         & Manuální (správce)           \\
+            Hardwarové nároky    & Žádné (výpočet u poskytovatele)   & GPU server (10+ GB VRAM)     \\
+            Pořizovací náklady   & Nulové                            & Vysoké (GPU hardware)        \\
+            Průběžné náklady     & Za token (opakující se)           & Elektřina a správa           \\
+            Škálovatelnost       & Automatická (rate limity)         & Fixní kapacita (fronta)      \\
+            Ochrana dat          & Data opouštějí školu              & Data zůstávají na škole      \\
+            Kvalita modelů       & Nejnovější modely                 & Závisí na hardware           \\
+            Latence              & Závislá na internetu a zátěži API & Závislá na hardware          \\
+            Správa a aktualizace & Automatická (poskytovatel)        & Manuální (správce)           \\
             \bottomrule
         \end{tabular}
     }
