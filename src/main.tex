@@ -21,16 +21,22 @@
 \usepackage{fontspec}
 \usepackage{pgfmath}
 
+% ==] Overrides and custom settings [==
+
+% Enable fixed-point arithmetic in TikZ for more accurate calculations (e.g., for cost computations)
+\usetikzlibrary{fpu}
+
 % Table of contents depth - TODO: Remove in final version!
 \setcounter{tocdepth}{3}
 
-\renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
-\newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
+% Convert "Listing" to "Zdrojový Kód"
+\renewcommand{\lstlistingname}{Zdrojový Kód}
 
-\usetikzlibrary{fpu}
+% New type of table column with numbers aligned by decimal comma
+\newcolumntype{d}[1]{D{,}{,}{#1}}
 
+% ==] Thesis metadata and configuration [==
 
-% Required thesis metadata
 \ThesisAuthor{Bc. Pavel Mikula}
 \ThesisSupervisor{Mgr. Ing. Michal Krumnikl, Ph.D.}
 \CzechThesisTitle{Integrace velkých jazykových modelů do systému Kelvin}
@@ -62,25 +68,9 @@
 
 \addbibresource{resources/sauce.bib}
 
-% Useful to.do command for marking places in the text that need to be completed
-\newcommand{\TODO}[1]{\textbf{\textcolor{red}{TODO:}} #1}
+% ==] Custom macros [==
 
-% Custom command for inline code snippets
-\definecolor{codegray}{gray}{0.95}
-\newcommand{\code}[1]{%
-    \fcolorbox{black}{codegray}{\texttt{#1}}%
-}
-
-% Custom commands for referencing tables and figures with the format "Tabulka X.Y" and "Obrázek X.Y"
-\newcommand{\tabref}[1]{(\hyperref[#1]{Tabulka~\ref*{#1}})}
-\newcommand{\figref}[1]{(\hyperref[#1]{Obrázek~\ref*{#1}})}
-
-% Custom command for mentioning sections, default to "Sekce X.Y" but can be overridden to "sekci X.Y" for better flow in the text
-\newcommand{\secref}[2][]{%
-    \ifthenelse{\equal{#1}{}}%
-        {\hyperref[#2]{Sekce~\ref*{#2}}}%
-        {\hyperref[#2]{#1~\ref*{#2}}}%
-}
+\input{macros}
 
 %
 % ==] Main document [==
