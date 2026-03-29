@@ -1,0 +1,15 @@
+\subsection{Zvolený způsob nasazení}
+\label{subsec:choice-deployment}
+
+Na základě srovnání obou způsobů nasazení v \secref[sekci]{sec:selection-deployment} bylo pro implementaci v systému Kelvin zvoleno \textbf{on-premise nasazení} s modelem provozovaným prostřednictvím nástroje Ollama.
+
+Rozhodující faktory pro tuto volbu jsou:
+\begin{itemize}
+    \item Školní infrastruktura disponuje GPU serverem s dostatečnou kapacitou VRAM pro provoz modelu ve zvolené velikosti.
+    \item Studentské zdrojové kódy a zadání úloh zůstávají výhradně na školní infrastruktuře, což výrazně zjednodušuje plnění požadavků GDPR\@.
+    \item Při objemu odevzdání typickém pro produkční provoz systému Kelvin jsou marginální náklady na zpracování každého dalšího odevzdání prakticky nulové.
+\end{itemize}
+
+Cloudové API zůstává jako alternativní varianta pro případy, kdy lokální infrastruktura není dostupná nebo je požadován vyšší výkon modelu, přičemž v takovém případě lze jednoduše přepnout na one-shot strategii a tím výrazně snížit náklady za zpracování.
+
+\endinput
