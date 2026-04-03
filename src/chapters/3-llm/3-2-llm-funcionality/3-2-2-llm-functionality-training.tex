@@ -47,5 +47,13 @@ Současně je udržována blízkost k původnímu SFT modelu pomocí penalizace 
 Tím se zabraňuje tzv.\ reward hackingu, tedy situaci, kdy by model nalezl způsob, jak dosáhnout vysoké odměny bez skutečného zlepšení kvality odpovědí.
 
 Výsledkem celého tří krokového procesu je model, jehož výstupy jsou věcnější, bezpečnější a lépe odpovídají záměru uživatele.
+Celý proces trénování a následného nasazení modelu je schematicky znázorněn na \figref[obrázku]{fig:llm-training-pipeline}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{resources/diagrams/model-training}
+    \caption{Schéma celého procesu od trénování po nasazení LLM\@. Předtrénování na rozsáhlých datech vytvoří základní model, instrukční dolaďování jej naučí sledovat pokyny a RLHF optimalizuje kvalitu výstupů na základě lidských preferencí. Finální model je poté nasazen pro inferenci.}
+    \label{fig:llm-training-pipeline}
+\end{figure}
 
 \endinput
