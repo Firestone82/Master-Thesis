@@ -4,22 +4,11 @@
 Prompty jsou v souladu se strukturou popsanou v \secref[sekci]{subsec:prompts-structure} sestaveny z role modelu, pravidel pro výběr nálezů a pokynů pro formát výstupu.
 Jsou psány v angličtině, protože jazykové modely dosahují konzistentněji kvalitních výsledků s anglickými instrukcemi.
 
-% TODO: FIX THIS CRAP
-\TODO{QUESTION: Pokud to přemístím do appendixu, nebude to až moc krátké? Nevím co s tím, ale v textu to vypadá blbě.}
-
 \subsubsection*{One-shot prompt}
 \label{subsubsec:choice-prompts-oneshot}
 
 Při one-shot přístupu je analýza provedena jediným voláním modelu.
-Níže uvedený systémový prompt definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi což teoreticky míchá \lstref{lst:prompt-cot-draft} doplněn o formátování z \lstref{lst:prompt-cot-review}.
-
-\lstinputlisting[
-    caption={One-shot systémový prompt pro analýzu studentského kódu},
-    label={lst:prompt-oneshot},
-    language=Markdown,
-    basicstyle=\ttfamily\scriptsize,
-    frame=single
-]{resources/prompts/zero-shot.txt}
+Systémový prompt (\lstref{lst:prompt-oneshot}) definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi -- kombinuje analytickou část z \lstref{lst:prompt-cot-draft} s formátovacími pokyny z \lstref{lst:prompt-cot-review}.
 
 \subsubsection*{Chain-of-thought prompty}
 \label{subsubsec:choice-prompts-cot}
@@ -27,28 +16,8 @@ Níže uvedený systémový prompt definuje roli modelu, typy hledaných problé
 Při chain-of-thought přístupu jsou volání modelu tři.
 Každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu.
 
-\lstinputlisting[
-    caption={Chain-of-thought krok 1: hrubá analýza (\textit{draft analysis})},
-    label={lst:prompt-cot-draft},
-    language=Markdown,
-    basicstyle=\ttfamily\scriptsize,
-    frame=single
-]{resources/prompts/chain-of-thought-draft.txt}
+Každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu: hrubá analýza (\lstref{lst:prompt-cot-draft}), kritická revize (\lstref{lst:prompt-cot-critique}) a finální přehled (\lstref{lst:prompt-cot-review}).
 
-\lstinputlisting[
-    caption={Chain-of-thought krok 2: kritická revize (\textit{critique analysis})},
-    label={lst:prompt-cot-critique},
-    language=Markdown,
-    basicstyle=\ttfamily\scriptsize,
-    frame=single
-]{resources/prompts/chain-of-thought-critique.txt}
-
-\lstinputlisting[
-    caption={Chain-of-thought krok 3: finální přehled (\textit{review analysis})},
-    label={lst:prompt-cot-review},
-    language=Markdown,
-    basicstyle=\ttfamily\scriptsize,
-    frame=single
-]{resources/prompts/chain-of-thought-review.txt}
+Úplné znění všech promptů je uvedeno v příloze~\ref{ch:appendix-prompts}.
 
 \endinput

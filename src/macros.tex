@@ -8,8 +8,8 @@
 }
 
 % Custom command for approximate values with a tilde symbol
-% Usage: \tavg{9053} → ≈ 9 053
-\newcommand{\tavg}[1]{\(\approx\)\,#1}
+% Usage: \tavg{9053} → ~ 9 053
+\newcommand{\tavg}[1]{\(\sim\)\,#1}
 
 % Custom commands for referencing tables, figures, and sections with consistent formatting
 % Usage: \tabref{tab:example} → Tabulka 1, \figref{fig:example} → Obrázek 1, \secref{sec:example} → Sekce 1
@@ -34,6 +34,6 @@
 
 \newcommand{\lstref}[2][]{%
     \ifthenelse{\equal{#1}{}}%
-    {\hyperref[#2]{Zdrojový kód~\ref*{#2}}}%
+    {\hyperref[#2]{Výpis~\ref*{#2}}}%
     {\hyperref[#2]{#1~\ref*{#2}}}%
 }

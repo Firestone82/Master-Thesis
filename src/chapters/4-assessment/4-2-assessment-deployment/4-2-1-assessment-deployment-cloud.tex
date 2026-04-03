@@ -18,7 +18,7 @@ Mezi hlavní poskytovatele cloudových API pro velké jazykové modely patří:
 
 Z pohledu systému Kelvin jsou hardwarové nároky pro použití cloudového API prakticky nulové.
 Na straně Kelvinu je potřeba pouze stabilní internetové připojení a server schopný zpracovávat HTTP požadavky.
-Školní infrastruktura, která leží na optické síti CETIN, tuto podmínku bez problémů splňuje.
+Školní infrastruktura, která leží na síti CESNET, tuto podmínku bez problémů splňuje.
 
 \subsubsection*{Limity}
 \label{subsubsec:deployment-cloud-limits}
@@ -53,6 +53,8 @@ Tato skutečnost může být rozhodujícím faktorem pro volbu mezi cloudovým A
 
 Náklady cloudových API jsou určeny cenovým modelem \textit{za token}.
 Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny bývají výrazně dražší.
+Ceny jsou uváděny za 1M (jeden milion) tokenů.
+
 
 % ===================================================================
 %   Chain-of-thought přístup (3 kroky: Draft analysis, Critique analysis, Review analysis):
@@ -94,7 +96,8 @@ Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a
 }
 
 Pro orientační porovnání nákladů byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a one-shot s jedním voláním.
-Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
+Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
+Výsledky jsou shrnuty v~\tabref{tab:cloud-api-costs}.
 
 \begin{table}[H]
     \centering
