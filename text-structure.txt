@@ -70,46 +70,34 @@
 │     ├─ Ochrana dat
 │     └─ Náklady
 ├─ 4.3 Analýza dostupných modelů
-│  ├─ Přehled dostupných modelů
 │  ├─ Modely zaměřené na zdrojový kód
-│  ├─ Modely zaměřené na text
-│  └─ Srovnávací tabulka vlastností modelů
+│  └─ Obecné modely
 ├─ 4.4 Návrh práce s prompty
 │  ├─ Struktura promptu
-│  ├─ One-shot (few-shot, zero-shot) vs chain-of-thought prompting
-│  ├─ Typy výstupů (komentáře k řádkům, shrnutí, hodnocení)
-│  └─ Iterativní ladění promptu
-└─ 4.5 Zvolená varianta a odůvodnění
-   ├─ Trade-offs jednotlivých řešení
-   └─ Odůvodnění volby konkrétního modelu
+│  ├─ Strategie promptování
+│  └─ Typy výstupů a iterativní ladění
+└─ 4.5 Volba modelu, promptu a přístupu
+   ├─ Srovnání strategií promptování
+   ├─ Zvolený způsob nasazení
+   ├─ Zvolený model
+   └─ Zvolené prompty
 
 5. Implementace do systému Kelvin
 ├─ 5.1 Backend
 │  ├─ Integrace nové asynchronní části systému Kelvin
 │  ├─ Nezablokování existující evaluační pipeline
 │  ├─ Práce s LLM a odesílání dat
-│  ├─ Architektonický / sekvenční diagram
-│  └─ Omezení vývoje daná historickou architekturou („špagetový kód“)
-├─ 5.2 Frontend
-│  ├─ Zobrazení výstupu LLM
-│  ├─ Interakce učitele s návrhy LLM
-│  └─ Omezení vývoje kvůli migraci na Vue
-└─ 5.3 Řízení vývoje
-   ├─ Iterativní vývoj pomocí pull requestů
-   ├─ Code review proces
-   └─ Struktura commitů
+│  └─ Architektonický / sekvenční diagram
+└─ 5.2 Frontend
+   ├─ Zobrazení výstupu LLM
+   └─ Interakce učitele s návrhy LLM
 
 6. Vyhodnocení řešení
 ├─ 6.1 Scénáře použití
 │  └─ Jak bude systém v praxi používán
 ├─ 6.2 Přínos pro učitele
 │  └─ Jak systém pomáhá při hodnocení
-├─ 6.3 Experimenty na historických datech
-│  ├─ Popis dat a způsob jejich zpracování
-│  ├─ Analýza výstupů
-│  ├─ Výběr a ladění promptu
-│  └─ Nastavení parametrů modelu (teplota apod.)
-└─ 6.4 Možný dopad na hodnocení
+└─ 6.3 Možný dopad na hodnocení
    ├─ Riziko přehnaného spoléhání se na LLM
    ├─ Chybovost modelu
    └─ Nutnost lidské kontroly
