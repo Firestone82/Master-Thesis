@@ -5,7 +5,7 @@ Inference jazykového modelu je výpočetně náročná operace.
 Její jádro tvoří opakované násobení matic velkých rozměrů v každé vrstvě architektury Transformer, přičemž tyto operace jsou pro každý generovaný token prováděny znovu.
 Způsob, jakým je výpočet prováděn buď na CPU nebo GPU zásadně ovlivňuje latenci i propustnost systému.
 
-\subsubsection*{Grafické karty (GPU) jako primární hardware pro inference}
+\subsubsection*{Grafické karty jako primární hardware pro inference}
 
 GPU jsou navrženy pro masivně paralelní výpočty, kde moderní karta jako NVIDIA RTX 4090 disponuje 16~384 CUDA jádry optimalizovanými pro maticové operace.
 Tomu odpovídá výrazně vyšší výkon při inferenci.

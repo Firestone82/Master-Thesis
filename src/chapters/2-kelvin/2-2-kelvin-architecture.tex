@@ -2,7 +2,7 @@
 \label{sec:kelvin-architecture}
 
 Systém Kelvin je realizován jako webová aplikace se standardním třívrstvým uspořádáním: databázová vrstva, backendová aplikační logika a frontendová prezentační vrstva.
-Komunikace mezi frontendem a backendem probíhá přes REST API\@.
+Komunikace mezi frontendem a backendem probíhá přes REST API (Representational State Transfer, Application Programming Interface)\@.
 
 \subsection{Backend}
 \label{subsec:kelvin-backend}
@@ -31,7 +31,7 @@ Stejný princip lze využít i pro další rozšiřující moduly, aniž by byla
 \label{subsec:kelvin-api}
 
 Komunikace mezi frontendem a backendem probíhá prostřednictvím REST API implementovaného za pomocí knihovny Django Ninja.
-Django Ninja je moderní framework pro budování aplikačního rozhraní (API) nad Django, inspirovaný FastAPI, který využívá Python \textit{type hints} pro automatickou validaci vstupních dat a generování OpenAPI dokumentace přístupnou například přes Swagger UI\@.
+Django Ninja je moderní framework pro budování API nad Django, inspirovaný FastAPI, který využívá Python \textit{type hints} pro automatickou validaci vstupních dat a generování OpenAPI dokumentace přístupnou například přes Swagger UI\@.
 
 \subsection{Frontend}
 \label{subsec:kelvin-frontend}
