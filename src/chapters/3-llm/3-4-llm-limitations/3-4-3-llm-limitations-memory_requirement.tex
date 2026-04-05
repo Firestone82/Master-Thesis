@@ -46,9 +46,10 @@ Ztráta kvality výstupu při kvalitní kvantizaci je pro praktické použití z
 \subsubsection*{KV cache}
 \label{subsubsec:kv-cache}
 
-KV cache (key-value cache) byla vysvětlena v \secref[sekci]{subsec:inference-generation}.
+KV cache byla vysvětlena v \secref[sekci]{subsec:inference-generation}.
 Její velikost roste lineárně s délkou zpracovávané sekvence a s počtem vrstev modelu.
-Pro model se 32 vrstvami, kontextovým oknem 8~000 tokenů a jedním souběžným požadavkem je KV cache typicky v řádu 2 až 4 GB VRAM, v závislosti na architektuře attention mechanismu (MHA vs.\ GQA).
+Pro model se 32 vrstvami, kontextovým oknem 8~000 tokenů a jedním souběžným požadavkem je KV cache typicky v řádu 2 až 4 GB VRAM, v závislosti na architektuře attention mechanismu
+(MHA -- Multi-Head Attention vs.\ GQA -- Grouped-Query Attention).
 Při zpracování více souběžných požadavků (dávkové zpracování) se tento nárok násobí.
 
 \subsubsection*{Praktické dopady}
