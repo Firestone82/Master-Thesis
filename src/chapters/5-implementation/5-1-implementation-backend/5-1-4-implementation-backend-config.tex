@@ -1,0 +1,13 @@
+\subsection{Konfigurace jazykových modelů}
+\label{subsec:implementation-config}
+
+Modul podporuje připojení k více OpenAI-kompatibilním serverům prostřednictvím konfiguračního souboru \code{openai-config.yaml}.
+Každý záznam v tomto souboru definuje adresu serveru, autentizační token, popis serveru, možné modely a zda je tento server výchozí pro zpracování odevzdání.
+Při inicializaci modulu je ověřeno, zda konfigurační soubor existuje a pokud ne, je vytvořen s výchozí konfigurací obsahující jediný záznam pro lokální server Ollama\@.
+
+Výchozím serverem je lokálně provozovaná instance Ollama, která umožňuje spouštět jazykové modely přímo na infrastruktuře školy.
+Toto nastavení bylo zvoleno s ohledem na dvě hlavní omezení popsaná v sekci \secref{sec:llm-limitations}: finanční náklady spojené s využíváním cloudových API a částečná ztráta kontroly nad daty při odesílání studentských kódů do externích služeb.
+
+V případě potřeby lze konfiguraci rozšířit o cloudové poskytovatele, například OpenAI nebo jiné OpenAI-kompatibilní alternativy, aniž by bylo nutné měnit kód aplikace.
+
+\endinput

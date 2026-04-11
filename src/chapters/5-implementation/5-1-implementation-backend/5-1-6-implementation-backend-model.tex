@@ -1,0 +1,28 @@
+\subsection{Zpracování výstupu a datový model}
+\label{subsec:implementation-model}
+ 
+Odpověď jazykového modelu je zpracována pomocnými funkcemi v souboru \code{processor.py}, které parsují strukturovaný výstup modelu do seznamu objektů \code{SuggestedCommentDTO}.
+Každý objekt obsahuje cestu k souboru, číslo řádku, textový obsah návrhu a závažnost nálezu.
+ 
+Výsledné objekty jsou ukládány do databáze jako instance Django modelu \code{SuggestedComment}.
+Model je propojen s odpovídajícím odevzdáním (\code{Submit}) a obsahuje následující klíčová pole.
+ 
+\begin{itemize}
+    \item \code{source} obsahuje cestu k analyzovanému souboru v rámci odevzdání.
+    \item \code{line} uchovává číslo řádku, ke kterému se návrh vztahuje.
+    \item \code{text} obsahuje vlastní obsah návrhu vygenerovaný modelem.
+    \item \code{severity} vyjadřuje závažnost nálezu a nabývá hodnot \code{CRITICAL}, \code{HIGH}, \code{MEDIUM} nebo \code{LOW}.
+    Tato hodnota slouží k vizuálnímu rozlišení návrhů ve frontendu.
+    \item \code{state} uchovává aktuální stav návrhu a nabývá hodnot \code{PENDING}, \code{ACCEPTED}, \code{REJECTED} nebo \code{DISMISSED}.
+    \item \code{quality\_rating} a \code{relevance\_rating} obsahují hodnocení kvality a relevance na stupnici 0 až 10, pokud jej učitel udělil.
+\end{itemize}
+ 
+Datový model je využíván pro dva typy záznamů.
+Prvním typem jsou jednotlivé návrhy komentářů vázané na konkrétní řádek zdrojového kódu, u kterých učitel volí mezi stavy \code{ACCEPTED} a \code{REJECTED}.
+Druhým typem je celkové informativní shrnutí odevzdání, které nelze přijmout, protože má pouze informativní charakter.
+U shrnutí může učitel využít výhradně stav \code{DISMISSED}, kterým jej ve svém rozhraní skryje.
+ 
+Pokud učitel jednotlivý návrh přijme, systém automaticky vytvoří standardní komentář v databázi, který je propojen s původním navrhovaným komentářem a stane se viditelným pro studenta.
+Zamítnuté nebo skryté záznamy zůstávají v databázi pro účely pozdější analýzy kvality modelu a případné doladění promptů, ale studentovi nejsou zpřístupněny.
+ 
+\endinput

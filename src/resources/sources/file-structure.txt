@@ -1,0 +1,22 @@
+api/v2/llm/                 # REST API vrstva LLM modulu
+|-- __init__.py
+|-- default.py              # výchozí routery a endpointy
+|-- prompts.py              # endpointy pro správu promptů
+|-- schema.py               # Django Ninja schémata (vstup/výstup)
+|-- submits.py              # endpointy pro ukládání výsledků analýzy
+`-- suggestions.py          # endpointy pro správu návrhů komentářů
+
+kelvin/common/ai_review/    # Jádro logiky LLM analýzy
+|-- __init__.py
+|-- dto.py                  # přenosové objekty (EmbeddedFile, SuggestedCommentDTO)
+|-- job.py                  # asynchronní úloha spouštěná při odevzdání
+|-- llm_reviewer.py         # třída Analyzer, komunikace s modelem
+|-- openai_config.py        # načítání konfigurace serverů
+|-- processor.py            # příprava dat a ukládání výsledků
+|-- prompt.py               # definice systémových promptů
+`-- scheme.py               # schéma výstupu pro OpenAI response_format
+
+frontend/                   # frontendová část systému
+
+data/                       # konfigurační soubory
+`-- openai-config.yaml      # konfigurace OpenAI-kompatibilních serverů

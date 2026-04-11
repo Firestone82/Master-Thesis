@@ -1,0 +1,16 @@
+\subsection{Struktura modulu}
+\label{subsec:implementation-module}
+
+LLM modul je uspořádán jako standardní Django aplikace s osmi hlavními soubory a několika soubory v API, přičemž každý z nich pokrývá jasně ohraničenou část funkcionality.
+Toto rozdělení umožňuje oddělit logiku komunikace s jazykovým modelem od správy promptů, definice výstupního schématu a ukládání výsledků.
+
+\begin{listing}[ht]
+    \inputminted{awk}{resources/sources/file-structure.txt}
+    \caption{Struktura adresářů a souborů implementace}
+    \label{code:implementation-structure}
+\end{listing}
+
+%TODO:
+\TODO{QUESTION: Nechat tento popis v práci? Je to hodně technické, ale pro popis v další sekci potřebné?}
+
+\endinput
