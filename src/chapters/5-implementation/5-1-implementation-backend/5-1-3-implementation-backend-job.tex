@@ -1,0 +1,24 @@
+\subsection{Asynchronní úloha a průběh analýzy}
+\label{subsec:implementation-job}
+
+Samotný průběh analýzy je řízen asynchronní úlohou definovanou v souboru \code{job.py}, která je volána při zpracování odevzdání vedle spuštění evaluační pipeline.
+Úloha je zcela nezávislá na synchronní části evaluace a prochází několika na sebe navazujícími kroky.
+
+Nejprve jsou pomocí funkcí z \code{processor.py} shromážděny všechny zdrojové soubory patřící k danému odevzdání.
+Každý soubor je převeden na objekt \code{EmbeddedFile}, který obsahuje relativní cestu v rámci odevzdání, identifikovaný programovací jazyk, celý obsah souboru a celkový počet řádků.
+Tento formát umožňuje modelu pracovat s plným kontextem souboru a současně mu poskytuje strukturovaná metadata.
+
+Následně je z databáze načten prompt definovaný pro danou úlohu v její konfiguraci.
+Prompty jsou uloženy jako samostatné záznamy a lze je upravovat prostřednictvím administračního rozhraní systému Kelvin, aniž by bylo nutné nasadit novou verzi aplikace.
+Konkrétní režim je opět načtený z konfigurace a může nabývat hodnot \code{CHAIN\_OF\_THOUGHT}, \code{ZERO\_SHOT} nebo \code{THINKING} (viz \secref{subsec:prompts-strategies}).
+
+Poté je vytvořena instance třídy \code{Analyzer} s klientem knihovny \code{openai} poskytnutým modulem \code{openai\_config.py}.
+Analyzer obdrží seznam souborů, prompt a zvolený režim a provede samotnou komunikaci s jazykovým modelem.
+Po dokončení komunikace je odpověď modelu zpracována pomocnými funkcemi z \code{processor.py}, které ji parsují do seznamu objektů \code{SuggestedCommentDTO} a uloží je do databáze jako instance Django modelu \code{SuggestedComment}.
+
+V případě selhání kteréhokoli kroku, například nedostupnosti LLM serveru, chyby při parsování odpovědi nebo překročení časového limitu, je úloha označena jako neúspěšná a do databáze se nic neukládá.
+
+% TODO:
+\TODO{Vložit obrázek -- sekvenční diagram průběhu asynchronní úlohy od spuštění až po uložení návrhů do databáze}
+
+\endinput
