@@ -1,0 +1,24 @@
+\subsection{Integrace do evaluačního procesu}
+\label{subsec:implementation-pipeline}
+
+Při odevzdání řešení studentem systém Kelvin spustí evaluační job zajišťující kompilaci, automatické testy a celkové provedení učitelem vytvořené pipeline pro danou úlohu.
+Tento job je z pohledu studenta synchronní: student vidí, že evaluace probíhá, a může čekat na zobrazení jejích výsledků.
+
+Souběžně se spuštěním evaluačního jobu je také spuštěn modul LLM analýzy.
+Hlavním důvodem, proč mohou oba procesy běžet paralelně, je skutečnost, že LLM analýza v aktuální době nevyžaduje výsledky evaluace jako přídavný vstup.
+Ke své práci potřebuje výhradně zdrojové soubory studenta, které jsou dostupné okamžitě po odevzdání.
+
+Výsledky LLM analýzy jsou navíc určeny pouze učiteli, takže student na ně nemusí čekat ani z hlediska uživatelského rozhraní.
+
+Začlenění výsledků evaluace do vstupu LLM analýzy by naopak vyžadovalo sekvenční zpracování.
+Analýza by musela počkat na dokončení evaluační pipeline, než by mohla začít, což by prodloužilo dobu čekání na její výsledky pro studenta.
+Zároveň by to ale otevřelo prostor pro propracovanější analýzu, protože model by mohl pracovat i s výstupy kompilátoru, například s varováními nebo chybami nástroje Clang, a ve svých návrzích na ně přímo odkazovat.
+Toto rozšíření tak představuje přirozený směr dalšího rozvoje implementace.
+
+Analogií k tomuto přístupu je kontrola plagiátorství, která v systému Kelvin funguje rovněž asynchronně.
+Kontrola plagiátorství je spouštěna buď manuálně učitelem, nebo automaticky po uplynutí termínu odevzdání dané úlohy, a student na její výsledky nikdy nečeká.
+
+% TODO:
+\TODO{Vložit diagram souběžného spuštění evaluačního jobu a LLM analýzy při odevzdání}
+
+\endinput

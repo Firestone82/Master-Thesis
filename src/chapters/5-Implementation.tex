@@ -1,4 +1,29 @@
 \chapter{Impementace do systému Kelvin}
 \label{ch:implementation}
 
+Předchozí kapitola~\ref{ch:selection} popsala výběr modelu, způsobu nasazení a promptovací strategie pro integraci LLM do systému Kelvin.
+Tato kapitola se věnuje samotné realizaci navrženého řešení: konkrétnímu způsobu začlenění LLM modulu do architektury systému, průběhu komunikace s jazykovým modelem, prezentaci výsledků učiteli v uživatelském rozhraní a evaluačnímu nástroji využitému pro ověření kvality jednotlivých konfigurací.
+
+% =============================================================
+\section{Backend}
+\label{sec:implementation-backend}
+
+Implementace LLM modulu na straně backendu byla realizována jako samostatná část Django aplikace (modul), která rozšiřuje systém Kelvin o nový asynchronní krok navazující vedle existující synchronní evaluaci odevzdání.
+Tato sekce popisuje integraci do evaluační pipeline, strukturu modulu, průběh asynchronní analýzy, konfiguraci jazykových modelů a způsob ukládání výsledků.
+
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-1-implementation-backend-pipeline}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-2-implementation-backend-module}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-3-implementation-backend-job}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-4-implementation-backend-config}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-5-implementation-backend-analyzer}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-6-implementation-backend-model}
+
+% =============================================================
+\section{Frontend}
+\label{sec:implementation-frontend}
+
+% =============================================================
+\section{Nástroj pro analýzu kvality promptů}
+\label{sec:implementation-tool}
+
 \endinput
