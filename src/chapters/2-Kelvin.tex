@@ -4,9 +4,49 @@
 Tato kapitola se věnuje školnímu systému Kelvin (\href{https://kelvin.cs.vsb.cz/}{https://kelvin.cs.vsb.cz/}), který slouží jako základní platforma pro odevzdávání a hodnocení programátorských úloh.
 Cílem kapitoly je přiblížit účel systému, jeho architekturu, způsob nasazení a především vývojová omezení, která významně ovlivnila návrh a implementaci řešení popsaného v této diplomové práci.
 
-\input{chapters/2-kelvin/2-1-kelvin-purpose}
-\input{chapters/2-kelvin/2-2-kelvin-architecture}
-\input{chapters/2-kelvin/2-3-kelvin-deployment}
-\input{chapters/2-kelvin/2-4-kelvin-development}
+% =============================================================
+\section{Účel systému}
+\label{sec:kelvin-purpose}
+
+Hlavním účelem systému Kelvin je podpora výuky, především programovacích předmětů v jazycích C, C++, Python nebo Rust, ale slouží také jako obecný systém pro odevzdávání úloh v dalších předmětech jakou jsou základy počítačové grafiky (ZPG), modelování v grafických aplikacích (MGA) a další.
+Systém poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh.
+Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim zpětnou vazbu a udělovat bodové hodnocení.
+Součástí systému jsou také moduly pro automatické přeložení odevzdaného kódu, jeho spuštění a ověření výstupů.
+
+\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-1-kelvin-purpose-workflow}
+\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-2-kelvin-purpose-assessments}
+\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-3-kelvin-purpose-features}
+
+% =============================================================
+\section{Architektura systému}
+\label{sec:kelvin-architecture}
+
+Systém Kelvin je realizován jako webová aplikace se standardním třívrstvým uspořádáním: databázová vrstva, backendová aplikační logika a frontendová prezentační vrstva.
+Komunikace mezi frontendem a backendem probíhá přes REST API (Representational State Transfer, Application Programming Interface)\@.
+
+\input{chapters/2-kelvin/2-2-kelvin-architecture/2-2-1-kelvin-architecture-backend}
+\input{chapters/2-kelvin/2-2-kelvin-architecture/2-2-2-kelvin-architecture-api}
+\input{chapters/2-kelvin/2-2-kelvin-architecture/2-2-3-kelvin-architecture-frontend}
+
+% =============================================================
+\section{Nasazení a provoz systému}
+\label{sec:kelvin-deployment}
+
+\input{chapters/2-kelvin/2-3-kelvin-deployment/2-3-1-kelvin-deployment-docker}
+
+% =============================================================
+\section{Vývojová omezení a proces}
+\label{sec:kelvin-development}
+
+Systém Kelvin vznikl původně jako školní projekt studenta Daniela Trnky\footnote[1]{https://github.com/trnkal}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
+Tento způsob vývoje bez jednotné dlouhodobé architektonické vize vedl ke vzniku technického dluhu, který se v systému projevuje například ve formě dlouhých a obtížně čitelných souborů, nedostatečného nebo chybějícího typování a míchání různých programátorských přístupů.
+Před přidáním nové aplikační logiky je proto často nutné provést částečný refaktoring existujícího kódu, aby byla zachována alespoň základní úroveň čitelnosti a udržovatelnosti systému.
+
+Vývoj systému Kelvin je dále ovlivněn několika zásadními omezeními, která vyplývají jak z jeho historického vývoje, tak z organizačních podmínek jeho správy a údržby.
+Tato omezení mají přímý dopad na návrh i samotnou implementaci řešení popsaného v této diplomové práci.
+
+\input{chapters/2-kelvin/2-4-kelvin-development/2-4-1-kelvin-development-atomicity}
+\input{chapters/2-kelvin/2-4-kelvin-development/2-4-2-kelvin-development-migration}
+\input{chapters/2-kelvin/2-4-kelvin-development/2-4-3-kelvin-development-organization}
 
 \endinput

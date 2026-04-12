@@ -1,0 +1,25 @@
+\subsection{Backend}
+\label{subsec:kelvin-backend}
+
+Backend systému je implementován v programovacím jazyce Python s využitím webového frameworku Django.
+Django zajišťuje správu databázových modelů prostřednictvím ORM (Object-Relational Mapping), autentizaci a autorizaci uživatelů, správu souborů (odevzdaných zdrojových kódů a testovacích dat) a základní routování požadavků.
+
+Použitým databázovým systémem je PostgreSQL, přičemž veškerý přístup k němu probíhá výhradně přes Django ORM\@.
+Soubory zdrojových kódů jsou ukládány na souborový uložišti serveru, přičemž v databázi jsou uloženy pouze metadata (cesty, časové razítka, vazby na studenty a úlohy).
+
+\subsubsection*{Evaluační pipeline}
+\label{subsubsec:kelvin-evaluation-pipeline}
+
+Stávající evaluační pipeline systému zajišťuje kompilaci odevzdaného zdrojového kódu a spuštění automatických testů v izolovaném prostředí.
+Izolace je realizována prostřednictvím kontejnerů (Docker) a omezení přístupu k systémovým zdrojům, což chrání infrastrukturu před škodlivým nebo nekorektním kódem a současně garantuje jednotné podmínky evaluace pro všechny studenty.
+Vyhodnocení je implementováno jako asynchronní úloha z pohledu aplikační architektury, nicméně z hlediska uživatelského chování se jedná o proces synchronní, protože student čeká na jeho dokončení před zobrazením výsledků testů.
+
+Zařazení dalších výpočetně náročných operací přímo do této pipeline, například generování analýzy pomocí velkých jazykových modelů, by vedlo k prodloužení doby čekání na výsledek.
+I pokud by byly tyto operace realizovány technicky asynchronně, jejich začlenění do stejného evaluačního procesu by mělo přímý dopad na vnímanou latenci systému uživatelem.
+
+Vedle evaluační pipeline systém Kelvin provádí rovněž kontrolu plagiátorství.
+Ta je ze své podstaty vázána na celou skupinu odevzdání, nikoli na jedno konkrétní, a je proto spouštěna buď manuálně učitelem, nebo automaticky po vypršení termínu odevzdání dané úlohy.
+Po spuštění systém porovná každé odevzdání s každým ostatním ve skupině za využití nástrojů DOLOS~\cite{dolos} a MOSS~\cite{moss}.
+Díky tomuto uspořádání kontrola plagiátorství nijak neovlivňuje dobu čekání studentů na výsledky automatických testů.
+
+\endinput
