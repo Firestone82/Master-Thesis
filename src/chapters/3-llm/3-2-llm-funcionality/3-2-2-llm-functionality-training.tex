@@ -20,7 +20,7 @@ V každém trénovacím kroku model zpracuje dávku sekvencí, vypočítá ztrá
 Tyto gradienty jsou poté použity optimalizačním algoritmem, typicky variantou \textit{Adam}, k aktualizaci vah modelu směrem k nižší ztrátě.
 
 Předtrénování vyžaduje enormní výpočetní prostředky.
-Trénování modelů řádu desítek miliard parametrů probíhá na clusterech stovek až tisíců GPU po dobu týdnů až měsíců.
+Trénování modelů řádu desítek miliard parametrů probíhá na clusterech stovek až tisíců GPU po dobu týdnů až měsíců\cite{brown-gpt3}.
 Výsledkem je tzv.\ základní model (base model), který disponuje širokými jazykovými schopnostmi, avšak neumí přirozeně reagovat na pokyny uživatele.
 Jeho tendencí je pouze pokračovat v textu na základě pravděpodobnostního rozdělení naučeného z trénovaných dat.
 
@@ -46,8 +46,8 @@ Následně je hlavní model optimalizován pomocí algoritmu posilovaného učen
 Současně je udržována blízkost k původnímu SFT modelu pomocí penalizace za příliš velké odchylky (KL divergence).
 Tím se zabraňuje tzv.\ reward hackingu, tedy situaci, kdy by model nalezl způsob, jak dosáhnout vysoké odměny bez skutečného zlepšení kvality odpovědí.
 
-Výsledkem celého tří krokového procesu je model, jehož výstupy jsou věcnější, bezpečnější a lépe odpovídají záměru uživatele.
 Celý proces trénování a následného nasazení modelu je schematicky znázorněn na \figref[obrázku]{fig:llm-training-pipeline}.
+Výsledkem celého tří krokového procesu je model, jehož výstupy jsou věcnější, bezpečnější a lépe odpovídají záměru uživatele.
 
 \begin{figure}[ht]
     \centering

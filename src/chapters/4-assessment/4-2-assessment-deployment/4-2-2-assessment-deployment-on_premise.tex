@@ -49,6 +49,8 @@ Nástroj \textit{vLLM} je vhodný pro serverové prostředí s GPU akcelerací a
 Nástroj \textit{Ollama} poskytuje kompromis -- jednoduché nasazení s možností integrace prostřednictvím API\@.
 Knihovna \textit{Hugging Face Transformers} je vhodná pro vývoj a testování modelů, ale pro produkční nasazení může být méně optimalizovaná než specializované nástroje.
 
+Teoreticky lze pomocí částečného offloadingu vah do operační paměti (RAM) provozovat i výrazně větší modely, které by se do VRAM nevešly, avšak inference takových modelů je neprakticky pomalá pro běžné nasazení.
+
 \subsubsection*{Hardwarové nároky}
 \label{subsubsec:deployment-on-premise-hardware}
 
@@ -57,7 +59,7 @@ Inference jazykových modelů je výpočetně náročná operace (viz~\secref{su
 Přibližné nároky na hardware pro různé velikosti modelů jsou uvedeny v \tabref{tab:memory-requirements}.
 
 Rozdíl ve výkonu mezi CPU a GPU je při inferenci značný.
-Při testování nástroje Ollama na lokálním stroji bylo zpracování zdrojového souboru o 107 řádcích metodou one-shot dokončeno za \textbf{7,5 s} při využití GPU (NVIDIA GeForce RTX 4070 Super), zatímco na procesoru AMD Ryzen 7~3800X (8 jader) trval stejný úkon \textbf{145 s} -- tedy přibližně 19$\times$ déle.
+Při testování nástroje Ollama na lokálním stroji bylo zpracování zdrojového souboru o 107 řádcích metodou one-shot dokončeno za \textbf{7,5 s} při využití GPU (NVIDIA GeForce RTX 4070 Super), zatímco na procesoru AMD Ryzen 7~3800X (8 jader) trval stejný úkon \textbf{145 s}, tedy přibližně 19$\times$ déle.
 Odezva na GPU je tak v jisté míře srovnatelná s komerčními cloudovými API, zatímco čistě CPU inference je pro interaktivní použití obtížně přijatelná.
 
 \subsubsection*{Limity}
