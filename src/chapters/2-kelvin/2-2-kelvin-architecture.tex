@@ -25,7 +25,7 @@ I pokud by byly tyto operace realizovány technicky asynchronně, jejich začlen
 
 Vedle evaluační pipeline systém Kelvin provádí rovněž kontrolu plagiátorství.
 Ta je ze své podstaty vázána na celou skupinu odevzdání, nikoli na jedno konkrétní, a je proto spouštěna buď manuálně učitelem, nebo automaticky po vypršení termínu odevzdání dané úlohy.
-Po spuštění systém porovná každé odevzdání s každým ostatním ve skupině za využití nástrojů DOLOS a MOSS\@.
+Po spuštění systém porovná každé odevzdání s každým ostatním ve skupině za využití nástrojů DOLOS~\cite{dolos} a MOSS~\cite{moss}.
 Díky tomuto uspořádání kontrola plagiátorství nijak neovlivňuje dobu čekání studentů na výsledky automatických testů.
 
 \subsection{API vrstva}
@@ -45,8 +45,9 @@ Django šablony jsou stále přítomny v systému u statičtějších částí r
 Druhou vrstvou je \textit{Svelte} -- moderní JavaScript framework pro tvorbu reaktivních komponent na straně klienta.
 V průběhu vývoje systému Kelvin byl Svelte adoptován jako primární framework pro dynamické části rozhraní, zejména pro zobrazení a přidávání komentářů ke zdrojovému kódu.
 Svelte komponenty jsou v produkci kompilovány do čistého JavaScriptu bez runtime knihovny, což zajišťuje rychlé načítání.
+Tato vrstva je však již považována za zastaralou a nové funkcionality v ní nejsou vyvíjené.
 
-Třetí a v současnosti preferovanou vrstvou je \textit{Vue.js} -- progresivní JavaScript framework, na který systém v současné době systém migruje.
+Třetí a v současnosti preferovanou vrstvou je \textit{Vue.js} -- JavaScript framework, na který systém aktivně migruje.
 Vue.js bylo zvoleno jako nástupce Svelte zejména z důvodu větší komunity, lepší dlouhodobé podpory a nižší vstupní bariéry pro nové přispívatele.
 
 Výsledkem tohoto historického vývoje je stav, kdy se ve zdrojovém kódu systému souběžně nacházejí všechny tři frontendové technologie.

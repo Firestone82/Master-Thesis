@@ -61,14 +61,14 @@ Ceny jsou uváděny za 1M (jeden milion) tokenů.
 %     Průměr vstupních tokenů:  9 053  (min: 7 247, max: 9 687)
 %     Průměr výstupních tokenů: 5 149  (min: 3 863, max: 6 404)
 %
-%   One-shot přístup (1 krok: One-shot analysis):
+%   Zero-shot přístup (1 krok: Zero-shot analysis):
 %     Průměr vstupních tokenů:  2 043  (min:   891, max: 4 508)
 %     Průměr výstupních tokenů:   501  (min:   305, max:   590)
 % ===================================================================
 \newcommand{\chainInToks}{9053}
 \newcommand{\chainOutToks}{5149}
-\newcommand{\oneshotInToks}{2043}
-\newcommand{\oneshotOutToks}{501}
+\newcommand{\zeroshotInToks}{2043}
+\newcommand{\zeroshotOutToks}{501}
 
 % Výpočet nákladů: #1 = cena vstupu ($/1M tokenů), #2 = cena výstupu ($/1M tokenů)
 %                  #3 = počet vstupních tokenů,    #4 = počet výstupních tokenů
@@ -89,13 +89,13 @@ Ceny jsou uváděny za 1M (jeden milion) tokenů.
   \computecost{#1}{#2}{\chainInToks}{\chainOutToks}%
 }
 
-% Výpočet nákladů pro One-shot
+% Výpočet nákladů pro Zero-shot
 % #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
-\newcommand{\computeCostOS}[2]{%
-  \computecost{#1}{#2}{\oneshotInToks}{\oneshotOutToks}%
+\newcommand{\computeCostZS}[2]{%
+  \computecost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}%
 }
 
-Pro orientační porovnání nákladů byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a one-shot s jedním voláním.
+Pro orientační porovnání nákladů byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a zero-shot s jedním voláním.
 Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
 Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
 
@@ -105,34 +105,42 @@ Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
         \begin{tabular}{lllll}
             \toprule
             & & & \multicolumn{2}{c}{\textbf{Náklady na odevzdání}} \\
-            \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-thought (\$)} & \textbf{one-shot (\$)} \\
+            \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-thought (\$)} & \textbf{zero-shot (\$)} \\
             \midrule
-                GPT-5.4~\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{15.00}$ & $\sim\computeCostOS{2.50}{15.00}$ \\
-                GPT-5.4-mini~\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostOS{0.75}{4.50}$ \\
-                GPT-5.4-nano~\cite{gpt-5.4-nano}                     & 0.20  & 1.25   & $\sim\computeCostCOT{0.20}{1.25}$  & $\sim\computeCostOS{0.20}{1.25}$ \\
+                GPT-5.4~\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{15.00}$ & $\sim\computeCostZS{2.50}{15.00}$ \\
+                GPT-5.4-mini~\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostZS{0.75}{4.50}$ \\
+                GPT-5.4-nano~\cite{gpt-5.4-nano}                     & 0.20  & 1.25   & $\sim\computeCostCOT{0.20}{1.25}$  & $\sim\computeCostZS{0.20}{1.25}$ \\
             \midrule
-                Claude 4.6 Opus~\cite{claude-opus-4.6}               & 5.00  & 25.00  & $\sim\computeCostCOT{5.00}{25.00}$ & $\sim\computeCostOS{5.00}{25.00}$ \\
-                Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & 3.00  & 15.00  & $\sim\computeCostCOT{3.00}{15.00}$ & $\sim\computeCostOS{3.00}{15.00}$ \\
-                Claude 3.5 Haiku~\cite{claude-3.5}                   & 0.80  & 4.00   & $\sim\computeCostCOT{0.80}{4.00}$  & $\sim\computeCostOS{0.80}{4.00}$ \\
-                Claude 3.0 Haiku~\cite{claude-3}                     & 0.25  & 1.25   & $\sim\computeCostCOT{0.25}{1.25}$  & $\sim\computeCostOS{0.25}{1.25}$ \\
+                Claude 4.6 Opus~\cite{claude-opus-4.6}               & 5.00  & 25.00  & $\sim\computeCostCOT{5.00}{25.00}$ & $\sim\computeCostZS{5.00}{25.00}$ \\
+                Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & 3.00  & 15.00  & $\sim\computeCostCOT{3.00}{15.00}$ & $\sim\computeCostZS{3.00}{15.00}$ \\
+                Claude 3.5 Haiku~\cite{claude-3.5}                   & 0.80  & 4.00   & $\sim\computeCostCOT{0.80}{4.00}$  & $\sim\computeCostZS{0.80}{4.00}$ \\
+                Claude 3.0 Haiku~\cite{claude-3}                     & 0.25  & 1.25   & $\sim\computeCostCOT{0.25}{1.25}$  & $\sim\computeCostZS{0.25}{1.25}$ \\
             \midrule
-                Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostOS{2.00}{12.00}$ \\
-                Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostOS{0.25}{1.50}$ \\
-                Gemini 3 Flash~\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostOS{0.50}{3.00}$ \\
-                Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostOS{0.30}{2.50}$ \\
+                Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostZS{2.00}{12.00}$ \\
+                Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostZS{0.25}{1.50}$ \\
+                Gemini 3 Flash~\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostZS{0.50}{3.00}$ \\
+                Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostZS{0.30}{2.50}$ \\
             \bottomrule
         \end{tabular}
     }
-    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání. Náklady jsou vypočítány pro dva přístupy: chain-of-thought (CoT) a one-shot (OS), na základě průměrného počtu vstupních a výstupních tokenů.}
+    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání. Náklady jsou vypočítány pro dva přístupy: chain-of-thought (CoT) a zero-shot (ZS), na základě průměrného počtu vstupních a výstupních tokenů.}
     \label{tab:cloud-api-costs}
 \end{table}
 
-Z pohledu nákladů vycházejí jako nejvýhodnější modely GPT-5.4-nano a Claude 3.0 Haiku, u kterých cena za jedno odevzdání při one-shot přístupu klesá pod \$0,002.
-Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější -- modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vycházejí přibližně na \$0,028--\$0,030 za odevzdání, oproti méně než \$0,004 při one-shot přístupu.
+Z pohledu nákladů vycházejí jako nejvýhodnější modely GPT-5.4-nano a Claude 3.0 Haiku, u kterých cena za jedno odevzdání při zero-shot přístupu klesá pod \$0,002.
+Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější, protože modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vycházejí přibližně na \$0,028 až \$0,030 za odevzdání, oproti méně než \$0,004 při zero-shot přístupu.
 Výjimkou je Gemini 3.1 Flash-Lite, který i při chain-of-thought přístupu dosahuje nákladů okolo \$0,01 za odevzdání.
 
 Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů přibližně \$0,174.
 Pro rozsáhlé školní nasazení jsou tyto modely výrazně nákladnější.
-Konkrétní volba modelu tak bude záviset na výsledku srovnávacího testování kvality výstupů -- z~čistě cenového hlediska vycházejí nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky bude dostatečná.
+Konkrétní volba modelu tak bude záviset na výsledku srovnávacího testování kvality výstupů, přičemž z čistě cenového hlediska vycházejí nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky bude dostatečná.
+
+\subsubsection*{Odhad celkových nákladů}
+\label{subsubsec:deployment-cloud-total-costs}
+
+Pro ilustraci reálných nákladů lze uvést příklad předmětu UPR (Úvod do programování), kde přibližně 500 studentů odevzdá v průměru 10 úloh za semestr.
+Při použití modelu GPT-5.4-nano s zero-shot přístupem by náklady na vyhodnocení jednoho odevzdání činily přibližně \$0,001, tedy celkové náklady za semestr by dosáhly přibližně \$5 (5~000 odevzdání).
+U modelu střední třídy, jako je Claude~3.5 Haiku s chain-of-thought přístupem by náklady vzrostly na přibližně \$150 za semestr.
+Přesné náklady však bude možné stanovit až na základě pilotního nasazení a vyhodnocení skutečných statistik provozu, což je věcí dalšího rozvoje systému.
 
 \endinput
