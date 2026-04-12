@@ -1,7 +1,7 @@
 \chapter{Impementace do systému Kelvin}
 \label{ch:implementation}
 
-Předchozí kapitola~\ref{ch:selection} popsala výběr modelu, způsobu nasazení a promptovací strategie pro integraci LLM do systému Kelvin.
+Předchozí \secref[kapitola]{ch:selection} popsala výběr modelu, způsobu nasazení a promptovací strategie pro integraci LLM do systému Kelvin.
 Tato kapitola se věnuje samotné realizaci navrženého řešení: konkrétnímu způsobu začlenění LLM modulu do architektury systému, průběhu komunikace s jazykovým modelem, prezentaci výsledků učiteli v uživatelském rozhraní a evaluačnímu nástroji využitému pro ověření kvality jednotlivých konfigurací.
 
 % =============================================================
@@ -22,7 +22,7 @@ Tato sekce popisuje integraci do evaluační pipeline, strukturu modulu, průbě
 \section{Frontend}
 \label{sec:implementation-frontend}
 
-Frontendová část LLM modulu byla implementována ve Vue.js v souladu s probíhající migrací systému Kelvin na tuto technologii, jak bylo popsáno v sekci~\ref{sec:kelvin-architecture}.
+Frontendová část LLM modulu byla implementována ve Vue.js v souladu s probíhající migrací systému Kelvin na tuto technologii, jak bylo popsáno v \secref[sekci]{sec:kelvin-architecture}.
 Navržené rozhraní respektuje existující vizuální styl systému a přirozeně rozšiřuje stávající zobrazení komentářů ke zdrojovému kódu.
 
 \input{chapters/5-implementation/5-2-implementation-frontend/5-2-1-implementation-frontend-display}
