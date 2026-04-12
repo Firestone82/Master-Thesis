@@ -22,8 +22,22 @@ Tato sekce popisuje integraci do evaluační pipeline, strukturu modulu, průbě
 \section{Frontend}
 \label{sec:implementation-frontend}
 
+Frontendová část LLM modulu byla implementována ve Vue.js v souladu s probíhající migrací systému Kelvin na tuto technologii, jak bylo popsáno v sekci~\ref{sec:kelvin-architecture}.
+Navržené rozhraní respektuje existující vizuální styl systému a přirozeně rozšiřuje stávající zobrazení komentářů ke zdrojovému kódu.
+
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-1-implementation-frontend-display}
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-2-implementation-frontend-interaction}
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-3-implementation-frontend-summary}
+
 % =============================================================
 \section{Nástroj pro analýzu kvality promptů}
 \label{sec:implementation-tool}
+
+Pro účely systematického ověření kvality různých kombinací promptů, modelů a promptovacích technik byla v rámci této práce vytvořena samostatná evaluační aplikace.
+Tato aplikace nebyla určena pro produkční provoz v systému Kelvin, ale sloužila výhradně jako výzkumný nástroj umožňující strukturovaný sběr zpětné vazby od učitelů a objektivní porovnání zvolených konfigurací.
+
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-1-implementation-tool-purpose}
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-2-implementation-tool-functionality}
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-3-implementation-tool-results}
 
 \endinput
