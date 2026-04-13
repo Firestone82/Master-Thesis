@@ -1,0 +1,18 @@
+\chapter{Závěr}
+\label{ch:conclusion}
+
+Tato diplomová práce se zabývala návrhem, implementací a ověřením modulu pro automatickou analýzu studentských zdrojových kódů pomocí velkých jazykových modelů v systému Kelvin.
+Cílem bylo poskytnout vyučujícím podpůrný nástroj, který jim pomůže rychleji se zorientovat v odevzdaných řešeních a upozorní na problematická místa v kódu, aniž by nahrazoval jejich odborný úsudek.
+
+Na základě analýzy dostupných modelů, způsobů nasazení a promptovacích strategií bylo zvoleno on-premise nasazení modelu Qwen3-Coder:30B prostřednictvím nástroje Ollama, který zajišťuje ochranu studentských dat a nulové marginální náklady na zpracování odevzdání.
+Implementace zahrnuje backendový Django modul provádějící asynchronní LLM analýzu souběžně s evaluační pipeline a frontendové Vue.js komponenty, které učiteli zobrazuje navrhované komentáře přímo u zdrojového kódu s možností jejich přijetí, úpravy nebo zamítnutí, či umožňuje upravovat celkové prompty používané pro generování komentářů.
+Studentovi se zobrazují pouze komentáře explicitně schválené učitelem, čímž je zajištěna plná kontrola pedagoga nad publikovanou zpětnou vazbou.
+
+Experimentální měření potvrdilo, že chain-of-thought přístup se třemi kroky analýzy produkuje pečlivěji ověřené nálezy díky filtraci falešně pozitivních zjištění, zatímco one-shot přístup je přibližně 8,5krát rychlejší a vhodnější pro cloudové API z hlediska nákladů.
+Zpětná vazba získaná od učitelů prostřednictvím samostatné evaluační aplikace na reálných studentských datech z předmětu UPR potvrdila schopnost zvoleného modelu identifikovat relevantní problémy ve studentských řešeních.
+Hlavním omezením zůstává pravděpodobnostní povaha jazykových modelů, které neposkytují formální záruku správnosti a jejichž výstupy mohou obsahovat nepřesnosti.
+
+Z pohledu dalšího rozvoje se nabízí především začlenění výsledků evaluační pipeline do vstupu LLM analýzy, které by modelu umožnilo pracovat i s výstupy kompilátoru, a využití shromážděných hodnocení od učitelů pro fine-tuning modelu za účelem zvýšení relevance generovaných komentářů.
+Přínosné by rovněž bylo rozsáhlejší pilotní nasazení v produkčním provozu a dlouhodobější vyhodnocení skutečného dopadu na efektivitu hodnocení a kvalitu zpětné vazby poskytované studentům.
+
+\endinput
