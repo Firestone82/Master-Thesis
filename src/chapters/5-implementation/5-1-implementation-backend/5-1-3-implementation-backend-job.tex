@@ -9,7 +9,7 @@ Každý soubor je převeden na objekt \code{EmbeddedFile}, který obsahuje relat
 Tento formát umožňuje modelu pracovat s plným kontextem souboru a současně mu poskytuje strukturovaná metadata.
 
 Následně je z databáze načten prompt definovaný pro danou úlohu v její konfiguraci.
-Prompty jsou uloženy jako samostatné záznamy a lze je upravovat prostřednictvím administračního rozhraní systému Kelvin, aniž by bylo nutné nasadit novou verzi aplikace.
+Prompty jsou uloženy jako samostatné záznamy a lze je upravovat prostřednictvím administračního rozhraní systému Kelvin, aniž by bylo nutné nasadit novou verzi aplikace (viz \secref{subsec:implementation-prompts}).
 Konkrétní režim je opět načtený z konfigurace a může nabývat hodnot \code{CHAIN\_OF\_THOUGHT}, \code{ZERO\_SHOT} nebo \code{THINKING} (viz \secref{subsec:prompts-strategies}).
 
 Poté je vytvořena instance třídy \code{Analyzer} s klientem knihovny \code{openai} poskytnutým modulem \code{openai\_config.py}.
