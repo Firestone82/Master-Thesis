@@ -1,28 +1,21 @@
 \subsection{Typy statických analyzátorů}
 \label{subsec:static-types}
 
-Pod pojmem statický analyzátor se skrývá široká škála nástrojů, které se liší hloubkou analýzy, rozsahem zachycených problémů a obtížností integrace.
-Pro porovnání s LLM je relevantní rozlišit tři hlavní úrovně.
+Pod pojmem statický analyzátor se skrývá široká škála nástrojů, které se liší hloubkou analýzy a rozsahem zachycených problémů.
+Pro účely srovnání s LLM postačí rozlišit tři základní úrovně, od nejjednodušších kontrol až po rozsáhlé enterprise systémy.
 
-\begin{enumerate}
-    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy a představuje první automatickou vrstvu kontroly kódu.
-    Kompilátory jako GCC nebo Clang\footnote{\url{https://clang.llvm.org/}} generují při překladu varování na potenciálně problematické konstrukce.
-    Typicky jde o detekci nevyužitých proměnných, potenciálně neinicializovaných proměnných nebo třeba porušení typové bezpečnosti.
-    \textit{Clang} navíc nabízí rozšířenou sadu upozornění a statický analyzátor, který dokáže sledovat toky dat a detekovat úniky paměti v jednodušších případech.
+\begin{itemize}
+    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy.
+    Kompilátory jako GCC nebo Clang\footnote{\url{https://clang.llvm.org/}} při překladu upozorňují na zjevné problémy, například nevyužité či neinicializované proměnné.
 
-    \item \textbf{Lintery a pokročilé statické analyzátory} rozšiřují základní kontrolu o rozsáhlejší sady pravidel zaměřených na dobrou programátorskou praxi, bezpečnost nebo konkrétní kódovací standardy.
-    Pro C++ jsou nejrozšířenějšími nástroji \texttt{clang-tidy}\footnote{\url{https://clang.llvm.org/extra/clang-tidy/}} a \texttt{cppcheck}\footnote{\url{https://cppcheck.sourceforge.io/}}.
-    \texttt{Clang-tidy} je modulární nástroj integrovaný do ekosystému LLVM, který umožňuje aplikovat kontroly z kategorií jako modernize (doporučení přechodu na moderní C++), readability (zlepšení čitelnosti), bugprone (detekce vzorů vedoucích k chybám) nebo cert (dodržování bezpečnostních doporučení standardu CERT).
-    \texttt{Cppcheck} je přenositelný analyzátor, který se zaměřuje na detekci skutečných chyb (přístupu mimo meze, použití neinicializovaných proměnných, duplicitního kódu nebo úniku paměti).
+    \item \textbf{Lintery a pokročilé analyzátory} rozšiřují tuto vrstvu o sady pravidel pro dobré programátorské zvyky, bezpečnost a styl.
+    Typickými zástupci pro jazyk C++ jsou \texttt{clang-tidy}\footnote{\url{https://clang.llvm.org/extra/clang-tidy/}} a \texttt{cppcheck}\footnote{\url{https://cppcheck.sourceforge.io/}}.
 
-    \item \textbf{Enterprise analyzátory a nástroje pro bezpečnostní analýzu} jsou určeny pro rozsáhlé projekty a komplexní bezpečnostní požadavky.
-    SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}} kombinuje statickou analýzu s průběžným sledováním trendů kvality kódu, tzv.\ \textit{technical debt} a umožňuje nastavovat prahy kvality (quality gates) blokující nasazení kódu, který nesplňuje definovaná kritéria.
-    Pro akademické prostředí školního systému Kelvin jsou enterprise analyzátory předimenzované.
-    Přidaná hodnota vůči linterům je zřejmá až při správě větších projektů s více přispěvateli.
-\end{enumerate}
+    \item \textbf{Enterprise nástroje}, například SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}}, propojují statickou analýzu s dlouhodobým sledováním kvality kódu.
+    Pro akademické prostředí systému Kelvin jsou však předimenzované.
+\end{itemize}
 
-% TODO: MKrumnikl, 3 hours ago
-%  aktuálně na mně sekce o statických analyzátorech působí jako odbočka od hlavního tématu. Určitě tu patří, ale možná bych zmenšil rozsah, který tomu věnujete a primárně se zaměřil na rozdíly, resp. přínos LLM vůči analyzátorům, což je náplní další sekce, která bych řekl je víceméně OK, ale zde se mi zdá, že možná zbytečně detailně rozepisujete jednotlivé typy analyzátorů
-\TODO{Možná zkrátit a zjednodušit, aby to nebylo příliš technické.}
+Ze všech uvedených kategorií jsou pro školní systém relevantní především lintery, protože nabízejí vyváženou kombinaci pokrytí a provozní jednoduchosti.
+Samotné rozdíly mezi těmito přístupy a velkými jazykovými modely jsou podrobněji rozebrány v následující sekci.
 
 \endinput

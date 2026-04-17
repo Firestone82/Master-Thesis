@@ -2,14 +2,14 @@
 \label{subsec:llm-tokens-parameters-context}
 
 Aby bylo možné text zpracovat neuronovou sítí, musí být nejprve převeden do numerické reprezentace.
-Tento proces se skládá ze dvou kroků: tokenizace a embeddingu.
+Tento proces se skládá ze dvou kroků: tokenizace a embedding.
 
 \subsubsection*{Tokenizace}
 \label{subsubsec:tokenization}
 
 Tokenizace rozdělí vstupní text na diskrétní jednotky zvané tokeny, přičemž každý token je přiřazen číselnému identifikátoru ze slovníku modelu.
 Moderní tokenizace nepracují na úrovni slov ani jednotlivých písmen, ale využívají metodu \textit{subword tokenizace}.
-Nejrozšířenějším algoritmem je Byte Pair Encoding (BPE)\cite{sennrich-bpe}, který iterativně slučuje nejčastěji se vyskytující páry bajtů nebo znaků až do dosažení požadované velikosti slovníku.
+Nejrozšířenějším algoritmem je Byte Pair Encoding (BPE)~\cite{sennrich-bpe}, který iterativně slučuje nejčastěji se vyskytující páry bajtů nebo znaků až do dosažení požadované velikosti slovníku.
 
 Výsledkem je, že běžná anglická slova jsou zpravidla zakódována jako jeden token, méně obvyklá slova jako více tokenů.
 Ve zdrojovém kódu jsou klíčová slova programovacích jazyků obvykle jednotlivými tokeny, delší identifikátory jsou rozděleny (viz \figref{fig:tokenization-example}).
@@ -21,12 +21,12 @@ Ve zdrojovém kódu jsou klíčová slova programovacích jazyků obvykle jednot
         Tokeny:  ['std', '::', 'vector', '<', 'int', '>', ' data',
                    ' =', ' {', '1', ',', ' 2', ',', ' 3', '};']
     \end{verbatim}
-    \caption{Příklad tokenizace výrazu v jazyce C++}
+    \caption{Příklad tokenizace výrazu v jazyce C++.}
     \label{fig:tokenization-example}
 \end{figure}
 
 Z pohledu systému Kelvin má tokenizace přímý praktický dopad.
-Podle dokumentace OpenAI platí jako orientační pravidlo, že jeden token odpovídá přibližně čtyřem znakům anglického textu \cite{openai-tokenizer}.
+Podle dokumentace OpenAI platí jako orientační pravidlo, že jeden token odpovídá přibližně čtyřem znakům anglického textu~\cite{openai-tokenizer}.
 Zdrojový kód je však tokenizován méně efektivně než přirozený jazyk, protože obsahuje speciální znaky, operátory a delší identifikátory, které bývají rozděleny do více tokenů.
 Počet tokenů zdrojového kódu je proto zpravidla vyšší než počet jeho slov.
 Pro kód s dlouhými identifikátory a hustou syntaxí může být tento poměr ještě výraznější.
@@ -39,8 +39,8 @@ Výsledný vektor $\mathbf{e}_t \in \mathbb{R}^d$ má typicky 768 až 8~192 dime
 Embedding vrstva je trénovaná společně se zbytkem modelu a kóduje sémantické a syntaktické vlastnosti tokenů: tokeny s podobnou funkcí nebo kontextem mají v tomto prostoru vysokou kosinovou podobnost.
 
 Protože Transformer zpracovává tokeny paralelně bez pořadí, je k embeddingu přidáno \textit{poziční kódování} nesoucí informaci o pozici tokenu v sekvenci.
-Původní Transformer\cite{vaswani-attention} použil deterministické sinusové funkce.
-Ale moderní modely (LLaMA, Qwen a další) využívají \textit{rotační poziční kódování} (RoPE), které kóduje relativní vzdálenosti tokenů přímo do výpočtu attention a lépe generalizuje na kontexty delší, než model viděl při trénování.
+Původní Transformer použil deterministické sinusové funkce~\cite{vaswani-attention}.
+Ale moderní modely (LLaMA, Qwen a další) využívají \textit{rotační poziční kódování} (RoPE), které kóduje relativní vzdálenosti tokenů přímo do výpočtu \textit{attention} a lépe generalizuje na kontexty delší, než model viděl při trénování.
 
 \subsubsection*{Parametry modelu}
 \label{subsubsec:model-parameters}

@@ -3,21 +3,17 @@
 
 Prompty jsou v souladu se strukturou popsanou v \secref[sekci]{subsec:prompts-structure} sestaveny z role modelu, pravidel pro výběr nálezů a pokynů pro formát výstupu.
 Jsou psány v angličtině, protože jazykové modely dosahují konzistentněji kvalitních výsledků s anglickými instrukcemi.
+Úplné znění všech promptů je uvedeno v příloze~\ref{ch:appendix-prompts}.
 
-\subsubsection*{One-shot prompt}
-\label{subsubsec:choice-prompts-oneshot}
+\subsubsection*{Prompt pro přístup \textit{zero-shot}}
+\label{subsubsec:choice-prompts-zeroshot}
 
-Při one-shot přístupu je analýza provedena jediným voláním modelu.
-Systémový prompt (\lstref{lst:prompt-oneshot}) definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi -- kombinuje analytickou část z \lstref{lst:prompt-cot-draft} s formátovacími pokyny z \lstref{lst:prompt-cot-review}.
+Při přístupu \textit{zero-shot} je analýza provedena jediným voláním modelu.
+Systémový prompt (viz \lstref[Prompt]{lst:prompt-oneshot}) definuje roli modelu, typy hledaných problémů a požadovaný formát odpovědi -- kombinuje analytickou část z \lstref[promptu]{lst:prompt-cot-draft} s formátovacími pokyny z \lstref[promptu]{lst:prompt-cot-review}.
 
-\subsubsection*{Chain-of-thought prompty}
+\subsubsection*{Prompty pro přístup \textit{chain-of-thought}}
 \label{subsubsec:choice-prompts-cot}
 
-Při chain-of-thought přístupu jsou volání modelu tři.
-Každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu.
-
-Každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu: hrubá analýza (\lstref{lst:prompt-cot-draft}), kritická revize (\lstref{lst:prompt-cot-critique}) a finální přehled (\lstref{lst:prompt-cot-review}).
-
-Úplné znění všech promptů je uvedeno v příloze~\ref{ch:appendix-prompts}.
+Při přístupu \textit{chain-of-thought} jsou volání modelu tři; každý krok má vlastní systémový prompt, který modelu zadává přesně ohraničenou úlohu: \textbf{hrubá analýza} (\lstref[prompt]{lst:prompt-cot-draft}), \textbf{kritická revize} (\lstref[prompt]{lst:prompt-cot-critique}) a \textbf{finální přehled} (\lstref[prompt]{lst:prompt-cot-review}).
 
 \endinput

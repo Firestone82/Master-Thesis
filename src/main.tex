@@ -22,24 +22,32 @@
 \usepackage{pgfmath}
 \usepackage{additionallst}
 \usepackage{minted}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{caption}
+\pgfplotsset{compat=1.18}
+
 
 % ==] Overrides and custom settings [==
 
 % Enable fixed-point arithmetic in TikZ for more accurate calculations (e.g., for cost computations)
 \usetikzlibrary{fpu}
 
+% Additional TikZ libraries used by architecture and sequence diagrams
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit}
+
 % Table of contents depth - TODO: Remove in final version!
-\setcounter{tocdepth}{3}
+%\setcounter{tocdepth}{3}
 
 % New type of table column with numbers aligned by decimal comma
 \newcolumntype{d}[1]{D{,}{,}{#1}}
 
 % Settings for minted code listings
-\setminted{fontsize=\fontsize{9}{11}\selectfont, baselinestretch=1, frame=lines, framesep=8pt, linenos, breaklines, ignorelexererrors=true}
+\setminted{fontsize=\fontsize{9}{11}\selectfont, baselinestretch=1.05, frame=single, framesep=6pt, rulecolor=\color{black!50}, linenos, numbersep=6pt, breaklines, breakanywhere=true, tabsize=4, ignorelexererrors=true}
 \renewcommand\listingscaption{Výpis}
 \renewcommand{\lstlistingname}{Prompt}
 
-% Tolerance settings for overfull boxes - TODO: Remove in final version!
+% Tolerance settings for overfull boxes
 \emergencystretch=3em
 \hfuzz=10pt
 
@@ -87,7 +95,6 @@
 \AddAcronym{GPU}{Graphics Processing Unit}
 \AddAcronym{GPT}{Generative Pre-trained Transformer}
 \AddAcronym{JSON}{JavaScript Object Notation}
-\AddAcronym{KL}{Kullback-Leibler}
 \AddAcronym{LSTM}{Long Short-Term Memory}
 \AddAcronym{PPO}{Proximal Policy Optimization}
 \AddAcronym{REST}{Representational State Transfer}
@@ -149,6 +156,5 @@
     {\sloppy
     \printbibliography[title={Literatura}, heading=bibintoc]
     }
-
 
 \end{document}

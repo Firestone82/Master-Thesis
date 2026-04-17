@@ -4,20 +4,19 @@
 Cloudové API představuje způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
 Systém Kelvin v tomto případě komunikuje s modelem prostřednictvím HTTP požadavků -- odešle vstupní data (prompt, zadání a zdrojový kód) na API endpoint poskytovatele a obdrží vygenerovanou odpověď.
 Veškerý výpočet probíhá na straně poskytovatele, takže na školní infrastruktuře není potřeba žádný specializovaný hardware.
-
 Mezi hlavní poskytovatele cloudových API pro velké jazykové modely patří:
+
 \begin{itemize}
     \item \textbf{OpenAI}~\cite{openai_api} -- modely řady GPT-5.4, GPT-5.4-mini a další varianty.
     \item \textbf{Anthropic}~\cite{anthropic_api} -- modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5.
     \item \textbf{Google}~\cite{google_vertex} -- modely Gemini dostupné prostřednictvím Google AI Studio nebo Vertex AI\@.
-    \item \textbf{Mistral AI}~\cite{mistral_api} -- modely Mistral Large a Mistral Nemo, přičemž některé jsou k dispozici i jako open-source ke stažení.
 \end{itemize}
 
 \subsubsection*{Hardwarové nároky}
 \label{subsubsec:deployment-cloud-hardware}
 
 Z pohledu systému Kelvin jsou hardwarové nároky pro použití cloudového API prakticky nulové.
-Na straně Kelvinu je potřeba pouze stabilní internetové připojení a server schopný zpracovávat HTTP požadavky.
+Na straně systému je potřeba pouze stabilní internetové připojení a server schopný zpracovávat HTTP požadavky.
 Školní infrastruktura, která leží na síti CESNET, tuto podmínku bez problémů splňuje.
 
 \subsubsection*{Limity}
@@ -38,7 +37,7 @@ Cloudové API zavádějí několik typů omezení, které je nutné při návrhu
     Podrobná analýza nákladů pro jednotlivé modely je uvedena níže.
 
     \item \textbf{Závislost na třetí straně} -- systém Kelvin se stává závislým na dostupnosti a spolehlivosti poskytovatele.
-    Výpadek služby, změna API rozhraní nebo ukončení podpory konkrétního modelu mohou narušit funkčnost celého systému.
+    Výpadek služby, změna API rozhraní nebo ukončení podpory konkrétního modelu mohou narušit funkčnost celého modulu a vyhlašovat systémové chyby.
 \end{enumerate}
 
 \subsubsection*{Ochrana dat}
@@ -95,9 +94,8 @@ Ceny jsou uváděny za 1M (jeden milion) tokenů.
   \computecost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}%
 }
 
-Pro orientační porovnání nákladů byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a zero-shot s jedním voláním.
+Pro orientační porovnání nákladů (viz \tabref{tab:cloud-api-costs}) byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a zero-shot s jedním voláním.
 Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
-Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
 
 \begin{table}[H]
     \centering
@@ -123,7 +121,7 @@ Výsledky jsou shrnuty v \tabref{tab:cloud-api-costs}.
             \bottomrule
         \end{tabular}
     }
-    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání. Náklady jsou vypočítány pro dva přístupy: chain-of-thought (CoT) a zero-shot (ZS), na základě průměrného počtu vstupních a výstupních tokenů.}
+    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání.}
     \label{tab:cloud-api-costs}
 \end{table}
 
@@ -132,15 +130,13 @@ Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nák
 Výjimkou je Gemini 3.1 Flash-Lite, který i při chain-of-thought přístupu dosahuje nákladů okolo \$0,01 za odevzdání.
 
 Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů přibližně \$0,174.
-Pro rozsáhlé školní nasazení jsou tyto modely výrazně nákladnější.
 Konkrétní volba modelu tak bude záviset na výsledku srovnávacího testování kvality výstupů, přičemž z čistě cenového hlediska vycházejí nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky bude dostatečná.
 
 \subsubsection*{Odhad celkových nákladů}
 \label{subsubsec:deployment-cloud-total-costs}
 
-Pro ilustraci reálných nákladů lze uvést příklad předmětu UPR (Úvod do programování), kde přibližně 500 studentů odevzdá v průměru 10 úloh za semestr.
-Při použití modelu GPT-5.4-nano s zero-shot přístupem by náklady na vyhodnocení jednoho odevzdání činily přibližně \$0,001, tedy celkové náklady za semestr by dosáhly přibližně \$5 (5~000 odevzdání).
-U modelu střední třídy, jako je Claude~3.5 Haiku s chain-of-thought přístupem by náklady vzrostly na přibližně \$150 za semestr.
-Přesné náklady však bude možné stanovit až na základě pilotního nasazení a vyhodnocení skutečných statistik provozu, což je věcí dalšího rozvoje systému.
+Pro ilustraci reálných nákladů lze uvést příklad předmětu UPR (Úvod do programování), kde přibližně 500 studentů odevzdá v průměru 10 úloh za semestr (celkem 5~000 odevzdání).
+Při použití modelu GPT-5.4-nano s zero-shot přístupem by celkové náklady za semestr dosáhly přibližně \$5, zatímco u modelu střední třídy, jako je Claude~3.5 Haiku s chain-of-thought přístupem, by vzrostly na přibližně \$150.
+Přesné náklady bude však možné stanovit až na základě pilotního nasazení a vyhodnocení skutečných statistik provozu.
 
 \endinput
