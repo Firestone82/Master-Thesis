@@ -17,15 +17,35 @@ Tyto modely jsou zpravidla výrazně větší než specializované varianty a je
     \item \textbf{Gemini}~\cite{geminy-3.1-pro,geminy-3-flash} od společnosti Google nabízí modely s velkými kontextovými okny (až 1~000~000 tokenů u vybraných variant), což může být výhodné pro analýzu rozsáhlejších studentských projektů.
     Řada zahrnuje varianty Pro (nejvyšší kvalita), Flash (rychlý a levný) a Flash Lite (nejlevnější).
 
-    \item \textbf{LLaMA~3.1}~\cite{llama3} od společnosti Meta je obecný open-source model dostupný ve velikostech 8B, 70B a 405B parametrů.
-    Na benchmarku HumanEval dosahuje varianta 70B přibližně 80\% úspěšnosti.
-    Model je plně otevřený a lze jej provozovat lokálně, čímž představuje alternativu ke komerčním API pro případy, kdy je vyžadována obecná jazyková schopnost v kombinaci s lokálním nasazením.
+    \item \textbf{Grok}\footnote{Groq a Grok jsou dvě rozdílné splečnosti.}~\cite{grok-2} od společnosti Elon Musk je model optimalizovaný pro práci s kódem, který dosahuje velmi dobrých výsledků i bez specializovaného tréninku na kódových datech.
+    Je dostupný pouze pro uživatele platformy X (dříve Twitter) a jeho použití je omezeno na 20~000 tokenů v kontextu.
 
-    \item \textbf{Mistral}~\cite{mistral_api} nabízí modely dostupné jak prostřednictvím API, tak jako open-source ke stažení.
-    Model Mistral~7B patří k nejefektivnějším modelům své velikostní kategorie a je vhodný pro nasazení na méně výkonném hardware.
+    \item \textbf{Mistral Large 2}~\cite{mistral-large-2} je model od společnosti Mistral, který se zaměřuje na vysokou kvalitu generovaných textů a širokou škálu podporovaných úloh, včetně práce s kódem.
+    Je dostupný přes API\@ a nabízí kontextové okno 128~000 tokenů.
 \end{itemize}
 
-% TODO: This
-\TODO{Doplnit graf srovnávající úspěšnost obecnějších modelů na benchmarku HumanEval}
+Srovnání zveřejněných hodnot úspěšnosti jednotlivých obecných modelů na benchmarku HumanEval je shrnuto v \tabref{tab:humaneval-general-models}.
+Hodnoty pocházejí z dokumentace příslušných poskytovatelů a z veřejných leaderboardů a vztahují se k metrice \textit{pass@1}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llr}
+        \toprule
+        \textbf{Model}                         & \textbf{HumanEval pass@1 [\%]} \\
+        \midrule
+        GPT-5.4~\cite{gpt-5.4}                 & 93.1                           \\
+        Claude~3.5~Sonnet~\cite{claude-3.5}    & 93.7                           \\
+        Claude~Opus~4.6~\cite{claude-opus-4.6} & 90.4                           \\
+        GPT-4o~\cite{gpt-4o}                   & 90.2                           \\
+        Mistral~Large~2~\cite{mistral-large-2} & 87.0                           \\
+        Gemini~3.1~Pro~\cite{geminy-3.1-pro}   & 89.2                           \\
+        Grok-2~\cite{grok-2}                   & 88.4                           \\
+        GPT-4.5~\cite{gpt-4.5}                 & 88.0                           \\
+        Gemini~1.5~Pro~\cite{gemini-1.5-pro}   & 84.1                           \\
+        \bottomrule
+    \end{tabular}
+    \caption[Úspěšnost proprietálních jazykových modelů na benchmarku HumanEval (pass@1).]{Úspěšnost proprietálních jazykových modelů na benchmarku HumanEval (pass@1).~\cite{llm-stats-humaneval}}
+    \label{tab:humaneval-general-models}
+\end{table}
 
 \endinput

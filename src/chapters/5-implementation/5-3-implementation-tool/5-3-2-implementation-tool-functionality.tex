@@ -11,12 +11,12 @@ Každý prompt je uložen v databázi aplikace a lze jej kdykoli upravit bez nut
 Přehled promptů a jejich aktuální stav jsou zobrazeny v rozhraní aplikace, jak ukazuje \figref[příloha]{fig:analyzyer-prompts}.
 
 Součástí rozhraní je také přehled vstupních dat, tedy historických studentských odevzdání importovaných ze systému Kelvin, která slouží jako podklad pro analýzu.
-Administrátor může prohlížet zdrojové soubory jednotlivých odevzdání a ověřit, že vstupní data jsou kompletní a vhodná pro testování (\figref[příloha]{fig:analyzyer-sources}).
+Administrátor může prohlížet zdrojové soubory jednotlivých odevzdání a ověřit, že vstupní data jsou kompletní a vhodná pro testování (viz \figref[Příloha]{fig:analyzyer-sources}).
 
 \subsubsection{Spouštění analýz}
 \label{subsubsec:implementation-tool-jobs}
 
-Aplikace umožňuje vybrat libovolnou kombinaci tří vstupních parametrů: systémový prompt, jazykový model a promptovací techniku (\code{ZERO\_SHOT} nebo \code{THINKING}).
+Aplikace umožňuje vybrat libovolnou kombinaci tří vstupních parametrů: systémový prompt, jazykový model a promptovací techniku (\textit{ZERO\_SHOT} nebo \textit{THINKING}).
 Na základě této kombinace aplikace spustí LLM analýzu nad zvolenou sadou historických odevzdání, uživatel volbu provádí prostřednictvím formuláře zobrazeného na \figref[obrázku]{fig:analyzer-job}.
 Výsledky každého běhu jsou uloženy odděleně a přiřazeny ke konfiguraci, která je vygenerovala.
 

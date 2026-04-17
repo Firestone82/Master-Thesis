@@ -12,10 +12,14 @@ Soubory zdrojových kódů jsou ukládány na souborový uložišti serveru, př
 
 Stávající evaluační pipeline systému zajišťuje kompilaci odevzdaného zdrojového kódu a spuštění automatických testů v izolovaném prostředí.
 Izolace je realizována prostřednictvím kontejnerů (Docker) a omezení přístupu k systémovým zdrojům, což chrání infrastrukturu před škodlivým nebo nekorektním kódem a současně garantuje jednotné podmínky evaluace pro všechny studenty.
+
 Vyhodnocení je implementováno jako asynchronní úloha z pohledu aplikační architektury, nicméně z hlediska uživatelského chování se jedná o proces synchronní, protože student čeká na jeho dokončení před zobrazením výsledků testů.
 
-Zařazení dalších výpočetně náročných operací přímo do této pipeline, například generování analýzy pomocí velkých jazykových modelů, by vedlo k prodloužení doby čekání na výsledek.
+Zařazení dalších výpočetně náročných operací přímo do této pipeline, například generování analýzy pomocí LLM, by vedlo k prodloužení doby čekání na výsledek.
 I pokud by byly tyto operace realizovány technicky asynchronně, jejich začlenění do stejného evaluačního procesu by mělo přímý dopad na vnímanou latenci systému uživatelem.
+
+\subsubsection*{Kontrola plagiátorství}
+\label{subsubsec:kelvin-plagiarism-check}
 
 Vedle evaluační pipeline systém Kelvin provádí rovněž kontrolu plagiátorství.
 Ta je ze své podstaty vázána na celou skupinu odevzdání, nikoli na jedno konkrétní, a je proto spouštěna buď manuálně učitelem, nebo automaticky po vypršení termínu odevzdání dané úlohy.

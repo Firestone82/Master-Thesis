@@ -7,7 +7,7 @@ Do tohoto limitu se započítávají jak tokeny vstupního promptu, tak tokeny g
 Pro analýzu studentských řešení je klíčové, aby model dokázal zpracovat celé odevzdání společně s doprovodným kontextem v rámci jednoho požadavku.
 Pouze v takovém případě může model vyhodnotit řešení jako celek a poskytnout kontextově správnou a konzistentní zpětnou vazbu.
 
-Na základě empirických měření uvedených v \secref[sekci]{subsec:criteria-operational} lze očekávat, že samotné studentské řešení spolu se zadáním typicky tvoří několik tisíc tokenů.
+Na základě experimentálních měření uvedených v \secref[sekci]{subsec:criteria-operational} lze očekávat, že samotné studentské řešení spolu se zadáním typicky tvoří několik tisíc tokenů.
 Pro přesnější odhad velikosti jednotlivých částí vstupu byl orientačně použit nástroj pro počítání tokenů dostupný na webu\footnote{\url{https://llmtokencounter.com/}}.
 Vstup modelu se obvykle skládá z následujících částí:
 
@@ -25,22 +25,22 @@ Vstup modelu se obvykle skládá z následujících částí:
 Celkový objem vstupních dat pro typické odevzdání se tedy pohybuje přibližně mezi 2500 a 7000 tokeny.
 Je rovněž nutné počítat s rezervou pro generovaný výstup modelu, který může obsahovat několik stovek až tisíc tokenů zpětné vazby.
 
-Pro běžné úlohy je proto dostačující kontextové okno přibližně \textbf{8~000 tokenů}.
-S ohledem na rozsáhlejší zadání, vícesouborová řešení a potřebu dostatečné rezervy je však jako \textbf{minimální požadavek} stanoveno kontextové okno o velikosti alespoň \textbf{16~000 tokenů}.
+Pro běžné úlohy je proto dostačující kontextové okno přibližně 8~000 tokenů.
+S ohledem na rozsáhlejší zadání, vícesouborová řešení a potřebu dostatečné rezervy je však jako minimální požadavek stanoveno kontextové okno o velikosti alespoň 16~000 tokenů.
 Moderní jazykové modely tuto hranici zpravidla bez problémů splňují, protože většina současných modelů nabízí kontextové okno v rozsahu 32~000 až 128~000 tokenů.
-Všechna čtyři kritéria výběru jsou shrnuta v \tabref{tab:selection-criteria}.
+Všechna čtyři kritéria výběru jsou shrnuta v \tabref[tabulce]{tab:selection-criteria}.
 
 \begin{table}[H]
     \centering
     \resizebox{\textwidth}{!}{%
         \begin{tabular}{lp{9cm}l}
             \toprule
-            \textbf{Kritérium}              & \textbf{Popis}                                                                 & \textbf{Minimální požadavek} \\
+            \textbf{Kritérium}              & \textbf{Popis}                                                                 & \textbf{Minimální požadavek}             \\
             \midrule
-            Kvalita výstupů                 & Věcně správné, srozumitelné, relevantní komentáře                              & Vyšší než průměr \\
-            Dostupnost                      & Přístupný přes API nebo ke stažení; vhodná licence pro akademické použití      & Open-source nebo API s DPA \\
-            Náročnost provozu               & Přijatelné náklady na token nebo na hardware                                   & Viz \tabref{tab:deployment-comparison} \\
-            Kontextové okno                 & Schopnost zpracovat celé odevzdání včetně promptu                              & $\geq$ 16~000 tokenů \\
+            Kvalita výstupů                 & Věcně správné, srozumitelné, relevantní komentáře                              & Vyšší než průměr                         \\
+            Dostupnost                      & Přístupný přes API nebo ke stažení; vhodná licence pro akademické použití      & Open-source nebo API s DPA               \\
+            Náročnost provozu               & Přijatelné náklady na token nebo na hardware                                   & Viz \tabref{tab:deployment-comparison}   \\
+            Kontextové okno                 & Schopnost zpracovat celé odevzdání včetně promptu                              & $\geq$ 16~000 tokenů                     \\
             \bottomrule
         \end{tabular}
     }

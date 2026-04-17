@@ -1,28 +1,26 @@
 \subsection{Zpracování výstupu a datový model}
 \label{subsec:implementation-model}
- 
-Odpověď jazykového modelu je zpracována pomocnými funkcemi v souboru \code{processor.py}, které parsují strukturovaný výstup modelu do seznamu objektů \code{SuggestedCommentDTO}.
+
+Odpověď jazykového modelu je zpracována pomocnými funkcemi v souboru \texttt{processor.py}, které parsují strukturovaný výstup modelu do seznamu objektů \texttt{SuggestedCommentDTO}.
 Každý objekt obsahuje cestu k souboru, číslo řádku, textový obsah návrhu a závažnost nálezu.
- 
-Výsledné objekty jsou ukládány do databáze jako instance Django modelu \code{SuggestedComment}.
-Model je propojen s odpovídajícím odevzdáním (\code{Submit}) a obsahuje následující klíčová pole.
- 
+
+Výsledné objekty jsou ukládány do databáze jako instance Django modelu \texttt{SuggestedComment}.
+Model je propojen s odpovídajícím odevzdáním (\texttt{Submit}) a obsahuje následující klíčová pole:
+
 \begin{itemize}
-    \item \code{source} obsahuje cestu k analyzovanému souboru v rámci odevzdání.
-    \item \code{line} uchovává číslo řádku, ke kterému se návrh vztahuje.
-    \item \code{text} obsahuje vlastní obsah návrhu vygenerovaný modelem.
-    \item \code{severity} vyjadřuje závažnost nálezu a nabývá hodnot \code{CRITICAL}, \code{HIGH}, \code{MEDIUM} nebo \code{LOW}.
-    Tato hodnota slouží k vizuálnímu rozlišení návrhů ve frontendu.
-    \item \code{state} uchovává aktuální stav návrhu a nabývá hodnot \code{PENDING}, \code{ACCEPTED}, \code{REJECTED} nebo \code{DISMISSED}.
-    \item \code{quality\_rating} a \code{relevance\_rating} obsahují hodnocení kvality a relevance na stupnici 0 až 10, pokud jej učitel udělil.
+    \item \textbf{source} -- cesta k analyzovanému souboru v rámci odevzdání.
+    \item \textbf{line} -- číslo řádku, ke kterému se návrh vztahuje.
+    \item \textbf{text} -- vlastní obsah návrhu vygenerovaný modelem.
+    \item \textbf{severity} -- závažnost nálezu; nabývá hodnot \texttt{CRITICAL}, \texttt{HIGH}, \texttt{MEDIUM} nebo \texttt{LOW} a slouží k~vizuálnímu rozlišení návrhů ve frontendu.
+    \item \textbf{state} -- aktuální stav návrhu; nabývá hodnot \texttt{PENDING}, \texttt{ACCEPTED}, \texttt{REJECTED} nebo \texttt{DISMISSED}.
+    \item \textbf{quality\_rating} a \textbf{relevance\_rating} -- hodnocení kvality a relevance na stupnici 0 až 10, pokud jej učitel udělil.
 \end{itemize}
- 
+
 Datový model je využíván pro dva typy záznamů.
-Prvním typem jsou jednotlivé návrhy komentářů vázané na konkrétní řádek zdrojového kódu, u kterých učitel volí mezi stavy \code{ACCEPTED} a \code{REJECTED}.
-Druhým typem je celkové informativní shrnutí odevzdání, které nelze přijmout, protože má pouze informativní charakter.
-U shrnutí může učitel využít výhradně stav \code{DISMISSED}, kterým jej ve svém rozhraní skryje.
- 
-Pokud učitel jednotlivý návrh přijme, systém automaticky vytvoří standardní komentář v databázi, který je propojen s původním navrhovaným komentářem a stane se viditelným pro studenta.
-Zamítnuté nebo skryté záznamy zůstávají v databázi pro účely pozdější analýzy kvality modelu a případné doladění promptů, ale studentovi nejsou zpřístupněny.
- 
+Prvním jsou jednotlivé \textbf{návrhy komentářů} vázané na konkrétní řádek zdrojového kódu, u nichž učitel volí mezi stavy \texttt{ACCEPTED} a \texttt{REJECTED}.
+Druhým typem je celkové \textbf{informativní shrnutí odevzdání}, které nelze přijmout, neboť slouží pouze jako orientační přehled; u shrnutí může učitel využít výhradně stav \texttt{DISMISSED}, kterým jej ve svém rozhraní skryje.
+
+Pokud učitel jednotlivý návrh přijme, systém automaticky vytvoří standardní komentář v databázi, jenž je s~původním navrhovaným komentářem propojen a zpřístupněn studentovi.
+Zamítnuté nebo skryté záznamy zůstávají v databázi pro účely pozdější analýzy kvality modelu a doladění promptů, studentovi však nejsou prezentovány.
+
 \endinput

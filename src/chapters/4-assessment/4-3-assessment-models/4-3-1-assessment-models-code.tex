@@ -9,11 +9,11 @@ Díky tomu lépe rozumí syntaktickým konstrukcím, standardním vzorům a typi
     \item \textbf{Code Llama}~\cite{codellama} je rodina modelů od společnosti Meta, odvozená z obecného modelu LLaMA~2.
     Modely byly dále trénovány na 500 miliardách tokenů zdrojového kódu a jsou k dispozici ve velikostech 7B, 13B, 34B a 70B parametrů.
     Varianta \textit{Code Llama Instruct} je optimalizována pro sledování instrukcí, což je pro účely analýzy kódu na základě zadaného promptu obzvláště relevantní.
-    Na benchmarku HumanEval~\cite{humaneval} dosahuje varianta 34B přibližně 48\,\% úspěšnosti (pass@1).
+    Na benchmarku HumanEval~\cite{humaneval} dosahuje varianta 70B Instruct přibližně 72\,\% úspěšnosti (pass@1).
 
     \item \textbf{DeepSeek Coder}~\cite{deepseek-coder} je rodina modelů trénovaných od základu na 2 bilionech tokenů, z nichž 87\,\% tvoří zdrojový kód a zbývajících 13\,\% přirozený jazyk.
     Modely jsou dostupné ve velikostech od 1,3B do 33B parametrů.
-    Na benchmarku HumanEval dosahuje varianta 33B Instruct přibližně 79\,\% úspěšnosti, což z ní činí jeden z nejvýkonnějších open-source modelů pro generování kódu.
+    Na benchmarku HumanEval dosahuje varianta DeepSeek-Coder-V2-Instruct přibližně 85\,\% úspěšnosti, což z ní činí jeden z nejvýkonnějších open-source modelů pro generování kódu.
 
     \item \textbf{StarCoder~2}~\cite{starcoder2} vznikl v rámci projektu BigCode jako plně otevřený model trénovaný na datové sadě The Stack v2~\cite{kocetkov-stack} o rozsahu 3,3 bilionu tokenů.
     Je k dispozici ve velikostech 3B, 7B a 15B parametrů.
@@ -28,7 +28,14 @@ Díky tomu lépe rozumí syntaktickým konstrukcím, standardním vzorům a typi
 
 Společným znakem všech uvedených modelů je, že jsou dostupné jako open-source a lze je provozovat lokálně prostřednictvím nástrojů popsaných v \secref[sekci]{subsec:deployment-on-premise}.
 
-% TODO: This
-\TODO{Doplnit graf srovnávající úspěšnost modelů na benchmarku HumanEval, případně i dalších relevantních benchmarků zaměřených na analýzu kódu.}
+Srovnání úspěšnosti vybraných modelů a jednotlivých rodin modelů na benchmarku HumanEval uvádí \figref[obrázek]{fig:humaneval-chart}.
+Hodnoty vycházejí z oficiálních technických reportů jednotlivých modelů a reprezentují metriku \textit{pass@1}, tedy procento úloh, které model vyřešil správně na první pokus.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{resources/images/open-source-model-graph}
+    \caption{Grafické srovnání úspěšnosti specializovaných kódových modelů na benchmarku HumanEval (pass@1).}
+    \label{fig:humaneval-chart}
+\end{figure}
 
 \endinput
