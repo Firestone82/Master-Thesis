@@ -1,4 +1,4 @@
-\chapter{System Kelvin}
+\chapter{Systém Kelvin}
 \label{ch:kelvin}
 
 Tato kapitola se věnuje školnímu systému Kelvin (\href{https://kelvin.cs.vsb.cz/}{https://kelvin.cs.vsb.cz/}), který slouží jako základní platforma pro odevzdávání a hodnocení programátorských úloh.
@@ -8,14 +8,14 @@ Cílem kapitoly je přiblížit účel systému, jeho architekturu, způsob nasa
 \section{Účel systému}
 \label{sec:kelvin-purpose}
 
-Hlavním účelem systému Kelvin je podpora výuky, především programovacích předmětů v jazycích C, C++, Python nebo Rust, ale slouží také jako obecný systém pro odevzdávání úloh v dalších předmětech jakou jsou základy počítačové grafiky (ZPG), modelování v grafických aplikacích (MGA) a další.
-Systém poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh.
+Hlavním účelem systému Kelvin je podpora výuky, především programovacích předmětů v jazycích C, C++, Python nebo Rust.
+Systém ale slouží také rovněž jako obecná platforma pro odevzdávání úloh v dalších předmětech, jako jsou základy počítačové grafiky (ZPG), modelování v grafických aplikacích (MGA), jazyk Java a další.
+Kelvin poskytuje jednotné webové rozhraní, prostřednictvím kterého mohou studenti odevzdávat svá řešení úloh na jednotné místo.
 Vyučujícím následně umožňuje tato řešení kontrolovat, poskytovat k nim zpětnou vazbu a udělovat bodové hodnocení.
-Součástí systému jsou také moduly pro automatické přeložení odevzdaného kódu, jeho spuštění a ověření výstupů.
+Součástí systému jsou také moduly pro automatické přeložení odevzdaného kódu, jeho spuštění, ověření výstupů a další podpůrné funkce.
 
 \input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-1-kelvin-purpose-workflow}
-\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-2-kelvin-purpose-assessments}
-\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-3-kelvin-purpose-features}
+\input{chapters/2-kelvin/2-1-kelvin-purpose/2-1-2-kelvin-purpose-features}
 
 % =============================================================
 \section{Architektura systému}
@@ -38,13 +38,13 @@ Tento přístup umožňuje zajistit jednotné běhové prostředí pro vývoj i 
 Proces nasazení systému je automatizován pomocí nástroje GitHub Actions, který po každém úspěšném sloučení změn do hlavní větve repozitáře provede sestavení Docker image a jejich nasazení na produkční server.
 Automatizovaný deployment snižuje riziko chyb při manuálním nasazování a zajišťuje, že produkční prostředí odpovídá aktuálnímu stavu zdrojového kódu.
 
-Využití Docker a Docker Compose zároveň zjednodušuje provozní správu systému a umožňuje jeho další rozšiřování bez nutnosti zásadních změn v infrastruktuře.
+Využití Docker a Docker Compose zároveň zjednodušuje vývoj a testování systému, protože umožňuje snadno spouštět kompletní instanci Kelvin na lokálním počítači bez nutnosti složité konfigurace prostředí.
 
 % =============================================================
 \section{Vývojová omezení a proces}
 \label{sec:kelvin-development}
 
-Systém Kelvin vznikl původně jako školní projekt studenta Daniela Trnky\footnote[1]{https://github.com/trnkal}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
+Systém Kelvin vznikl původně jako školní projekt studenta Daniela Trnky\footnote[1]{\href{https://github.com/trnila}{https://github.com/trnila}}, ale v průběhu let byl postupně rozšiřován dalšími studenty a vyučujícími.
 Tento způsob vývoje bez jednotné dlouhodobé architektonické vize vedl ke vzniku technického dluhu, který se v systému projevuje například ve formě dlouhých a obtížně čitelných souborů, nedostatečného nebo chybějícího typování a míchání různých programátorských přístupů.
 Před přidáním nové aplikační logiky je proto často nutné provést částečný refaktoring existujícího kódu, aby byla zachována alespoň základní úroveň čitelnosti a udržovatelnosti systému.
 

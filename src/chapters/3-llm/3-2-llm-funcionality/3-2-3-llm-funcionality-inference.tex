@@ -15,7 +15,7 @@ Způsob výběru tokenu určuje \textit{dekódovací strategie}:
 \end{itemize}
 
 Pro analýzu zdrojového kódu ve školním prostředí je žádoucí konzistentnost a determinismus, kde cílem je diagnostika, nikoli kreativní generování.
-Proto se doporučuje nízká teplota v rozsahu $T = 0{,}1$ až $T = 0{,}3$ kombinovaná s top-p vzorkováním.
+Proto je vhodná nízká teplota v rozsahu $T = 0{,}1$ až $T = 0{,}3$ kombinovaná s top-p vzorkováním.
 
 Důležitou optimalizací inference je \textbf{KV cache}: klíče a hodnoty ($\mathbf{K}$, $\mathbf{V}$) pro tokeny vstupního prefixu jsou uloženy do cache a nepřepočítávají se při každém dalším generovacím kroku.
 Tím se drasticky snižuje výpočetní náročnost inference, avšak za cenu vyšší spotřeby paměti.
