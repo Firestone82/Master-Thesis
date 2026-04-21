@@ -94,6 +94,35 @@ Ceny jsou uváděny za 1M (jeden milion) tokenů.
   \computecost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}%
 }
 
+% Počet odevzdání za semestr (reálná statistika Kelvin -- všechna odevzdání bez ohledu na hodnocení;
+% semestr 2025/26 podzim: 46 846, semestr 2024/25 podzim: 39 562 -- použit konzervativní odhad)
+\newcommand{\semesterSubmits}{40000}
+
+% Výpočet celkových nákladů za semestr
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M), #3 = vstupní tokeny, #4 = výstupní tokeny, #5 = počet odevzdání
+\newcommand{\computeTotalCost}[5]{%
+  \begingroup
+  \pgfkeys{/pgf/fpu, /pgf/fpu/output format=fixed}%
+  \pgfmathparse{#5 * ((#3 * (#1 / 1000000)) + (#4 * (#2 / 1000000)))}%
+  \pgfmathsetmacro{\myresult}{\pgfmathresult}%
+  \pgfkeys{/pgf/fpu=false}%
+  \pgfkeys{/pgf/number format/.cd, use comma, fixed, precision=0}%
+  \pgfmathprintnumber{\myresult}%
+  \endgroup
+}
+
+% Výpočet celkových nákladů za semestr pro Chain-of-Thought
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeTotalCostCOT}[2]{%
+  \computeTotalCost{#1}{#2}{\chainInToks}{\chainOutToks}{\semesterSubmits}%
+}
+
+% Výpočet celkových nákladů za semestr pro Zero-shot
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeTotalCostZS}[2]{%
+  \computeTotalCost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}{\semesterSubmits}%
+}
+
 Pro orientační porovnání nákladů (viz \tabref{tab:cloud-api-costs}) byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a zero-shot s jedním voláním.
 Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
 
@@ -125,18 +154,67 @@ Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
     \label{tab:cloud-api-costs}
 \end{table}
 
-Z pohledu nákladů vycházejí jako nejvýhodnější modely GPT-5.4-nano a Claude 3.0 Haiku, u kterých cena za jedno odevzdání při zero-shot přístupu klesá pod \$0,002.
-Použití chain-of-thought přístupu se třemi kroky analýzy je výrazně nákladnější, protože modely střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vycházejí přibližně na \$0,028 až \$0,030 za odevzdání, oproti méně než \$0,004 při zero-shot přístupu.
-Výjimkou je Gemini 3.1 Flash-Lite, který i při chain-of-thought přístupu dosahuje nákladů okolo \$0,01 za odevzdání.
+Nejlevnější modely (GPT-5.4-nano, Claude 3.0 Haiku) klesají při zero-shot přístupu pod \$0,002 za odevzdání, zatímco CoT u modelů střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vychází na \$0,028--\$0,030.
+Výkonné modely (Claude 4.6 Opus, GPT-5.4) překračují \$0,10 za odevzdání u CoT přístupu -- přibližně sedmkrát více než jejich zero-shot ekvivalent.
+Výjimkou jsou modely optimalizované pro nízkou cenu, jako Gemini 3.1 Flash-Lite, u kterého CoT přístup stále vychází na přibližně \$0,010 za odevzdání.
 
-Nejvýkonnější modely (Claude 4.6 Opus, Claude 4.6 Sonnet, GPT-5.4) přesahují \$0,10 za odevzdání u CoT přístupu, přičemž Claude 4.6 Opus dosahuje nejvyšších nákladů přibližně \$0,174.
-Konkrétní volba modelu tak bude záviset na výsledku srovnávacího testování kvality výstupů, přičemž z čistě cenového hlediska vycházejí nejlépe menší modely, pokud jejich analytická kvalita pro dané požadavky bude dostatečná.
+U modelů s podporou \textit{extended thinking}~\cite{anthropic_extended_thinking, openai_reasoning} (Claude~4.6~Opus/Sonnet, GPT-5.4) je manuální CoT zbytečný -- model provádí vnitřní uvažování v rámci jediného API požadavku, čímž snižuje počet volání i celkovou cenu za odevzdání.
 
 \subsubsection*{Odhad celkových nákladů}
 \label{subsubsec:deployment-cloud-total-costs}
 
-Pro ilustraci reálných nákladů lze uvést příklad předmětu UPR (Úvod do programování), kde přibližně 500 studentů odevzdá v průměru 10 úloh za semestr (celkem 5~000 odevzdání).
-Při použití modelu GPT-5.4-nano s zero-shot přístupem by celkové náklady za semestr dosáhly přibližně \$5, zatímco u modelu střední třídy, jako je Claude~3.5 Haiku s chain-of-thought přístupem, by vzrostly na přibližně \$150.
-Přesné náklady bude však možné stanovit až na základě pilotního nasazení a vyhodnocení skutečných statistik provozu.
+Pro odhad reálných nákladů lze vycházet ze skutečných statistik systému Kelvin.
+Jelikož analýza LLM probíhá při každém odevzdání bez ohledu na to, zda jej učitel bodově ohodnotí, je nutné vycházet z \textbf{celkového počtu odevzdání}, nikoliv pouze z hodnocených.
+Jak ukazuje \tabref{tab:kelvin-submits}, celkový počet odevzdání za semestr v posledních letech výrazně roste -- v semestru 2025/2026 (podzim) dosáhl \textbf{46\,846}, v semestru 2024/2025 (podzim) pak \textbf{39\,562}.
+Jako reprezentativní scénář proto uvažujeme \textbf{40\,000 odevzdání za semestr}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lrr}
+        \toprule
+        \textbf{Semestr} & \textbf{Odevzdání (celkem)} & \textbf{Studenti} \\
+        \midrule
+        2024/2025 (jaro)   & 19\,952 &  865 \\
+        2024/2025 (podzim) & 39\,562 & 1\,109 \\
+        2025/2026 (jaro)   & 46\,846 & 1\,168 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Celkové počty odevzdání v systému Kelvin (poslední semestry).}
+    \label{tab:kelvin-submits}
+\end{table}
+
+Při srovnávání přístupů je zásadní zohlednit, že CoT přístup odesílá \textbf{3 API požadavky} na jedno odevzdání (Draft, Critique, Review), zatímco zero-shot odesílá pouze \textbf{1 požadavek}.
+CoT proto spotřebuje průměrně \textbf{\chainInToks{} vstupních} a \textbf{\chainOutToks{} výstupních} tokenů na odevzdání, oproti \textbf{\zeroshotInToks{} vstupním} a \textbf{\zeroshotOutToks{} výstupním} tokenům u zero-shot -- tedy přibližně 4,4$\times$ více vstupních a 10$\times$ více výstupních tokenů.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l rr}
+        \toprule
+        & \multicolumn{2}{c}{\textbf{Celkové náklady za semestr (\semesterSubmits{} odevzdání)}} \\
+        \textbf{Model} & \textbf{chain-of-thought (\$)} & \textbf{zero-shot (\$)} \\
+        \midrule
+            GPT-5.4~\cite{gpt-5.4}                               & $\sim\computeTotalCostCOT{2.50}{15.00}$ & $\sim\computeTotalCostZS{2.50}{15.00}$ \\
+            GPT-5.4-mini~\cite{gpt-5.4-mini}                     & $\sim\computeTotalCostCOT{0.75}{4.50}$  & $\sim\computeTotalCostZS{0.75}{4.50}$ \\
+            GPT-5.4-nano~\cite{gpt-5.4-nano}                     & $\sim\computeTotalCostCOT{0.20}{1.25}$  & $\sim\computeTotalCostZS{0.20}{1.25}$ \\
+        \midrule
+            Claude 4.6 Opus~\cite{claude-opus-4.6}               & $\sim\computeTotalCostCOT{5.00}{25.00}$ & $\sim\computeTotalCostZS{5.00}{25.00}$ \\
+            Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & $\sim\computeTotalCostCOT{3.00}{15.00}$ & $\sim\computeTotalCostZS{3.00}{15.00}$ \\
+            Claude 3.5 Haiku~\cite{claude-3.5}                   & $\sim\computeTotalCostCOT{0.80}{4.00}$  & $\sim\computeTotalCostZS{0.80}{4.00}$ \\
+            Claude 3.0 Haiku~\cite{claude-3}                     & $\sim\computeTotalCostCOT{0.25}{1.25}$  & $\sim\computeTotalCostZS{0.25}{1.25}$ \\
+        \midrule
+            Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & $\sim\computeTotalCostCOT{2.00}{12.00}$ & $\sim\computeTotalCostZS{2.00}{12.00}$ \\
+            Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & $\sim\computeTotalCostCOT{0.25}{1.50}$  & $\sim\computeTotalCostZS{0.25}{1.50}$ \\
+            Gemini 3 Flash~\cite{geminy-3-flash}                 & $\sim\computeTotalCostCOT{0.50}{3.00}$  & $\sim\computeTotalCostZS{0.50}{3.00}$ \\
+            Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & $\sim\computeTotalCostCOT{0.30}{2.50}$  & $\sim\computeTotalCostZS{0.30}{2.50}$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Přibližné celkové náklady za semestr pro \semesterSubmits{} odevzdání.}
+    \label{tab:cloud-api-total-costs}
+\end{table}
+
+Z tabulky plyne, že i při použití nejlevnějšího modelu s CoT přístupem (GPT-5.4-nano nebo Claude~3.0~Haiku) dosáhnou náklady přibližně \$330--\$348 za semestr, zatímco výkonné modely (Claude~4.6~Opus) překročí \$6\,900.
+Zero-shot přístup je ve všech scénářích výrazně levnější -- u nejlevnějších modelů klesají náklady na \$41--\$54 za semestr.
+Pro srovnání: provoz systému Kelvin na školním serveru s GPU stojí přibližně 60\,000~Kč jednorázově, kdežto roční provoz cloudového API s modelem střední třídy a zero-shot přístupem vychází na \$100--\$200, tedy přibližně 2\,500--5\,000~Kč.
+Konkrétní volba přístupu a modelu tak závisí především na výsledku srovnávacího testování kvality výstupů.
 
 \endinput
