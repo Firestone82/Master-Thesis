@@ -41,24 +41,22 @@ Souhrnné porovnání obou přístupů je uvedeno v \tabref[tabulce]{tab:llm-vs-
 
 \begin{table}[H]
     \centering
-    \resizebox{\textwidth}{!}{%
-        \begin{tabular}{lll}
-            \toprule
-            \textbf{Vlastnost}                   & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
-            \midrule
-            Deterministický výstupu              & Ano                          & Ne (pravděpodobnostní)        \\
-            Formální verifikace pravidel         & Ano                          & Ne                            \\
-            Analýza řízení toku (CFG)            & Ano                          & Omezeně / heuristicky         \\
-            Detekce syntaktických chyb           & Ano (spolehlivě)             & Omezeně                       \\
-            Práce s kontextem zadání úlohy       & Ne                           & Ano                           \\
-            Hodnocení vhodnosti algoritmu        & Ne                           & Ano (při znalosti zadání)     \\
-            Hodnocení čitelnosti a stylu         & Omezeně (dle pravidel)       & Ano                           \\
-            Vysvětlení přirozeným jazykem        & Ne (technická hlášení)       & Ano                           \\
-            Škálovatelnost na libovolný kód      & Ano                          & Limitováno kontextem          \\
-            Detekce bezpečnostních zranitelností & Ano (definované vzory)       & Omezeně                       \\
-            \bottomrule
-        \end{tabular}
-    }
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Vlastnost}                   & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
+        \midrule
+        Deterministický výstupu              & Ano                          & Ne (pravděpodobnostní)        \\
+        Formální verifikace pravidel         & Ano                          & Ne                            \\
+        Analýza řízení toku (CFG)            & Ano                          & Omezeně / heuristicky         \\
+        Detekce syntaktických chyb           & Ano (spolehlivě)             & Omezeně                       \\
+        Práce s kontextem zadání úlohy       & Ne                           & Ano                           \\
+        Hodnocení vhodnosti algoritmu        & Ne                           & Ano (při znalosti zadání)     \\
+        Hodnocení čitelnosti a stylu         & Omezeně (dle pravidel)       & Ano                           \\
+        Vysvětlení přirozeným jazykem        & Ne (technická hlášení)       & Ano                           \\
+        Škálovatelnost na libovolný kód      & Ano                          & Limitováno kontextem          \\
+        Detekce bezpečnostních zranitelností & Ano (definované vzory)       & Omezeně                       \\
+        \bottomrule
+    \end{tabular}
     \caption{Porovnání statických analyzátorů a velkých jazykových modelů při analýze zdrojového kódu.}
     \label{tab:llm-vs-static-summary}
 \end{table}
