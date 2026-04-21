@@ -1,0 +1,46 @@
+\subsection{Typy výstupů a iterativní ladění}
+\label{subsec:prompts-output}
+
+Výstup jazykového modelu při analýze studentského kódu může mít několik podob v závislosti na tom, jaký typ zpětné vazby je pro učitele a studenty nejužitečnější.
+
+\subsubsection*{Typy výstupů}
+\label{subsubsec:prompts-output-types}
+
+\begin{itemize}
+    \item \textbf{Komentáře k řádkům} představují nejpodrobnější formu zpětné vazby.
+    Každý nalezený problém je vázán na konkrétní řádek zdrojového kódu a obsahuje popis problému spolu s návrhem opravy.
+    Tento formát je pro studenty nejpřínosnější, protože přesně ukazuje, kde v kódu se problém nachází, a nabízí konkrétní vysvětlení.
+
+    \item \textbf{Souhrnné hodnocení} poskytuje celkový pohled na kvalitu odevzdaného řešení.
+    Může zahrnovat informaci o tom, zda řešení splňuje požadavky zadání, jaká je jeho celková úroveň a jaké hlavní oblasti vyžadují zlepšení.
+    Tento typ výstupu je užitečný především pro učitele jako rychlý přehled před detailním hodnocením.
+\end{itemize}
+
+Pro integraci do systému Kelvin byl zvolen formát, který kombinuje oba výše zmíněné typy výstupy v podobně JSON souboru.
+Tento formát umožňuje programové zpracování na straně backendu a zároveň tak jednoduše předává tyto informace na frontend.
+
+\subsubsection*{Struktura výstupního formátu}
+\label{subsubsec:prompts-output-structure}
+
+Výstup modelu je definován JSON schématem, které je součástí systémového promptu a zajišťuje, že model vrací data v přesně specifikované struktuře.
+Toto schéma je předáno modelu prostřednictvím parametru \texttt{response\_format}, čímž je vynucen strukturovaný výstup bez nutnosti dodatečného zpracování volného textu.
+
+Výsledek analýzy je reprezentován objektem \texttt{ReviewResult}, který obsahuje dva prvky: textové shrnutí celkové kvality kódu a seznam konkrétních nalezených problémů.
+Shrnutí (\texttt{summary}) poskytuje učiteli rychlý přehled o architektuře, čitelnosti a udržovatelnosti analyzovaného kódu, aniž by opakovalo jednotlivé nálezy.
+
+Každý problém v seznamu (\texttt{issues}) je reprezentován objektem \texttt{ReviewIssue} se čtyřmi povinnými atributy:
+
+\begin{itemize}
+    \item \textbf{file} určuje název souboru, ve kterém byl problém identifikován.
+
+    \item \textbf{severity} vyjadřuje závažnost nálezu pomocí čtyřstupňové škály: \texttt{critical} pro chyby, které zásadně narušují funkčnost programu, \texttt{high} pro závažné problémy ovlivňující správnost, \texttt{medium} pro nedostatky v kvalitě kódu a \texttt{low} pro drobné stylistické připomínky.
+
+    \item \textbf{line} obsahuje číslo řádku, na kterém se problém nachází.
+    Schéma explicitně instruuje model, aby uváděl řádek prvního tokenu přímo zodpovědného za daný problém, nikoli uzavírací závorku, prázdný řádek nebo komentář.
+    Pokud se problém týká více řádků, uvede se nejranější příčinný řádek a ostatní jsou zmíněny v textovém vysvětlení.
+
+    \item \textbf{explanation} obsahuje stručný popis problému: co je chybou, proč je to problém a jak jej opravit.
+    Schéma vyžaduje, aby model odkazoval na konkrétní názvy proměnných a funkcí a vyhýbal se obecným frázím bez informační hodnoty.
+\end{itemize}
+
+\endinput

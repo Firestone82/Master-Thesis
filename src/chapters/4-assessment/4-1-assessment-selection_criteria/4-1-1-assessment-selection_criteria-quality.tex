@@ -1,0 +1,51 @@
+\subsection{Kvalita výstupů}
+\label{subsec:criteria-quality}
+
+Nejdůležitějším kritériem pro výběr modelu je schopnost generovat výstupy, které budou pro učitele i studenty skutečně užitečné.
+V kontextu analýzy zdrojového kódu zahrnuje kvalita výstupů několik vzájemně provázaných vlastností:
+
+\begin{itemize}
+    \item \textbf{Správnost} -- model musí identifikovat reálné problémy v kódu a nepřidávat falešné výstrahy (\textit{false positives}).
+    Falešný pozitivní nález je pro studenta matoucí a pro učitele představuje zbytečnou zátěž, protože musí ověřovat, zda jde o skutečný problém.
+
+    \item \textbf{Relevance k zadání} -- model by měl posuzovat řešení s ohledem na konkrétní zadání úlohy, nikoliv pouze na obecné programátorské principy.
+    Například správnost výstupního formátu programu nelze posoudit bez kontextu zadání.
+
+    \item \textbf{Srozumitelnost a didaktická hodnota} -- výstupy musí být psány jazykem, kterému studenti rozumí.
+    Model by měl vysvětlit, \textit{proč} je daná část kódu problematická, a navrhnout konkrétní způsob opravy.
+
+    \item \textbf{Konzistentnost} -- model by měl pro podobné vstupy generovat podobné výstupy.
+    Absolutní reprodukovatelnost u pravděpodobnostních systémů není realistická, ale výstupy by se neměly mezi dvěma identickými odevzdáními zásadně lišit.
+\end{itemize}
+
+Pro objektivní porovnání kvality modelů existují standardizované benchmarky, tedy soubory testovacích úloh sloužících k měření výkonu za definovaných podmínek.
+V oblasti práce se zdrojovým kódem patří mezi nejznámější:
+
+\begin{itemize}
+    \item \textbf{HumanEval}~\cite{humaneval} -- sada 164 programátorských úloh v jazyce Python s automatickým ověřením správnosti generovaného kódu.
+    Výsledek udává, jak často model na první pokus vygeneruje správné řešení.
+
+    \item \textbf{MBPP} (Mostly Basic Python Problems)~\cite{mbpp} -- obdobný benchmark s důrazem na jednoduché úlohy vhodné pro začátečníky.
+
+    \item \textbf{LiveCodeBench}~\cite{livecodebench} -- novější benchmark zahrnující úlohy z programátorských soutěží, které průběžně přibývají.
+    Tím snižuje riziko kontaminace trénovaných dat, ke které u starších a veřejně dostupných benchmarků dochází.
+\end{itemize}
+
+Tyto benchmarky však měří primárně schopnost \textit{generovat} kód, nikoli schopnost \textit{analyzovat} a \textit{komentovat} existující kód, což je hlavní úloha modelu v systému Kelvin.
+
+\subsubsection*{Vlastní metriky pro hodnocení kvality}
+\label{subsubsec:criteria-quality-metrics}
+
+Pro hodnocení kvality výstupů byly proto zvoleny dvě vlastní metriky, které lépe odpovídají požadavkům na analýzu studentských řešení:
+
+\begin{itemize}
+    \item \textbf{Relevance} -- metrika hodnotí, nakolik je identifikovaný problém významný vzhledem ke konkrétnímu zadání úlohy a zdrojovému souboru jako celku.
+    Nález, který je sice technicky správný, ale v kontextu zadání nevýznamný nebo irelevantní, snižuje užitečnost výstupu pro studenta i učitele.
+
+    \item \textbf{Kvalita} -- metrika hodnotí, zda identifikovaný problém skutečně představuje chybu či nedostatek, nebo se jedná o falešný nález (\textit{false positive}).
+    Výstup s vysokou kvalitou přesně popisuje reálnou chybu v kódu studenta.
+\end{itemize}
+
+Obě metriky budou následně využity pro porovnání kvality výstupů různých modelů při analýze studentských řešení v systému Kelvin, jak je popsáno v \secref[sekci]{sec:selection-choice}.
+
+\endinput

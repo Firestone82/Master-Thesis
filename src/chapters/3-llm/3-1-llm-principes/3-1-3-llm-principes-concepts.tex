@@ -1,0 +1,62 @@
+\subsection{Tokeny, parametry a kontext}
+\label{subsec:llm-tokens-parameters-context}
+
+Aby bylo možné text zpracovat neuronovou sítí, musí být nejprve převeden do numerické reprezentace.
+Tento proces se skládá ze dvou kroků: tokenizace a embedding.
+
+\subsubsection*{Tokenizace}
+\label{subsubsec:tokenization}
+
+Tokenizace rozdělí vstupní text na diskrétní jednotky zvané tokeny, přičemž každý token je přiřazen číselnému identifikátoru ze slovníku modelu.
+Moderní tokenizace nepracují na úrovni slov ani jednotlivých písmen, ale využívají metodu \textit{subword tokenizace}.
+Nejrozšířenějším algoritmem je Byte Pair Encoding (BPE)~\cite{sennrich-bpe}, který iterativně slučuje nejčastěji se vyskytující páry bajtů nebo znaků až do dosažení požadované velikosti slovníku.
+
+Výsledkem je, že běžná anglická slova jsou zpravidla zakódována jako jeden token, méně obvyklá slova jako více tokenů.
+Ve zdrojovém kódu jsou klíčová slova programovacích jazyků obvykle jednotlivými tokeny, delší identifikátory jsou rozděleny (viz \figref{fig:tokenization-example}).
+
+\begin{figure}[H]
+    \centering
+    \begin{verbatim}
+        Vstup:   std::vector<int> data = {1, 2, 3};
+        Tokeny:  ['std', '::', 'vector', '<', 'int', '>', ' data',
+                   ' =', ' {', '1', ',', ' 2', ',', ' 3', '};']
+    \end{verbatim}
+    \caption{Příklad tokenizace výrazu v jazyce C++.}
+    \label{fig:tokenization-example}
+\end{figure}
+
+Z pohledu systému Kelvin má tokenizace přímý praktický dopad.
+Podle dokumentace OpenAI platí jako orientační pravidlo, že jeden token odpovídá přibližně čtyřem znakům anglického textu~\cite{openai-tokenizer}.
+Zdrojový kód je však tokenizován méně efektivně než přirozený jazyk, protože obsahuje speciální znaky, operátory a delší identifikátory, které bývají rozděleny do více tokenů.
+Počet tokenů zdrojového kódu je proto zpravidla vyšší než počet jeho slov.
+Pro kód s dlouhými identifikátory a hustou syntaxí může být tento poměr ještě výraznější.
+
+\subsubsection*{Embeddingy a poziční kódování}
+\label{subsubsec:embedding-positional-encoding}
+
+Každý token ze slovníku je mapován na hustý vektorový prostor pomocí \textit{embedding vrstvy}.
+Výsledný vektor $\mathbf{e}_t \in \mathbb{R}^d$ má typicky 768 až 8~192 dimenzí v závislosti na velikosti modelu.
+Embedding vrstva je trénovaná společně se zbytkem modelu a kóduje sémantické a syntaktické vlastnosti tokenů: tokeny s podobnou funkcí nebo kontextem mají v tomto prostoru vysokou kosinovou podobnost.
+
+Protože Transformer zpracovává tokeny paralelně bez pořadí, je k embeddingu přidáno \textit{poziční kódování} nesoucí informaci o pozici tokenu v sekvenci.
+Původní Transformer použil deterministické sinusové funkce~\cite{vaswani-attention}.
+Ale moderní modely (LLaMA, Qwen a další) využívají \textit{rotační poziční kódování} (RoPE), které kóduje relativní vzdálenosti tokenů přímo do výpočtu \textit{attention} a lépe generalizuje na kontexty delší, než model viděl při trénování.
+
+\subsubsection*{Parametry modelu}
+\label{subsubsec:model-parameters}
+
+Parametry modelu jsou \textit{trénovatelné váhy}, konkrétně hodnoty matic v attention vrstvách a feed-forward sítích architektury Transformer.
+Jejich počet určuje kapacitu modelu, kde větší modely dokáží zachytit složitější vzory a přirozeněji je zobecňovat.
+Škálovací zákony pak ukazují, že výkon roste jako mocninná funkce počtu parametrů, objemu trénovaných dat a výpočetního výkonu.
+Přičemž pro dosažení optimálního výkonu by počet trénovaných tokenů měl být přibližně dvacetinásobkem počtu parametrů~\cite{hoffmann-chinchilla}.
+
+\subsubsection*{Kontextové okno}
+\label{subsubsec:context-window}
+
+Kontextové okno určuje maximální počet tokenů, které model zpracuje v jednom průchodu.
+Jedná se tedy o tvrdé omezení, jehož překročení vede ke zkrácení vstupu nebo nutnosti zpracování v oddělených průchodech.
+Velikost okna vzrostla s vývojem modelů dramaticky, GPT-3 měl 2~048 tokenů, moderní modely dosahují 128~000 (GPT-4o) až 1~000~000 tokenů (Gemini 2.5 Pro).
+
+Pro analýzu studentských řešení v systému Kelvin jsou relevantní modely s oknem alespoň 16~000 tokenů, které s rezervou pojmou systémový prompt, zadání úlohy i celý odevzdaný zdrojový kód.
+
+\endinput

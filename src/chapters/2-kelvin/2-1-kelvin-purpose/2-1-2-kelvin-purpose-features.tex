@@ -1,0 +1,21 @@
+\subsection{Klíčové funkce systému}
+\label{subsec:kelvin-features}
+
+Systém Kelvin nabízí několik funkcí, které jsou podstatné jak pro běžný provoz, tak pro plánovanou integraci s LLM\@.
+
+\begin{itemize}
+    \item \textbf{Automatické evaluace} -- po každém odevzdání systém automaticky zkompiluje studentův kód, spustí jej proti sadě předpřipravených testovacích vstupů a porovná výstupy s očekávanými hodnotami.
+    Zdrojový kód je tak testován na jednotném prostředí, což zajišťuje spravedlivé hodnocení funkční správnosti.
+    Výsledky jednotlivých testů jsou studentovi zobrazeny okamžitě, což umožňuje rychlou iteraci nad řešením bez nutnosti čekat na zpětnou vazbu od vyučujícího.
+
+    \item \textbf{Automatické udělování bodů} -- na základě výsledků automatických testů může systém přidělit body automaticky podle poměru úspěšných testů.
+    Vyučující tak nemusí manuálně hodnotit funkční správnost a může se soustředit na kvalitativní aspekty řešení, jako je čitelnost kódu, vhodnost zvolené datové struktury nebo efektivita algoritmu.
+
+    \item \textbf{Řádkové a celkové komentáře} -- vyučující může označit libovolný řádek zdrojového kódu a připsat k němu připomínku.
+    Kromě řádkových komentářů systém umožňuje i vložení celkového komentáře k odevzdání, který není vázán na konkrétní řádek a slouží jako celkové shrnutí zpětné vazby.
+    Komentáře jsou studentovi zobrazeny přímo v kontextu kódu, takže okamžitě vidí, ke které konkrétní části řešení se zpětná vazba vztahuje.
+    Tato vlastnost je z pohledu integrace LLM zcela zásadní, protože LLM generuje komentáře přirozeně ve formátu \uv{k řádku X patří připomínka Y}.
+    Výstup modelu tak lze přímo mapovat na existující datový model systému bez nutnosti zavádět nové typy do databáze.
+\end{itemize}
+
+\endinput

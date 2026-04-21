@@ -1,0 +1,73 @@
+\subsection{Historický vývoj}
+\label{subsec:llm-history}
+
+Dnešní LLM jsou výsledkem několika desetiletí výzkumu v oblasti zpracování přirozeného jazyka, neuronových sítí a strojového učení.
+Pochopení této vývojové linie shrnutá v \tabref{tab:llm-history-summary} pomáhá vysvětlit, proč jsou dnešní modely takové, jaké jsou, a jaké problémy se přitom řešily.
+\newpage % kvůli přehlednosti
+
+\subsubsection*{Pravidlové systémy (1960 -- 1980)}
+\label{subsubsec:llm-history-rules}
+
+Prvními systémy zpracování přirozeného jazyka byly programy pracující na bázi ručně definovaných pravidel a vzorů.
+Nejznámějším příkladem je chatbot ELIZA z roku 1966, který simuloval psychoterapeuta pomocí jednoduchých vzorů přepisování vstupních vět.
+ELIZA přes svou primitivnost vyvolávala v uživatelích dojem skutečného porozumění, jev, který Joseph Weizenbaum nazval \textit{ELIZA effect}.
+Pravidlové systémy měly však zásadní omezení.
+Každá nová situace vyžadovala nová explicitní pravidla a systém nedokázal reagovat na neočekávané vstupy~\cite{weizenbaum-eliza}.
+
+\subsubsection*{Statistické jazykové modely a n-gramy (1980 -- 2000)}
+\label{subsubsec:llm-history-statistical}
+
+Přechod od pravidel ke statistickým přístupům přinesl výrazný posun.
+N-gramové modely odhadovaly pravděpodobnost výskytu slova na základě $n-1$ předcházejících slov, přičemž pravděpodobnosti byly odhadovány z četností v trénovaném korpusu.
+Bigramový model například odhaduje $P(w_t \mid w_{t-1})$ a trigramový model rozšiřuje podmínění o jeden token zpět $P(w_t \mid w_{t-2}, w_{t-1})$.
+
+Nevýhoda je, že kontextové okno bylo omezeno na $n$ tokenů, přičemž při větším $n$ exponenciálně rostla potřeba dat pro spolehlivý odhad pravděpodobností.
+Model tak nemohl zachytit dlouhodobé závislosti v textu.
+Například to, čemu odkazuje zájmeno na konci věty nebo jaké téma se rozvíjí v delším odstavci.
+
+\subsubsection*{Neuronové jazykové modely a word embeddingy (2000 -- 2017)}
+\label{subsubsec:llm-history-neural}
+
+Nástup neuronových sítí přinesl dvě klíčové inovace.
+První z nich jsou \textit{word embeddingy}, husté vektorové reprezentace slov, ve kterých slova s podobným významem  mají v prostoru malou vzájemnou vzdálenost měřenou kosinovou podobností.
+Modely Word2Vec (2013)~\cite{mikolov-word2vec} a GloVe (2014)~\cite{pennington-glove} ukázaly, že lze natrénovat reprezentace zachycující sémantické vztahy: král, muž, žena se blíží slovu královna.
+
+Druhou inovací jsou rekurentní neuronové sítě (RNN) a zejména jejich varianta LSTM (Long Short-Term Memory)~\cite{hochreiter-lstm}.
+LSTM zavedlo výpočetní brány, které modelu umožňují selektivně uchovávat informace z předchozích kroků, čímž byl z velké části vyřešen problém mizejícího gradientu (\textit{vanishing gradient}), který brzdil trénování hlubokých rekurentních sítí.
+Přesto měly RNN a LSTM dvě přetrvávající omezení: zpracovávaly tokeny sekvenčně, což znemožňovalo efektivní paralelizaci, a v praxi měly obtíže se zachycením závislostí na velmi vzdálených tokenech.
+
+\subsubsection*{Architektura Transformer (2017)}
+\label{subsubsec:llm-history-transformer}
+
+Zásadní průlom nastal v roce 2017 s publikací práce \textit{Attention is All You Need} od výzkumníků z Google Brain~\cite{vaswani-attention}.
+Transformer zcela nahradil rekurentní zpracování mechanismem \textit{self-attention}, který umožňuje modelu uvažovat o vztazích mezi všemi tokeny vstupu najednou v jednom paralelním výpočtu.
+Tím byly odstraněny obě hlavní nevýhody RNN: výpočty bylo možné plně paralelizovat na GPU a model mohl přirozeně zachytit závislosti mezi libovolně vzdálenými tokeny.
+
+\subsubsection*{Období předtrénovaných modelů a škálování (2018 -- současnost)}
+\label{subsubsec:llm-history-pretraining}
+
+Demonstrace síly předtrénování, kdy je model natrénovaný na velkém korpusu a následně doladěný na konkrétní úlohu dosahoval výsledků překonávajících dosavadní specializované přístupy.
+GPT-3 (rok 2020 s 175 miliardami parametrů) ukázal, že se škálováním modelů objevují kvalitativně nové schopnosti~\cite{brown-gpt3}.
+Od roku 2022 nastupuje éra instrukčního dolaďování a modelů trénovaných zpětnou vazbou od lidí (Reinforcement Learning from Human Feedback, RLHF), jejichž výsledkem jsou aktuální asistenti jako ChatGPT, Claude nebo Geminy.
+
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Období}   & \textbf{Klíčová technologie}    & \textbf{Zástupce}                             \\
+        \midrule
+        1960 -- 1980        & Pravidlové systémy              & ELIZA (1966)~\cite{weizenbaum-eliza}          \\
+        1980 -- 2000        & N-gramové modely                & IBM Candide                                   \\
+        2000 -- 2013        & Neuronové sítě, word embeddingy & Word2Vec (2013)~\cite{mikolov-word2vec}       \\
+        2013 -- 2017        & RNN, LSTM                       & seq2seq (2014)                                \\
+        2017 -- 2020        & Transformer, předtrénování      & BERT (2018)~\cite{devlin-bert}, GPT-2 (2019)  \\
+        2020 -- 2022        & Škálování, few-shot learning    & GPT-3 (2020)~\cite{brown-gpt3}                \\
+        2022 -- dnes        & Instrukční ladění, RLHF         & ChatGPT, Claude, Llama                        \\
+        \bottomrule
+    \end{tabular}
+    \caption{Přehled klíčových etap vývoje jazykových modelů.}
+    \label{tab:llm-history-summary}
+\end{table}
+
+\endinput

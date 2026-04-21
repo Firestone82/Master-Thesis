@@ -1,0 +1,220 @@
+\subsection{Cloudové API}
+\label{subsec:deployment-cloud}
+
+Cloudové API představuje způsob přístupu k jazykovému modelu provozovanému na serverech externího poskytovatele.
+Systém Kelvin v tomto případě komunikuje s modelem prostřednictvím HTTP požadavků -- odešle vstupní data (prompt, zadání a zdrojový kód) na API endpoint poskytovatele a obdrží vygenerovanou odpověď.
+Veškerý výpočet probíhá na straně poskytovatele, takže na školní infrastruktuře není potřeba žádný specializovaný hardware.
+Mezi hlavní poskytovatele cloudových API pro velké jazykové modely patří:
+
+\begin{itemize}
+    \item \textbf{OpenAI}~\cite{openai_api} -- modely řady GPT-5.4, GPT-5.4-mini a další varianty.
+    \item \textbf{Anthropic}~\cite{anthropic_api} -- modely Claude Opus~4.6, Claude Sonnet~4.6 a Claude Haiku~4.5.
+    \item \textbf{Google}~\cite{google_vertex} -- modely Gemini dostupné prostřednictvím Google AI Studio nebo Vertex AI\@.
+\end{itemize}
+
+\subsubsection*{Hardwarové nároky}
+\label{subsubsec:deployment-cloud-hardware}
+
+Z pohledu systému Kelvin jsou hardwarové nároky pro použití cloudového API prakticky nulové.
+Na straně systému je potřeba pouze stabilní internetové připojení a server schopný zpracovávat HTTP požadavky.
+Školní infrastruktura, která leží na síti CESNET, tuto podmínku bez problémů splňuje.
+
+\subsubsection*{Limity}
+\label{subsubsec:deployment-cloud-limits}
+
+Cloudové API zavádějí několik typů omezení, které je nutné při návrhu systému zohlednit:
+
+\begin{enumerate}
+    \item \textbf{Limit na počet tokenů v kontextu} -- každý model má maximální délku zpracovatelného vstupu i výstupu.
+    U moderních modelů činí tento limit zpravidla 128~000 tokenů nebo více, což je pro potřeby Kelvinu dostatečné.
+    Systém však musí zajistit, aby požadavky nepřekročily tento limit, a případnou chybovou odpověď API korektně ošetřit.
+
+    \item \textbf{Limit na počet požadavků} -- poskytovatelé zavádějí takzvané \textit{rate limits}, které omezují počet požadavků v daném časovém období (například 100 požadavků za minutu).
+    V kontextu Kelvinu je toto omezení relevantní zejména v období před termínem odevzdání, kdy může počet současných požadavků výrazně vzrůst.
+    Systém proto musí implementovat mechanismus řízení zátěže.
+
+    \item \textbf{Finanční náklady} -- cloudové API je zpoplatněno na základě počtu zpracovaných tokenů, což při rozsáhlém nasazení představuje opakující se výdaj.
+    Podrobná analýza nákladů pro jednotlivé modely je uvedena níže.
+
+    \item \textbf{Závislost na třetí straně} -- systém Kelvin se stává závislým na dostupnosti a spolehlivosti poskytovatele.
+    Výpadek služby, změna API rozhraní nebo ukončení podpory konkrétního modelu mohou narušit funkčnost celého modulu a vyhlašovat systémové chyby.
+\end{enumerate}
+
+\subsubsection*{Ochrana dat}
+\label{subsubsec:deployment-cloud-data-protection}
+
+Otázka ochrany dat studentů při použití cloudového API byla podrobně rozebrána v \secref[sekci]{subsubsec:gdpr-data-transfer}.
+V případě cloudového nasazení studentské zdrojové kódy a zadání úloh opouštějí školní infrastrukturu a jsou zpracovávány na serverech poskytovatele.
+Tato skutečnost může být rozhodujícím faktorem pro volbu mezi cloudovým API a on-premise nasazením.
+
+\subsubsection*{Náklady}
+\label{subsubsec:deployment-cloud-costs}
+
+Náklady cloudových API jsou určeny cenovým modelem \textit{za token}.
+Poskytovatelé zpravidla rozlišují vstupní tokeny (text odesílaný modelu) a výstupní tokeny (text generovaný modelem), přičemž výstupní tokeny bývají výrazně dražší.
+Ceny jsou uváděny za 1M (jeden milion) tokenů.
+
+
+% ===================================================================
+%   Chain-of-thought přístup (3 kroky: Draft analysis, Critique analysis, Review analysis):
+%     Průměr vstupních tokenů:  9 053  (min: 7 247, max: 9 687)
+%     Průměr výstupních tokenů: 5 149  (min: 3 863, max: 6 404)
+%
+%   Zero-shot přístup (1 krok: Zero-shot analysis):
+%     Průměr vstupních tokenů:  2 043  (min:   891, max: 4 508)
+%     Průměr výstupních tokenů:   501  (min:   305, max:   590)
+% ===================================================================
+\newcommand{\chainInToks}{9053}
+\newcommand{\chainOutToks}{5149}
+\newcommand{\zeroshotInToks}{2043}
+\newcommand{\zeroshotOutToks}{501}
+
+% Výpočet nákladů: #1 = cena vstupu ($/1M tokenů), #2 = cena výstupu ($/1M tokenů)
+%                  #3 = počet vstupních tokenů,    #4 = počet výstupních tokenů
+\newcommand{\computecost}[4]{%
+  \begingroup
+  \pgfkeys{/pgf/fpu, /pgf/fpu/output format=fixed}%
+  \pgfmathparse{(#3 * (#1 / 1000000)) + (#4 * (#2 / 1000000))}%
+  \pgfmathsetmacro{\myresult}{\pgfmathresult}%
+  \pgfkeys{/pgf/fpu=false}%
+  \pgfkeys{/pgf/number format/.cd, use comma, fixed, precision=4}%
+  \pgfmathprintnumber{\myresult}%
+  \endgroup
+}
+
+% Výpočet nákladů pro Chain-of-Thought
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeCostCOT}[2]{%
+  \computecost{#1}{#2}{\chainInToks}{\chainOutToks}%
+}
+
+% Výpočet nákladů pro Zero-shot
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeCostZS}[2]{%
+  \computecost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}%
+}
+
+% Počet odevzdání za semestr (reálná statistika Kelvin -- všechna odevzdání bez ohledu na hodnocení;
+% semestr 2025/26 podzim: 46 846, semestr 2024/25 podzim: 39 562 -- použit konzervativní odhad)
+\newcommand{\semesterSubmits}{40000}
+
+% Výpočet celkových nákladů za semestr
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M), #3 = vstupní tokeny, #4 = výstupní tokeny, #5 = počet odevzdání
+\newcommand{\computeTotalCost}[5]{%
+  \begingroup
+  \pgfkeys{/pgf/fpu, /pgf/fpu/output format=fixed}%
+  \pgfmathparse{#5 * ((#3 * (#1 / 1000000)) + (#4 * (#2 / 1000000)))}%
+  \pgfmathsetmacro{\myresult}{\pgfmathresult}%
+  \pgfkeys{/pgf/fpu=false}%
+  \pgfkeys{/pgf/number format/.cd, use comma, fixed, precision=0}%
+  \pgfmathprintnumber{\myresult}%
+  \endgroup
+}
+
+% Výpočet celkových nákladů za semestr pro Chain-of-Thought
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeTotalCostCOT}[2]{%
+  \computeTotalCost{#1}{#2}{\chainInToks}{\chainOutToks}{\semesterSubmits}%
+}
+
+% Výpočet celkových nákladů za semestr pro Zero-shot
+% #1 = cena vstupu ($/1M), #2 = cena výstupu ($/1M)
+\newcommand{\computeTotalCostZS}[2]{%
+  \computeTotalCost{#1}{#2}{\zeroshotInToks}{\zeroshotOutToks}{\semesterSubmits}%
+}
+
+Pro orientační porovnání nákladů (viz \tabref{tab:cloud-api-costs}) byly vypočítány přibližné ceny za jedno odevzdání pro dva přístupy: chain-of-thought (CoT) se třemi kroky analýzy a zero-shot s jedním voláním.
+Uvedené ceny jsou platné ke dni zpracování práce a mohou se v čase měnit.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lllll}
+            \toprule
+            & & & \multicolumn{2}{c}{\textbf{Náklady na odevzdání}} \\
+            \textbf{Model} & \textbf{Vstup (\$/1M)} & \textbf{Výstup (\$/1M)} & \textbf{chain-of-thought (\$)} & \textbf{zero-shot (\$)} \\
+            \midrule
+                GPT-5.4~\cite{gpt-5.4}                               & 2.50  & 15.00  & $\sim\computeCostCOT{2.50}{15.00}$ & $\sim\computeCostZS{2.50}{15.00}$ \\
+                GPT-5.4-mini~\cite{gpt-5.4-mini}                     & 0.75  & 4.50   & $\sim\computeCostCOT{0.75}{4.50}$  & $\sim\computeCostZS{0.75}{4.50}$ \\
+                GPT-5.4-nano~\cite{gpt-5.4-nano}                     & 0.20  & 1.25   & $\sim\computeCostCOT{0.20}{1.25}$  & $\sim\computeCostZS{0.20}{1.25}$ \\
+            \midrule
+                Claude 4.6 Opus~\cite{claude-opus-4.6}               & 5.00  & 25.00  & $\sim\computeCostCOT{5.00}{25.00}$ & $\sim\computeCostZS{5.00}{25.00}$ \\
+                Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & 3.00  & 15.00  & $\sim\computeCostCOT{3.00}{15.00}$ & $\sim\computeCostZS{3.00}{15.00}$ \\
+                Claude 3.5 Haiku~\cite{claude-3.5}                   & 0.80  & 4.00   & $\sim\computeCostCOT{0.80}{4.00}$  & $\sim\computeCostZS{0.80}{4.00}$ \\
+                Claude 3.0 Haiku~\cite{claude-3}                     & 0.25  & 1.25   & $\sim\computeCostCOT{0.25}{1.25}$  & $\sim\computeCostZS{0.25}{1.25}$ \\
+            \midrule
+                Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & 2.00  & 12.00  & $\sim\computeCostCOT{2.00}{12.00}$ & $\sim\computeCostZS{2.00}{12.00}$ \\
+                Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & 0.25  & 1.50   & $\sim\computeCostCOT{0.25}{1.50}$  & $\sim\computeCostZS{0.25}{1.50}$ \\
+                Gemini 3 Flash~\cite{geminy-3-flash}                 & 0.50  & 3.00   & $\sim\computeCostCOT{0.50}{3.00}$  & $\sim\computeCostZS{0.50}{3.00}$ \\
+                Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & 0.30  & 2.50   & $\sim\computeCostCOT{0.30}{2.50}$  & $\sim\computeCostZS{0.30}{2.50}$ \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přibližné ceny vybraných cloudových API modelů pro jedno odevzdání.}
+    \label{tab:cloud-api-costs}
+\end{table}
+
+Nejlevnější modely (GPT-5.4-nano, Claude 3.0 Haiku) klesají při zero-shot přístupu pod \$0,002 za odevzdání, zatímco CoT u modelů střední třídy (Claude 3.5 Haiku, GPT-5.4-mini) vychází na \$0,028--\$0,030.
+Výkonné modely (Claude 4.6 Opus, GPT-5.4) překračují \$0,10 za odevzdání u CoT přístupu -- přibližně sedmkrát více než jejich zero-shot ekvivalent.
+Výjimkou jsou modely optimalizované pro nízkou cenu, jako Gemini 3.1 Flash-Lite, u kterého CoT přístup stále vychází na přibližně \$0,010 za odevzdání.
+
+U modelů s podporou \textit{extended thinking}~\cite{anthropic_extended_thinking, openai_reasoning} (Claude~4.6~Opus/Sonnet, GPT-5.4) je manuální CoT zbytečný -- model provádí vnitřní uvažování v rámci jediného API požadavku, čímž snižuje počet volání i celkovou cenu za odevzdání.
+
+\subsubsection*{Odhad celkových nákladů}
+\label{subsubsec:deployment-cloud-total-costs}
+
+Pro odhad reálných nákladů lze vycházet ze skutečných statistik systému Kelvin.
+Jelikož analýza LLM probíhá při každém odevzdání bez ohledu na to, zda jej učitel bodově ohodnotí, je nutné vycházet z \textbf{celkového počtu odevzdání}, nikoliv pouze z hodnocených.
+Jak ukazuje \tabref{tab:kelvin-submits}, celkový počet odevzdání za semestr v posledních letech výrazně roste -- v semestru 2025/2026 (podzim) dosáhl \textbf{46\,846}, v semestru 2024/2025 (podzim) pak \textbf{39\,562}.
+Jako reprezentativní scénář proto uvažujeme \textbf{40\,000 odevzdání za semestr}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lrr}
+        \toprule
+        \textbf{Semestr} & \textbf{Odevzdání (celkem)} & \textbf{Studenti} \\
+        \midrule
+        2024/2025 (jaro)   & 19\,952 &  865 \\
+        2024/2025 (podzim) & 39\,562 & 1\,109 \\
+        2025/2026 (jaro)   & 46\,846 & 1\,168 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Celkové počty odevzdání v systému Kelvin (poslední semestry).}
+    \label{tab:kelvin-submits}
+\end{table}
+
+Při srovnávání přístupů je zásadní zohlednit, že CoT přístup odesílá \textbf{3 API požadavky} na jedno odevzdání (Draft, Critique, Review), zatímco zero-shot odesílá pouze \textbf{1 požadavek}.
+CoT proto spotřebuje průměrně \textbf{\chainInToks{} vstupních} a \textbf{\chainOutToks{} výstupních} tokenů na odevzdání, oproti \textbf{\zeroshotInToks{} vstupním} a \textbf{\zeroshotOutToks{} výstupním} tokenům u zero-shot -- tedy přibližně 4,4$\times$ více vstupních a 10$\times$ více výstupních tokenů.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l rr}
+        \toprule
+        & \multicolumn{2}{c}{\textbf{Celkové náklady za semestr (\semesterSubmits{} odevzdání)}} \\
+        \textbf{Model} & \textbf{chain-of-thought (\$)} & \textbf{zero-shot (\$)} \\
+        \midrule
+            GPT-5.4~\cite{gpt-5.4}                               & $\sim\computeTotalCostCOT{2.50}{15.00}$ & $\sim\computeTotalCostZS{2.50}{15.00}$ \\
+            GPT-5.4-mini~\cite{gpt-5.4-mini}                     & $\sim\computeTotalCostCOT{0.75}{4.50}$  & $\sim\computeTotalCostZS{0.75}{4.50}$ \\
+            GPT-5.4-nano~\cite{gpt-5.4-nano}                     & $\sim\computeTotalCostCOT{0.20}{1.25}$  & $\sim\computeTotalCostZS{0.20}{1.25}$ \\
+        \midrule
+            Claude 4.6 Opus~\cite{claude-opus-4.6}               & $\sim\computeTotalCostCOT{5.00}{25.00}$ & $\sim\computeTotalCostZS{5.00}{25.00}$ \\
+            Claude 4.6 Sonnet~\cite{claude-sonnet-4.6}           & $\sim\computeTotalCostCOT{3.00}{15.00}$ & $\sim\computeTotalCostZS{3.00}{15.00}$ \\
+            Claude 3.5 Haiku~\cite{claude-3.5}                   & $\sim\computeTotalCostCOT{0.80}{4.00}$  & $\sim\computeTotalCostZS{0.80}{4.00}$ \\
+            Claude 3.0 Haiku~\cite{claude-3}                     & $\sim\computeTotalCostCOT{0.25}{1.25}$  & $\sim\computeTotalCostZS{0.25}{1.25}$ \\
+        \midrule
+            Gemini 3.1 Pro~\cite{geminy-3.1-pro}                 & $\sim\computeTotalCostCOT{2.00}{12.00}$ & $\sim\computeTotalCostZS{2.00}{12.00}$ \\
+            Gemini 3.1 Flash-Lite~\cite{geminy-3.1-flash-lite}   & $\sim\computeTotalCostCOT{0.25}{1.50}$  & $\sim\computeTotalCostZS{0.25}{1.50}$ \\
+            Gemini 3 Flash~\cite{geminy-3-flash}                 & $\sim\computeTotalCostCOT{0.50}{3.00}$  & $\sim\computeTotalCostZS{0.50}{3.00}$ \\
+            Gemini 2.5 Flash~\cite{geminy-2.5-flash}             & $\sim\computeTotalCostCOT{0.30}{2.50}$  & $\sim\computeTotalCostZS{0.30}{2.50}$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Přibližné celkové náklady za semestr pro \semesterSubmits{} odevzdání.}
+    \label{tab:cloud-api-total-costs}
+\end{table}
+
+Z tabulky plyne, že i při použití nejlevnějšího modelu s CoT přístupem (GPT-5.4-nano nebo Claude~3.0~Haiku) dosáhnou náklady přibližně \$330--\$348 za semestr, zatímco výkonné modely (Claude~4.6~Opus) překročí \$6\,900.
+Zero-shot přístup je ve všech scénářích výrazně levnější -- u nejlevnějších modelů klesají náklady na \$41--\$54 za semestr.
+Pro srovnání: provoz systému Kelvin na školním serveru s GPU stojí přibližně 60\,000~Kč jednorázově, kdežto roční provoz cloudového API s modelem střední třídy a zero-shot přístupem vychází na \$100--\$200, tedy přibližně 2\,500--5\,000~Kč.
+Konkrétní volba přístupu a modelu tak závisí především na výsledku srovnávacího testování kvality výstupů.
+
+\endinput

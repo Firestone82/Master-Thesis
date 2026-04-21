@@ -1,0 +1,41 @@
+\subsection{Nasazení a výsledky hodnocení}
+\label{subsec:implementation-tool-results}
+
+Evaluační aplikace byla nasazena na školní server a zpřístupněna učitelům, kteří se podíleli na hodnocení.
+Hodnocení bylo provedeno přibližně pěti učiteli na reálných studentských odevzdáních z předmětu UPR\@.
+Zpětná vazba získaná prostřednictvím aplikace představovala klíčový zdroj dat pro srovnání kombinací promptů a modelů.
+Každý učitel hodnotil návrhy komentářů na škále 0--10 nezávisle ve dvou dimenzích: relevanci vůči kódu studenta a celkovou kvalitu formulace.
+
+\tabref[Tabulka]{tab:teacher-ratings} shrnuje průměrná hodnocení pro tři vyhodnocované kombinace promptu a modelu.
+Strategie \textit{chain-of-thought} byla testována s modelem \texttt{gemini-2.5-pro} (cloudové API) a s on-premise modelem \texttt{qwen3-coder:30b}, strategie \textit{zero-shot} pak s on-premise modelem \texttt{qwen3-coder:30b}.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{llrrrr}
+            \toprule
+            \multirow[b]{2}{*}{\textbf{Strategie}} & \multirow[b]{2}{*}{\textbf{Model}} & \multicolumn{2}{c}{\textbf{Průměrné hodnocení}} & \multirow[b]{2}{*}{\textbf{Celkové hodnocení}} & \multirow[b]{2}{*}{\textbf{Počet}} \\
+            & & \textbf{Relevance} & \textbf{Kvalita} & & \\
+            \midrule
+            \textit{chain-of-thought} & \texttt{gemini-2.5-pro}  & 7{,}72 & 7{,}74 & \tavg{7{,}73} & 47 \\
+            \textit{chain-of-thought} & \texttt{qwen3-coder:30b} & 7{,}45 & 7{,}79 & \tavg{7{,}62} & 43 \\
+            \textit{zero-shot}        & \texttt{qwen3-coder:30b} & 6{,}24 & 6{,}29 & \tavg{6{,}26} & 21 \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Průměrná hodnocení učitelů dle strategie promptování a modelu. Celkové hodnocení je aritmetickým průměrem relevance a kvality.}
+    \label{tab:teacher-ratings}
+\end{table}
+\newpage
+
+Výsledky ukazují, že strategie \textit{chain-of-thought} dosáhla výrazně lepšího hodnocení než \textit{zero-shot} (7,62 -- 7,73 oproti 6,26 z 10).
+Model \texttt{gemini-2.5-pro} dosáhl mírně vyššího celkového skóre než on-premise \texttt{qwen3-coder:30b} při stejné strategii (7,73 oproti 7,62), přičemž rozdíl je minimální (0,11 bodu) a on-premise model překonal cloudový v dimenzi kvality formulace (7,79 oproti 7,74).
+
+Je však třeba brát tato data s rezervou -- hodnocení se zúčastnilo pouze pět z devíti vyučujících a počty ohodnocených návrhů jsou relativně nízké.
+Výsledky proto nelze považovat za statisticky průkazné; jejich hlavním přínosem je orientační srovnání strategií.
+Relevantní data přinese až dlouhodobější provoz systému, kdy učitelé přirozeně přijímají nebo zamítají návrhy v rámci běžného hodnocení.
+
+Shromážděná hodnocení zároveň tvoří počáteční dataset pro případné budoucí doladění (\textit{fine-tuning}) jazykového modelu, jak je diskutováno v~\secref[kapitole]{ch:conclusion}.
+Každý záznam obsahuje kombinaci vstupních parametrů, vygenerovaný návrh a nezávislá hodnocení od více učitelů, což z datasetu činí využitelný podklad pro další trénování.
+
+\endinput

@@ -1,0 +1,51 @@
+\subsection{Obecné modely}
+\label{subsec:models-general}
+
+Druhou skupinu tvoří obecné jazykové modely, které nebyly primárně navrženy pro práci s kódem, ale díky svému rozsahu a kvalitě trénovaných dat dosahují v úlohách spojených s analýzou a generováním kódu velmi dobrých výsledků.
+Tyto modely jsou zpravidla výrazně větší než specializované varianty a jejich trénování vyžadovalo řádově vyšší výpočetní prostředky.
+
+\begin{itemize}
+    \item \textbf{GPT-5.4}~\cite{gpt-5.4} od společnosti OpenAI je proprietární model dostupný výhradně prostřednictvím cloudového API\@.
+    Přestože není specializován na kód, dosahuje na benchmarku HumanEval~\cite{humaneval} výsledků přesahujících 90\%.
+    Menší varianty GPT-5.4-mini~\cite{gpt-5.4-mini} a GPT-5.4-nano~\cite{gpt-5.4-nano} nabízejí kompromis mezi cenou a výkonem.
+    Kontextové okno všech variant je minimálně 128~000 tokenů.
+
+    \item \textbf{Claude 4.6}~\cite{claude-opus-4.6,claude-sonnet-4.6, claude-3.5} od společnosti Anthropic nabízí silné analytické schopnosti a detailní porozumění instrukcím.
+    Řada modelů zahrnuje varianty Opus (nejvyšší kvalita), Sonnet (vyvážený poměr ceny a kvality) a Haiku (nejrychlejší a nejlevnější).
+    Modely Claude jsou rovněž proprietární a dostupné pouze přes API\@.
+
+    \item \textbf{Gemini}~\cite{geminy-3.1-pro,geminy-3-flash} od společnosti Google nabízí modely s velkými kontextovými okny (až 1~000~000 tokenů u vybraných variant), což může být výhodné pro analýzu rozsáhlejších studentských projektů.
+    Řada zahrnuje varianty Pro (nejvyšší kvalita), Flash (rychlý a levný) a Flash Lite (nejlevnější).
+
+    \item \textbf{Grok}\footnote{Groq a Grok jsou dvě rozdílné splečnosti.}~\cite{grok-2} od společnosti Elon Musk je model optimalizovaný pro práci s kódem, který dosahuje velmi dobrých výsledků i bez specializovaného tréninku na kódových datech.
+    Je dostupný pouze pro uživatele platformy X (dříve Twitter) a jeho použití je omezeno na 20~000 tokenů v kontextu.
+
+    \item \textbf{Mistral Large 2}~\cite{mistral-large-2} je model od společnosti Mistral, který se zaměřuje na vysokou kvalitu generovaných textů a širokou škálu podporovaných úloh, včetně práce s kódem.
+    Je dostupný přes API\@ a nabízí kontextové okno 128~000 tokenů.
+\end{itemize}
+
+Srovnání zveřejněných hodnot úspěšnosti jednotlivých obecných modelů na benchmarku HumanEval je shrnuto v \tabref{tab:humaneval-general-models}.
+Hodnoty pocházejí z dokumentace příslušných poskytovatelů a z veřejných leaderboardů a vztahují se k metrice \textit{pass@1}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lr}
+        \toprule
+        \textbf{Model}                         & \textbf{HumanEval pass@1 [\%]} \\
+        \midrule
+        GPT-5.4~\cite{gpt-5.4}                 & 93.1                           \\
+        Claude~3.5~Sonnet~\cite{claude-3.5}    & 93.7                           \\
+        Claude~Opus~4.6~\cite{claude-opus-4.6} & 90.4                           \\
+        GPT-4o~\cite{gpt-4o}                   & 90.2                           \\
+        Mistral~Large~2~\cite{mistral-large-2} & 87.0                           \\
+        Gemini~3.1~Pro~\cite{geminy-3.1-pro}   & 89.2                           \\
+        Grok-2~\cite{grok-2}                   & 88.4                           \\
+        GPT-4.5~\cite{gpt-4.5}                 & 88.0                           \\
+        Gemini~1.5~Pro~\cite{gemini-1.5-pro}   & 84.1                           \\
+        \bottomrule
+    \end{tabular}
+    \caption[Úspěšnost proprietálních jazykových modelů na benchmarku HumanEval (pass@1).]{Úspěšnost proprietálních jazykových modelů na benchmarku HumanEval (pass@1).~\cite{llm-stats-humaneval}}
+    \label{tab:humaneval-general-models}
+\end{table}
+
+\endinput

@@ -1,0 +1,58 @@
+\subsection{Strategie promptování}
+\label{subsec:prompts-strategies}
+
+Způsob, jakým je prompt formulován, zásadně ovlivňuje kvalitu a konzistentnost výstupu modelu.
+V literatuře jsou popsány tři základní strategie promptování, které se liší mírou kontextu a strukturou poskytnutou modelu~\cite{brown-gpt3,wei-cot}.
+
+\subsubsection*{Zero-shot prompting}
+\label{subsubsec:prompts-strategies-zero-shot}
+
+Při přístupu \textit{zero-shot} je modelu zadán úkol bez jakéhokoli příkladu očekávaného výstupu~\cite{kojima-zeroshot}.
+Model se spoléhá výhradně na znalosti získané při trénování.
+Pro analýzu studentského kódu by \textit{zero-shot} prompt vypadal přibližně takto: \uv{Analyzuj následující zdrojový kód a identifikuj v něm problémy.}
+
+Výhodou tohoto přístupu je jednoduchost a nízká spotřeba tokenů.
+Nevýhodou je, že model nemá explicitní vodítko pro formát a úroveň detailu odpovědi, což může vést k nekonzistentním výstupům.
+Jeden dotaz může vrátit stručný seznam problémů, zatímco jiný rozsáhlé vysvětlení s příklady oprav.
+
+\subsubsection*{Few-shot prompting}
+\label{subsubsec:prompts-strategies-few-shot}
+
+Přístup \textit{few-shot} rozšiřuje prompt o jeden nebo více příkladů (vzorových dvojic vstup/výstup), které ukazují modelu požadovaný formát a úroveň detailu odpovědi~\cite{brown-gpt3}.
+Model tak může na základě poskytnutých příkladů lépe pochopit, jaký typ výstupu je očekáván.
+
+Pro systém Kelvin by \textit{few-shot} prompt mohl obsahovat ukázkový zdrojový kód s předdefinovanými komentáři, které ukazují, jakým způsobem má model identifikovat a popsat nalezené problémy.
+Nevýhodou je zvýšená spotřeba tokenů, protože každý příklad zabírá prostor v kontextovém okně.
+U modelů s menším kontextovým oknem může tento přístup významně omezit prostor pro samotný analyzovaný kód.
+
+\subsubsection*{Chain-of-thought prompting}
+\label{subsubsec:prompts-strategies-chain-of-thought}
+
+Strategie \textit{chain-of-thought} (CoT) vede model k tomu, aby svou analýzu provedl v několika po sobě jdoucích krocích~\cite{wei-cot}.
+Místo přímého vygenerování konečného výstupu model nejprve provede hrubou analýzu, poté ji kriticky zhodnotí a na základě tohoto zhodnocení vytvoří finální seznam zjištěných problémů.
+Tuto logiku lze nahradit variantou \textit{zero-shot} v případě, že model poskytuje vestavěnou \textit{thinking} logiku, která pracuje obdobně jako CoT\@.
+V kontextu systému Kelvin byl navržen třístupňový přístup CoT:
+
+\begin{enumerate}
+    \item \textbf{Hrubá analýza} (\textit{draft analysis}) identifikuje všechny potenciální problémy v kódu studenta.
+    V tomto kroku je model instruován, aby byl co nejdůkladnější a nezabýval se filtrováním irelevantních nálezů.
+
+    \item \textbf{Kritická revize} (\textit{critique analysis}) zpracuje výstup předchozího kroku a vyhodnotí relevanci každého nálezu vzhledem k zadání úlohy.
+    Tento krok slouží k odstranění falešných pozitiv a nálezů, které jsou sice technicky správné, ale v kontextu zadání nejsou důležité.
+
+    \item \textbf{Finální přehled} (\textit{review analysis}) vytvoří konečný strukturovaný výstup obsahující pouze relevantní a ověřené problémy ve formátu vhodném pro systém.
+\end{enumerate}
+
+Tento přístup je výpočetně náročnější, protože vyžaduje tři po sobě jdoucí volání modelu.
+Jak bylo ukázáno v \tabref[tabulce]{tab:cloud-api-costs}, náklady na jedno odevzdání při CoT přístupu jsou přibližně 4 až 10krát vyšší než u přímého přístupu s jedním voláním.
+Zároveň je zpracování jednoho odevzdání výrazně pomalejší.
+Na druhou stranu CoT přístup může vést k přesnějším a lépe strukturovaným výstupům, protože každý krok slouží jako kontrolní mechanismus pro výstup předchozího kroku.
+
+\subsubsection*{Thinking}
+\label{subsubsec:prompts-strategies-thinking}
+
+Některé modely, zejména ty nejnovější, mají vestavěnou \textit{thinking} logiku, která umožňuje modelu provést vnitřní analýzu a zhodnocení bez nutnosti explicitního rozdělení do několika kroků.
+V tomto případě by prompt mohl být formulován jako \uv{Analyzuj následující zdrojový kód a identifikuj v něm problémy. Uvažuj o každém kroku své analýzy a zhodnoť relevanci nálezů vzhledem k zadání úlohy.}
+Tento přístup může být efektivnější než tradiční CoT, protože model provádí interní zpracování a nemusí být explicitně instruován k rozdělení do kroků.
+
+\endinput

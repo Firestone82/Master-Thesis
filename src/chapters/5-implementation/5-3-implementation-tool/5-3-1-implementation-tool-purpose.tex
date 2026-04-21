@@ -1,0 +1,15 @@
+\subsection{Účel a motivace}
+\label{subsec:implementation-tool-purpose}
+
+Hlavní výzvou při výběru vhodného promptu, modelu a promptovací techniky je absence objektivního kritéria pro porovnání jejich kvality.
+Automatické metriky, jako je délka odpovědi nebo počet identifikovaných problémů, neposkytují dostatečně spolehlivý obraz o skutečné užitečnosti navrhovaných komentářů pro učitele.
+Vyhodnocení proto musí provést člověk, který posoudí, zda jsou jednotlivé návrhy relevantní a formulované správně.
+
+Přímé testování různých konfigurací v produkčním systému Kelvin by však bylo nepraktické.
+Každá změna promptu nebo modelu by ovlivnila všechna aktuálně probíhající odevzdání a znemožnila kontrolované porovnání za stejných podmínek.
+Učitelé by zároveň neměli možnost posoudit více variant vedle sebe a srovnat je na totožné sadě studentských řešení.
+
+Z tohoto důvodu byla v rámci práce vytvořena samostatná evaluační aplikace, jejímž účelem je umožnit strukturovaný sběr zpětné vazby od učitelů nad historickými odevzdáními.
+Aplikace poskytuje kontrolované prostředí, ve kterém lze nezávisle měnit jednotlivé proměnné a objektivně porovnat kvalitu výstupů různých kombinací.
+
+\endinput

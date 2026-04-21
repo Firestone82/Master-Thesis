@@ -1,0 +1,51 @@
+\subsection{Schopnost pojmout celé studentské řešení}
+\label{subsec:criteria-context-window}
+
+V \secref[sekci]{subsec:llm-token-limit} byla popsána omezená kapacita kontextového okna LLM, která určuje maximální počet tokenů, jež může model v rámci jednoho požadavku zpracovat.
+Do tohoto limitu se započítávají jak tokeny vstupního promptu, tak tokeny generované ve výstupu modelu.
+
+Pro analýzu studentských řešení je klíčové, aby model dokázal zpracovat celé odevzdání společně s doprovodným kontextem v rámci jednoho požadavku.
+Pouze v takovém případě může model vyhodnotit řešení jako celek a poskytnout kontextově správnou a konzistentní zpětnou vazbu.
+
+Na základě experimentálních měření uvedených v \secref[sekci]{subsec:criteria-operational} lze očekávat, že samotné studentské řešení spolu se zadáním typicky tvoří několik tisíc tokenů.
+Pro přesnější odhad velikosti jednotlivých částí vstupu byl orientačně použit nástroj pro počítání tokenů dostupný na webu\footnote{\url{https://llmtokencounter.com/}}.
+Vstup modelu se obvykle skládá z následujících částí:
+
+\begin{itemize}
+    \item \textbf{Systémový prompt} -- instrukce definující roli modelu, požadovaný styl odpovědi a formát výstupu.
+    Typicky přibližně 1000--2000 tokenů.
+
+    \item \textbf{Zadání úlohy} -- text zadání včetně požadavků na vstupy, výstupy a případných příkladů.
+    Obvykle přibližně 500--1000 tokenů.
+
+    \item \textbf{Zdrojový kód} -- samotné řešení studenta.
+    U středně velkých úloh se jedná přibližně o 1000--4000 tokenů.
+\end{itemize}
+
+Celkový objem vstupních dat pro typické odevzdání se tedy pohybuje přibližně mezi 2500 a 7000 tokeny.
+Je rovněž nutné počítat s rezervou pro generovaný výstup modelu, který může obsahovat několik stovek až tisíc tokenů zpětné vazby.
+
+Pro běžné úlohy je proto dostačující kontextové okno přibližně 8~000 tokenů.
+S ohledem na rozsáhlejší zadání, vícesouborová řešení a potřebu dostatečné rezervy je však jako minimální požadavek stanoveno kontextové okno o velikosti alespoň 16~000 tokenů.
+Moderní jazykové modely tuto hranici zpravidla bez problémů splňují, protože většina současných modelů nabízí kontextové okno v rozsahu 32~000 až 128~000 tokenů.
+Všechna čtyři kritéria výběru jsou shrnuta v \tabref[tabulce]{tab:selection-criteria}.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lp{9cm}l}
+            \toprule
+            \textbf{Kritérium}              & \textbf{Popis}                                                                 & \textbf{Minimální požadavek}             \\
+            \midrule
+            Kvalita výstupů                 & Věcně správné, srozumitelné, relevantní komentáře                              & Vyšší než průměr                         \\
+            Dostupnost                      & Přístupný přes API nebo ke stažení; vhodná licence pro akademické použití      & Open-source nebo API s DPA               \\
+            Náročnost provozu               & Přijatelné náklady na token nebo na hardware                                   & Viz \tabref{tab:deployment-comparison}   \\
+            Kontextové okno                 & Schopnost zpracovat celé odevzdání včetně promptu                              & $\geq$ 16~000 tokenů                     \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Přehled kritérií výběru modelu a jejich minimálních požadavků}
+    \label{tab:selection-criteria}
+\end{table}
+
+\endinput

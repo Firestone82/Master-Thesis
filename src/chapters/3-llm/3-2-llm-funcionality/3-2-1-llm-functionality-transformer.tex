@@ -1,0 +1,30 @@
+\subsection{Architektura Transformer}
+\label{subsec:transformer-architecture}
+
+Transformer je neuronová síť navržená pro zpracování sekvencí, jejíž jádro tvoří mechanismus \textit{self-attention}~\cite{vaswani-attention}.
+Ten umožňuje modelu pro každý token v sekvenci zjistit, jak relevantní jsou pro jeho interpretaci všechny ostatní tokeny, a to paralelně v jednom výpočtu.
+
+Formálně lze říci, že vstupní matice tokenu embeddingu $\mathbf{X} \in \mathbb{R}^{T \times d}$ je nejprve lineárními transformacemi promítnuta do tří prostorů: dotazů (queries $\mathbf{Q}$), klíčů (keys $\mathbf{K}$) a hodnot (values $\mathbf{V}$):
+
+\begin{equation}
+    \mathbf{Q} = \mathbf{X}\mathbf{W}^Q, \quad
+    \mathbf{K} = \mathbf{X}\mathbf{W}^K, \quad
+    \mathbf{V} = \mathbf{X}\mathbf{W}^V \label{eq:equation-qkv}
+\end{equation}
+
+Výstup attention mechanismu je pak~\cite{vaswani-attention}:
+\begin{equation}
+    \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right)\mathbf{V} \label{eq:equation-attention}
+\end{equation}
+
+Výraz $\mathbf{Q}\mathbf{K}^\top$ produkuje matici skóre $T \times T$, kde prvek na pozici $(i, j)$ vyjadřuje relevanci tokenu $j$ pro token $i$.
+Softmax tato skóre normalizuje na pravděpodobnostní rozdělení, které se použije jako váhy pro lineární kombinaci hodnotových vektorů.
+V generačních modelech je navíc aplikována \textit{kauzální maska}: skóre pro všechny budoucí tokeny jsou nastavena na $-\infty$, čímž je garantováno, že model při predikci tokenu $t$ nemá přístup k tokenům na pozicích $t+1, t+2, \ldots$
+
+Namísto jednoho attention mechanismu používají Transformery \textit{multi-head attention}~\cite{vaswani-attention}, tedy $h$ paralelních attention hlav zpracovává vstup v různých pod prostorech, přičemž se každá hlava může specializovat na jiný typ závislosti (syntaktický vztah, sémantická vazba, vzdálenostní vzor apod.).
+
+Každý Transformer blok dále obsahuje dvojvrstvou \textit{feed-forward síť} aplikovanou na každý token nezávisle.
+Tato vrstva slouží jako adresovatelná paměť uchovávající faktické znalosti a reziduální spojení s vrstvou normalizací stabilizující data tréninku~\cite{vaswani-attention}.
+Celý model je sestaven z desítek až stovek těchto bloků vrstvených za sebou.
+
+\endinput

@@ -1,0 +1,44 @@
+\subsection{Výpočetní náročnost (GPU / CPU / TPU)}
+\label{subsec:llm-computational-cost}
+
+Inference jazykového modelu je výpočetně náročná operace.
+Její jádro tvoří opakované násobení matic velkých rozměrů v každé vrstvě architektury Transformer, přičemž tyto operace jsou pro každý generovaný token prováděny znovu.
+Způsob, jakým je výpočet prováděn, ať už na CPU, GPU nebo specializovaném akcelerátoru jako TPU (Tensor Processing Unit), zásadně ovlivňuje latenci i propustnost systému.
+TPU jsou čipy navržené společností Google specificky pro operace s tenzory a mohou nabídnout vyšší efektivitu inference při nižší spotřebě energie, nicméně jejich dostupnost je v současnosti omezena převážně na cloudové prostředí Google Cloud.
+
+\subsubsection*{Grafické karty jako primární hardware pro inference}
+\label{subsubsec:llm-computational-cost-gpu}
+
+GPU jsou navrženy pro masivně paralelní výpočty, kde moderní karta jako NVIDIA RTX 4090 disponuje 16~384 CUDA jádry optimalizovanými pro maticové operace.
+Tomu odpovídá výrazně vyšší výkon při inferenci.
+Model s 7 miliardami parametrů zpracuje dotaz s 8~000 vstupními tokeny na GPU s 24 GB VRAM typicky za 15 až 60 sekund v závislosti na délce generovaného výstupu.
+Výkon inference se standardně měří metrikou \textit{tokenů za sekundu} (tokens/s), která udává, kolik tokenů model vygeneruje za jednotku času.
+Na moderním GPU dosahují 7B modely typicky 30 až 80 tokenů za sekundu, zatímco na CPU se tato hodnota pohybuje řádově v jednotkách tokenů za sekundu.
+Dalším klíčovým faktorem je šířka pásma paměti, kterou GPU mají typicky 500 až 2~000 GB/s, zatímco u CPU je to 50 až 200 GB/s.
+Protože největším úzkým hrdlem inference je přenos vah modelu z paměti do výpočetních jader, je tato vlastnost pro výkon inference zásadní.
+
+\subsubsection*{CPU inference a její omezení}
+\label{subsubsec:llm-computational-cost-cpu}
+
+Provoz modelu na CPU je technicky možný, avšak výrazně pomalejší.
+Tentýž dotaz, který GPU zpracuje za 30 sekund, může výkonnému serverovému CPU (například AMD EPYC nebo Intel Xeon) trvat 5 až 15 minut, v závislosti na velikosti modelu a délce vstupu.
+Pro systém s asynchronním zpracováním, kde student nečeká na výsledek okamžitě, je takováto latence přijatelná pouze v případech velmi nízkého objemu odevzdání.
+Při hromadném odevzdávání úloh před deadlinem by se fronty zpracování prodlužovaly na nepřijatelné hodnoty a výkon serveru by se výrazně snížil.
+
+\subsubsection*{Propustnost a škálování}
+\label{subsubsec:llm-computational-cost-throughput-scaling}
+
+V prostředí školního systému je relevantní nejen latence jednotlivého dotazu, ale i propustnost systému při vyšší zátěži.
+Pokud třicet studentů odevzdá řešení v krátkém časovém okně, jsou požadavky zařazeny do fronty a zpracovávány postupně.
+Na GPU s dostatečnou pamětí lze požadavky zpracovávat i v dávkách (batching), čímž se zvyšuje efektivita využití hardware.
+Na CPU je dávkové zpracování prakticky nerealizovatelné bez výrazného prodloužení celkové doby zpracování.
+
+Výhodou CPU inference je však výrazně větší dostupná operační paměť (RAM), která umožňuje provozovat i modely, jež by se do VRAM grafické karty nevešly.
+Existuje také hybridní přístup, kdy je část vah modelu uložena v RAM a část ve VRAM, přičemž inference probíhá částečně na CPU a částečně na GPU\@.
+Tato varianta umožňuje nasadit větší modely za cenu pomalejšího zpracování.
+
+Protože systém Kelvin zpracovává analýzu asynchronně, tedy výsledky jsou dostupné s určitým zpožděním po odevzdání, nikoliv okamžitě.
+Tak je pro školní prostředí latence v řádu minut přijatelná.
+Klíčové je pouze to, aby výsledky byly dostupné před tím, než vyučující přistoupí k manuálnímu hodnocení.
+
+\endinput

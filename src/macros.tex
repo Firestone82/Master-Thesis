@@ -1,0 +1,39 @@
+% Useful to.do command for marking places in the text that need to be completed
+\newcommand{\TODO}[1]{\textbf{\textcolor{red}{TODO:}} #1}
+
+% Custom command for inline code snippets
+% Usage: \code{print("Hello, World!")}
+\newcommand{\code}[1]{%
+    \fcolorbox{black}{codegray}{\texttt{#1}}%
+}
+
+% Custom command for approximate values with a tilde symbol
+% Usage: \tavg{9053} → ~ 9 053
+\newcommand{\tavg}[1]{\(\sim\)\,#1}
+
+% Custom commands for referencing tables, figures, and sections with consistent formatting
+% Usage: \tabref{tab:example} → Tabulka 1, \figref{fig:example} → Obrázek 1, \secref{sec:example} → Sekce 1
+% Optional argument allows for custom reference names, e.g., \tabref[Tab.]{tab:example} → Tab. 1
+\newcommand{\tabref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+    {\hyperref[#2]{Tabulka~\ref*{#2}}}%
+    {\hyperref[#2]{#1~\ref*{#2}}}%
+}
+
+\newcommand{\figref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+    {\hyperref[#2]{Obrázek~\ref*{#2}}}%
+    {\hyperref[#2]{#1~\ref*{#2}}}%
+}
+
+\newcommand{\secref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+    {\hyperref[#2]{Sekce~\ref*{#2}}}%
+    {\hyperref[#2]{#1~\ref*{#2}}}%
+}
+
+\newcommand{\lstref}[2][]{%
+    \ifthenelse{\equal{#1}{}}%
+    {\hyperref[#2]{Výpis~\ref*{#2}}}%
+    {\hyperref[#2]{#1~\ref*{#2}}}%
+}

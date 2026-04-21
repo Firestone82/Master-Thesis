@@ -1,0 +1,74 @@
+\subsection{Srovnání strategií promptování}
+\label{subsec:choice-strategies}
+
+Pro porovnání strategií promptování bylo provedeno experimentální měření na pěti reálných studentských odevzdáních z předmětu UPR v systému Kelvin.
+Každé odevzdání bylo zpracováno modelem \textbf{Qwen3-Coder:30B} oběma přístupy: \textit{chain-of-thought} se třemi kroky analýzy a \textit{zero-shot} s jediným voláním modelu.
+Detailní výsledky jsou zobrazeny v \tabref[tabulce]{tab:cot-vs-oneshot-detail}, naměřená spotřeba tokenů v \tabref[tabulce]{tab:token-usage} a souhrnné průměry v \tabref[tabulce]{tab:cot-vs-zeroshot-summary}.
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{llllll}
+            \toprule
+            \textbf{Strategie} & \textbf{Odevzdání} & \textbf{Čas (s)} & \textbf{Problémy} & \textbf{Vstupní tokeny} & \textbf{Výstupní tokeny} \\
+            \midrule
+            Chain-of-thought   & 1233               & 157,09           & 3                 & 9\,584                  & 5\,550                   \\
+            Chain-of-thought   & 1223               & 171,21           & 4                 & 9\,687                  & 6\,404                   \\
+            Chain-of-thought   & 1224               & 107,44           & 2                 & 7\,247                  & 4\,314                   \\
+            Chain-of-thought   & 1215               & 103,48           & 2                 & 9\,620                  & 3\,863                   \\
+            Chain-of-thought   & 1228               & 131,69           & 4                 & 9\,126                  & 5\,614                   \\
+            \midrule
+            Zero-shot           & 1233               & 16,85            & 5                 & 2\,070                  & 590                      \\
+            Zero-shot           & 1223               & 12,64            & 5                 & 891                     & 478                      \\
+            Zero-shot           & 1224               & 14,02            & 5                 & 1\,218                  & 570                      \\
+            Zero-shot           & 1215               & 13,04            & 2                 & 4\,508                  & 305                      \\
+            Zero-shot           & 1228               & 21,88            & 6                 & 1\,527                  & 564                      \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Detailní výsledky experimentu s modelem Qwen3-Coder:30B na pěti studentských odevzdání z předmětu UPR\@.}
+    \label{tab:cot-vs-oneshot-detail}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{lrrrr}
+            \toprule
+            \textbf{Přístup} & \textbf{Vstup min--max} & \textbf{Vstup průměr} & \textbf{Výstup min--max} & \textbf{Výstup průměr} \\
+            \midrule
+            Zero-shot         & 891--4~508              & \tavg{2~043}          & 305--590                 & \tavg{501}             \\
+            Chain-of-thought & 7~247--9~687            & \tavg{9~053}          & 3~863--6~404             & \tavg{5~149}           \\
+            \bottomrule
+        \end{tabular}
+    }
+    \caption{Naměřená spotřeba tokenů při analýze studentských odevzdání dle \tabref[tabulky]{tab:cot-vs-oneshot-detail}.}
+    \label{tab:token-usage}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Metrika} & \textbf{Chain-of-thought} & \textbf{Zero-shot} \\
+        \midrule
+        Průměrný čas (s)             & 134,18    & 15,69 \\
+        Průměrný počet problémů      & 3,0       & 4,6 \\
+        Průměrné vstupní tokeny      & 9\,053    & 2\,043 \\
+        Průměrné výstupní tokeny     & 5\,149    & 501 \\
+        Poměr rychlosti              & 1$\times$ & 8,5$\times$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Průměrné hodnoty porovnání chain-of-thought a zero-shot přístupu na modelu Qwen3-Coder:30B.}
+    \label{tab:cot-vs-zeroshot-summary}
+\end{table}
+
+Přístup zero-shot je výrazně rychlejší (průměrně 15,7~s oproti 134,2~s) a spotřebovává přibližně čtyřikrát méně vstupních a desetkrát méně výstupních tokenů.
+Přístup zero-shot zároveň naivně nachází vyšší počet problémů (4,6 oproti 3,0); chain-of-thought záměrně filtruje falešné pozitivní nálezy v kroku kritické revize, a proto reportuje méně, avšak pečlivěji ověřených zjištění.
+Z hlediska nákladů na cloudové API je vliv výběru strategie zásadní: jak ukazuje \tabref[tabulka]{tab:cloud-api-costs}, chain-of-thought zvyšuje cenu za jedno odevzdání přibližně čtyř až desetkrát oproti zero-shot přístupu.
+
+Výsledná implementace bude podporovat obě strategie s možností konfigurace.
+Pro on-premise nasazení bude jako výchozí volba použit chain-of-thought, jehož vyšší výpočetní náklady jsou při lokálním provozu bez marginálních nákladů přijatelné.
+Pro cloudové API bude k dispozici volba zero-shot, která výrazně snižuje cenu za odevzdání při zachování přijatelné kvality výstupů.
+
+\endinput

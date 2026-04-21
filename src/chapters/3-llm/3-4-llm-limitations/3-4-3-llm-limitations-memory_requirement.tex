@@ -1,0 +1,62 @@
+\subsection{Paměťové nároky}
+\label{subsec:llm-memory-requirements}
+
+Paměťové nároky pro provoz jazykového modelu jsou výrazně vyšší, než by se mohlo na první pohled zdát.
+Celkové nároky tvoří tři složky:
+
+\begin{itemize}
+    \item paměť potřebnou pro uložení vah modelu,
+    \item paměť využívanou během inference (mezivýpočty a attention cache),
+    \item režii spojenou s paralelním zpracováním více požadavků.
+\end{itemize}
+
+Tyto faktory omezují velikost modelu, který lze efektivně provozovat lokálně, a zároveň určují maximální počet paralelních analýz bez výrazného zpomalení systému.
+
+\subsubsection*{Váhy modelu}
+
+V plné 16-bitové přesnosti (FP16 nebo BF16) jsou potřeba 2 bajty na parametr.
+Model se 7 miliardami parametrů tak vyžaduje přibližně 14 GB VRAM pouze pro uložení vah,
+což přesahuje kapacitu většiny běžných spotřebitelských grafických karet.
+
+\textbf{Kvantizace} je technikou, která tuto situaci výrazně mění.
+Redukcí přesnosti vah z 16 bitů na 8 nebo 4 bity lze paměťové nároky snížit na přibližně polovinu, respektive čtvrtinu původní hodnoty.
+Model 7B v 4-bitové kvantizaci (označované například jako GGUF Q4\_K\_M) vyžaduje přibližně 4 až 5 GB VRAM, hodnota dostupná i na středně výkonných spotřebitelských GPU\@.
+Ztráta kvality výstupu při kvalitní kvantizaci je pro praktické použití zpravidla zanedbatelná a pro účely analýzy studentských řešení zcela přijatelná.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        \textbf{Velikost modelu} & \textbf{FP16} & \textbf{Q8} & \textbf{Q4} & \textbf{Typická GPU} \\
+        \midrule
+        3B parametrů   & $\sim 6$ GB   & $\sim 3$ GB   & $\sim 2$ GB   & RTX 4060 (8 GB) \\
+        7B parametrů   & $\sim 14$ GB  & $\sim 7$ GB   & $\sim 4$ GB   & RTX 3060 (12 GB) \\
+        13B parametrů  & $\sim 26$ GB  & $\sim 13$ GB  & $\sim 7$ GB   & RTX 4070 Ti (12 GB) \\
+        34B parametrů  & $\sim 68$ GB  & $\sim 34$ GB  & $\sim 19$ GB  & RTX 4090 (24 GB) \\
+        70B parametrů  & $\sim 140$ GB & $\sim 70$ GB  & $\sim 38$ GB  & 2$\times$ RTX 4090 (48 GB) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Přibližné paměťové nároky modelů podle počtu parametrů a kvantizace (bez KV cache)}
+    \label{tab:memory-requirements}
+\end{table}
+
+\subsubsection*{KV cache}
+\label{subsubsec:kv-cache}
+
+KV cache byla vysvětlena v \secref[sekci]{subsec:inference-generation}.
+Její velikost roste lineárně s délkou zpracovávané sekvence a s počtem vrstev modelu.
+Pro model se 32 vrstvami, kontextovým oknem 8~000 tokenů a jedním souběžným požadavkem je KV cache typicky v řádu 2 až 4 GB VRAM, v závislosti na architektuře attention mechanismu
+(MHA -- Multi-Head Attention vs.\ GQA -- Grouped-Query Attention).
+Při zpracování více souběžných požadavků (dávkové zpracování) se tento nárok násobí.
+
+\subsubsection*{Praktické dopady}
+\label{subsubsec:practical-memory-implications}
+
+Z výše uvedených hodnot plyne, že pro efektivní lokální provoz modelu třídy 7B parametrů je zapotřebí GPU s alespoň 4 GB VRAM pro Q4 kvantizaci, přičemž 12 GB nebo více poskytuje pohodlnou rezervu pro KV cache.
+Model třídy 13B parametrů vyžaduje GPU s 8 až 12 GB VRAM v Q4 kvantizaci.
+Pro modely třídy 70B a více parametrů je nutné nasazení více GPU -- například konfigurace 2$\times$ RTX 4090 s celkovou kapacitou 48 GB VRAM umožňuje provoz 70B modelu v Q4 kvantizaci.
+
+%Pokud škola disponuje odpovídajícím GPU (například NVIDIA RTX 3060 s 24 GB nebo profesionální kartou řady A), je lokální nasazení modelu 7B nebo 13B technicky realistické.
+%V opačném případě je variantou cloudové API, u nějž jsou paměťové nároky plně v režiji poskytovatele.
+
+\endinput

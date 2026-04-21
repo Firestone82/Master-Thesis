@@ -1,0 +1,23 @@
+\subsection{Dostupnost modelu}
+\label{subsec:criteria-availability}
+
+Dostupností modelu se rozumí soubor podmínek, které určují, zda a jakým způsobem lze model v systému Kelvin reálně provozovat.
+Nejde pouze o technický přístup k modelu, ale i o právní a provozní aspekty, které mohou některé varianty zcela vyloučit:
+
+\begin{enumerate}
+    \item \textbf{Způsob přístupu} -- model může být dostupný jako cloudové API, kdy veškerý výpočet zajišťuje externí poskytovatel, nebo jako open-source model ke stažení a lokálnímu nasazení.
+    Cloudové API nabízí snadnou integraci bez hardwarových nároků, ale zavádí závislost na externím poskytovateli.
+    Open-source modely naopak umožňují lokální nasazení a plnou kontrolu nad zpracováním dat.
+
+    \item \textbf{Licenční podmínky} -- pro akademické použití v rámci vysoké školy je nutné ověřit, zda licence modelu takové nasazení umožňuje.
+    Některé modely jsou dostupné pod permisivními licencemi (Apache 2.0, MIT), jiné však obsahují omezení pro komerční použití nebo vyžadují uzavření samostatné licenční smlouvy.
+
+    \item \textbf{Geografická dostupnost a datová centra} -- jak bylo rozebráno v \secref[sekci]{subsubsec:gdpr-data-transfer} o přenosu osobních údajů, pro dodržení GDPR je důležité, aby poskytovatel cloudového API provozoval datová centra v regionech, které jsou s GDPR v souladu.
+    Tato podmínka se týká výhradně cloudového nasazení, protože u on-premise řešení data školu neopouštějí.
+
+    \item \textbf{Stabilita a podpora} -- u cloudového API je klíčová spolehlivost služby a předvídatelnost cenového modelu.
+    Změna API, zrušení konkrétního modelu nebo úprava cenových podmínek ze strany poskytovatele mohou ohrozit funkčnost celého systému.
+    Pro školní prostředí, kde je systém provozován dlouhodobě, je rovněž důležitá dostupnost dokumentace a garantovaná doba odezvy (SLA).
+\end{enumerate}
+
+\endinput

@@ -1,0 +1,44 @@
+\subsection{Limit na počet tokenů}
+\label{subsec:llm-token-limit}
+
+Tokenizace a kontextové okno byly vysvětleny v \secref[sekci]{subsec:llm-tokens-parameters-context}.
+Každý model je omezen maximálním počtem tokenů, které může zpracovat v jednom průchodu inference.
+Pokud vstup tento limit překročí, část informací se do modelu vůbec nedostane.
+Typicky jsou odříznuty tokeny z konce vstupu, nebo musí být vstup manuálně zkrácen před odesláním.
+Pro analýzu zdrojového kódu je toto omezení zvlášť problematické ze dvou důvodů:
+
+\begin{enumerate}
+    \item Programátorské chyby mají svou strukturu rozloženou napříč kódem.
+    Únik paměti může vzniknout tím, že je paměť alokována v jedné funkci na řádku 20, přerušena výjimkou na řádku 80 a uvolnění voláno teprve na řádku 150 -- přičemž cesta výjimky ho obejde.
+    Pokud model nemá v kontextu celý tento úsek najednou, může lokálně popsat alokaci jako správnou, aniž by postřehl problém v celkové logice.
+    Výzkum navíc ukazuje, že i v případech, kdy se relevantní informace do kontextového okna vejdou, modely nejspolehlivěji zpracovávají informace umístěné na začátku nebo konci vstupu -- informace uprostřed dlouhého kontextu mohou být přehlédnuty~\cite{liu-lost}.
+
+    \item Smysluplná analýza kódu vyžaduje nejen samotný kód, ale i zadání úlohy a systémový prompt.
+    Celková délka promptu tak může přesáhnout limit i u kódu, jehož samotná délka by byla přijatelná.
+    Samotná délka vstupu přitom negativně ovlivňuje kvalitu výstupu modelu, a to i tehdy, když všechny relevantní informace jsou formálně v kontextovém okně přítomny~\cite{hosseini-efficient}.
+\end{enumerate}
+
+\subsubsection*{Strategie pro práci s omezeným kontextem}
+\label{subsubsec:llm-token-limit-strategies}
+
+V situacích, kdy vstup přesahuje kontextové okno modelu, se v praxi používají tři základní strategie, každá s vlastními trade-offs.
+
+\begin{enumerate}
+    \item \textbf{Chunking} -- rozdělení kódu na menší části, které jsou analyzovány samostatně.
+    Výhodou je jednoduchost implementace, ale nevýhodou je ztráta globálního kontextu.
+    Model při analýze každé části neví, co se děje v ostatních částech, a nemůže detekovat problémy vyplývající ze vzájemných závislostí.
+
+    \item \textbf{Hierarchická analýza} -- nejprve jsou samostatně analyzovány menší části kódu (například jednotlivé funkce), výsledky jsou pak agregovány do celkového shrnutí.
+    Tento přístup lépe zachovává globální obraz, avšak agregační krok může přenášet nebo zvyšovat nepřesnosti z dílčích analýz.
+    Zároveň přidává výpočetní náklady ve formě více průchodů modelem.
+
+    \item \textbf{Selektivní kontext} -- modelu jsou předány pouze části kódu označené jako relevantní pro hodnocenou úlohu, například konkrétní funkce, jejíž implementaci zadání specifikuje.
+    Tento přístup je efektivní, avšak silně závislý na kvalitě výběru vstupu.
+    Pokud výběr vynechá důležitou část, model generuje neúplnou nebo nepřesnou analýzu.
+\end{enumerate}
+
+Pro typické studentské úlohy v systému Kelvin, kde se rozsah kódu pohybuje v řádu stovek řádků, jsou všechny tři strategie ve většině případů zbytečné.
+Moderní modely s kontextovým oknem 16~000 tokenů a více totiž pojmou celé odevzdání včetně zadání a systémového promptu s dostatečnou rezervou.
+Strategie jsou relevantní pro rozsáhlejší projekty nebo v případě volby modelu s menším kontextovým oknem.
+
+\endinput

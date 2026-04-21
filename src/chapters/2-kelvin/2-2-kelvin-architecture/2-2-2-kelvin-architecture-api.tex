@@ -1,0 +1,12 @@
+\subsection{API vrstva}
+\label{subsec:kelvin-api}
+
+Komunikace mezi frontendem a backendem probíhá prostřednictvím REST API implementovaného za pomocí knihovny \textbf{Django Ninja}.
+Jedná se o moderní framework pro budování API nad Django, inspirovaný knihovnou \textit{FastAPI}, který využívá \textit{type hints} jazyku Python pro automatickou validaci vstupních dat, serializaci odpovědí a generování OpenAPI dokumentace přístupné například skrze rozhraní \textit{Swagger UI}\@.
+Tento přístup výrazně snižuje množství opakujícího se kódu, neboť datové modely požadavků a odpovědí jsou popsány jedinou definicí třídy, ze které jsou odvozeny jak validační pravidla, tak dokumentace endpointů.
+
+Jednotlivé endpointy jsou organizovány do logických celků (tzv. \textit{routers}) podle domény, které zpřístupňují -- například odevzdání, uživatelé, úlohy nebo hodnocení.
+Autentizace uživatelů probíhá pomocí session cookies sdílených se standardní autentizační vrstvou Django, což umožňuje přímé propojení s existujícím systémem uživatelských účtů a oprávnění.
+Autorizace vůči jednotlivým entitám (například přístup k odevzdání nebo úloze) je řešena na úrovni jednotlivých endpointů s využitím rolí definovaných v rámci předmětu.
+
+\endinput

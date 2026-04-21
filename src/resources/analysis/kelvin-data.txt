@@ -1,0 +1,54 @@
+Tabulka zobrazuje data o počtu odevzdaných úloh (submits), které učitel bodově ohodnotil.
+
+SELECT s2.id, s2.begin, COUNT(*) AS submits, COUNT(DISTINCT student_id) AS students FROM common_submit AS s JOIN common_assignedtask AS t ON t.id = s.assignment_id JOIN common_class AS c ON c.id = t.clazz_id JOIN common_semester s2 ON s2.id = c.semester_id WHERE s.assigned_points IS NOT NULL GROUP BY s2.id, s2.begin;
+
+ id |   begin    | submits | students | avg_submits_per_student
+----+------------+---------+----------+------------------------
+  2 | 2020-02-10 |    1178 |      181 | 				   6.51
+  3 | 2020-09-14 |    3630 |      382 | 				   9.50
+  4 | 2021-02-08 |    5107 |      443 | 				   11.52
+  5 | 2021-09-13 |    7205 |      556 | 				   12.96
+  6 | 2022-02-07 |    2708 |      352 | 				   7.69
+  7 | 2022-08-29 |    6620 |      706 | 				   9.38
+  8 | 2023-02-27 |    3937 |      394 | 				   9.99
+  9 | 2023-09-04 |    4803 |      509 | 				   9.44
+ 10 | 2024-02-19 |    6685 |      590 | 				   11.33
+ 11 | 2024-09-23 |    9837 |     1003 | 				   9.80
+ 12 | 2025-02-17 |    9554 |      736 | 				   12.98
+ 13 | 2025-09-08 |   13333 |     1066 | 				   12.50
+ 14 | 2026-02-16 |    1676 |      698 | 				   2.40
+
+===]
+===]
+===]
+
+Tabulka zobrazuje data o počtu odevzdaných úloh (submits) a počtu studentů, kteří odevzdali úlohy, bez ohledu na to, zda učitel úlohu bodově ohodnotil.
+
+SELECT s2.id, s2.begin, COUNT(*) AS submits, COUNT(DISTINCT student_id) AS students FROM common_submit AS s JOIN common_assignedtask AS t ON t.id = s.assignment_id JOIN common_class AS c ON c.id = t.clazz_id JOIN common_semester s2 ON s2.id = c.semester_id GROUP BY s2.id, s2.begin;
+
+id  |   begin    | submits | students | avg_submits_per_student
+----+------------+---------+----------+------------------------
+1   | 2019-09-16 |    3090 |      189 | 				   16.34
+2   | 2020-02-10 |    3140 |      233 | 				   13.48
+3   | 2020-09-14 |    7079 |      387 | 				   18.29
+4   | 2021-02-08 |   11312 |      451 | 				   25.09
+5   | 2021-09-13 |   14873 |      623 | 				   23.87
+6   | 2022-02-07 |    9244 |      475 | 				   19.46
+7   | 2022-08-29 |   17922 |      761 | 				   23.55
+8   | 2023-02-27 |    9931 |      533 | 				   18.63
+9   | 2023-09-04 |   15938 |      532 | 				   29.95
+10  | 2024-02-19 |   13129 |      704 | 				   18.65
+11  | 2024-09-23 |   39562 |     1109 | 				   35.67
+12  | 2025-02-17 |   19952 |      865 | 				   23.06
+13  | 2025-09-08 |   46846 |     1168 | 				   40.11
+14  | 2026-02-16 |    3666 |      870 | 				   4.21
+
+===]
+===]
+===]
+
+Tabulka ukazuje hodnocení učitelů pro různé modely a prompt.
+
+Prompt	    Model	        Avg rel.	Avg qual.	Rating	Count
+cpp-draft	gemini-2.5-pro	7.72	    7.74	    7.73	47
+cpp-draft	qwen3-coder:30b	7.45	    7.79	    7.62	43

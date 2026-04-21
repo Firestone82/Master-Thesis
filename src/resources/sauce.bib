@@ -1,0 +1,624 @@
+% ============================================================
+% Akademické články – architektura a principy LLM
+% ============================================================
+
+@inproceedings{vaswani-attention,
+    author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+    title = {Attention is All You Need},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {30},
+    year = {2017},
+    url = {https://arxiv.org/abs/1706.03762},
+}
+
+@inproceedings{brown-gpt3,
+    author = {Brown, Tom B. and Mann, Benjamin and Ryder, Nick and Subbiah, Melanie and Kaplan, Jared and Dhariwal, Prafulla and Neelakantan, Arvind and Shyam, Pranav and Sastry, Girish and Askell, Amanda and Agarwal, Sandhini and Herbert-Voss, Ariel and Krueger, Gretchen and Henighan, Tom and Child, Rewon and Ramesh, Aditya and Ziegler, Daniel M. and Wu, Jeffrey and Winter, Clemens and Hesse, Chris and Chen, Mark and Sigler, Eric and Litwin, Mateusz and Gray, Scott and Chess, Benjamin and Clark, Jack and Berner, Christopher and McCandlish, Sam and Radford, Alec and Sutskever, Ilya and Amodei, Dario},
+    title = {Language Models are Few-Shot Learners},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {33},
+    pages = {1877--1901},
+    year = {2020},
+    url = {https://arxiv.org/abs/2005.14165},
+}
+
+@inproceedings{devlin-bert,
+    author = {Devlin, Jacob and Chang, Ming-Wei and Lee, Kenton and Toutanova, Kristina},
+    title = {{BERT}: Pre-training of Deep Bidirectional Transformers for Language Understanding},
+    booktitle = {Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+    pages = {4171--4186},
+    year = {2019},
+    url = {https://arxiv.org/abs/1810.04805},
+}
+
+@article{mikolov-word2vec,
+    author = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
+    title = {Efficient Estimation of Word Representations in Vector Space},
+    journal = {arXiv preprint arXiv:1301.3781},
+    year = {2013},
+    url = {https://arxiv.org/abs/1301.3781},
+}
+
+@inproceedings{pennington-glove,
+    author = {Pennington, Jeffrey and Socher, Richard and Manning, Christopher D.},
+    title = {{GloVe}: Global Vectors for Word Representation},
+    booktitle = {Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+    pages = {1532--1543},
+    year = {2014},
+    url = {https://aclanthology.org/D14-1162},
+}
+
+@article{hochreiter-lstm,
+    author = {Hochreiter, Sepp and Schmidhuber, J{\"u}rgen},
+    title = {Long Short-Term Memory},
+    journal = {Neural Computation},
+    volume = {9},
+    number = {8},
+    pages = {1735--1780},
+    year = {1997},
+    publisher = {MIT Press},
+    doi = {10.1162/neco.1997.9.8.1735},
+}
+
+@article{hoffmann-chinchilla,
+    author = {Hoffmann, Jordan and Borgeaud, Sebastian and Mensch, Arthur and Buchatskaya, Elena and Cai, Trevor and Rutherford, Eliza and Casas, Diego de Las and Hendricks, Lisa Anne and Welbl, Johannes and Clark, Aidan and Hennigan, Tom and Noland, Eric and Millican, Katie and Driessche, George van den and Damoc, Bogdan and Guy, Aurelia and Osindero, Simon and Simonyan, Karen and Elsen, Erich and Rae, Jack W. and Vinyals, Oriol and Sifre, Laurent},
+    title = {Training Compute-Optimal Large Language Models},
+    journal = {arXiv preprint arXiv:2203.15556},
+    year = {2022},
+    url = {https://arxiv.org/abs/2203.15556},
+}
+
+@article{jelodar-llmsourcecode,
+    author = {Jelodar, Hamed and Meymani, Mohammad and Razavi-Far, Roozbeh},
+    title = {Large Language Models {(LLMs)} for Source Code Analysis: Applications, Models and Datasets},
+    journal = {arXiv preprint arXiv:2503.17502},
+    year = {2025},
+    url = {https://arxiv.org/abs/2503.17502},
+}
+
+@article{weizenbaum-eliza,
+    author = {Weizenbaum, Joseph},
+    title = {{ELIZA} -- A Computer Program for the Study of Natural Language Communication Between Man and Machine},
+    journal = {Communications of the ACM},
+    volume = {9},
+    number = {1},
+    pages = {36--45},
+    year = {1966},
+    publisher = {ACM},
+    doi = {10.1145/365153.365168},
+}
+
+% ============================================================
+% Statická analýza kódu
+% ============================================================
+
+@book{moller-spa,
+    author = {Anders M{\o}ller and Michael I. Schwartzbach},
+    title = {Static Program Analysis},
+    year = {2025},
+    publisher = {Aarhus University},
+    url = {https://cs.au.dk/~amoeller/spa/}
+}
+
+@article{kocetkov-stack,
+    title = {The Stack: 3 {TB} of Permissively Licensed Source Code},
+    author = {Denis Kocetkov and Raymond Li and Loubna Ben Allal and Jia Li and Chenghao Mou and Carlos Mu{\~n}oz Ferrandis and Sean Hughes and Thomas Wolf and Dzmitry Bahdanau and Leandro von Werra and Harm de Vries},
+    journal = {Transactions on Machine Learning Research},
+    year = {2023},
+    url = {https://openreview.net/forum?id=pxpbTdUEpD}
+}
+
+@online{agileseekers-staticanalysis,
+    author = {{Agile Seekers}},
+    title = {Using Static Code Analysis Tools as Part of Sprint Reviews},
+    year = {2024},
+    urldate = {2025-01-15},
+    url = {https://agileseekers.com/blog/using-static-code-analysis-tools-as-part-of-sprint-reviews},
+}
+
+% ============================================================
+% Omezení LLM a bezpečnost
+% ============================================================
+
+@online{ibm-llmlimitations,
+    author = {{IBM}},
+    title = {{LLM} Limitations},
+    year = {2024},
+    urldate = {2025-01-15},
+    url = {https://www.ibm.com/think/topics/llm-limitations},
+}
+
+@online{owasp-promptinjection,
+    author = {{OWASP Foundation}},
+    title = {Prompt Injection},
+    year = {2024},
+    urldate = {2025-01-15},
+    url = {https://owasp.org/www-community/attacks/PromptInjection},
+}
+
+@online{nist-airmf,
+    author = {{National Institute of Standards and Technology}},
+    title = {{AI} Risk Management Framework},
+    year = {2023},
+    urldate = {2025-01-15},
+    url = {https://www.nist.gov/itl/ai-risk-management-framework},
+}
+
+@online{redhat-llm,
+    author = {{Red Hat}},
+    title = {What are Large Language Models?},
+    year = {2024},
+    urldate = {2025-01-15},
+    url = {https://www.redhat.com/en/topics/ai/what-are-large-language-models},
+}
+
+@inproceedings{liu-lost,
+    title = {Lost in the Middle: How Language Models Use Long Contexts},
+    author = {Nelson F. Liu and Kevin Lin and John Hewitt and Ashwin Paranjape and Michele Bevilacqua and Fabio Petroni and Percy Liang},
+    booktitle = {Transactions of the Association for Computational Linguistics},
+    year = {2024},
+    url = {https://arxiv.org/abs/2307.03172}
+}
+
+@inproceedings{hosseini-efficient,
+    title = {Efficient Solutions For An Intriguing Failure of {LLM}s: Long Context Window Does Not Mean {LLM}s Can Analyze Long Sequences Flawlessly},
+    author = {Peyman Hosseini and Ignacio Castro and Iacopo Ghinassi and Matthew Purver},
+    booktitle = {Proceedings of the 31st International Conference on Computational Linguistics},
+    year = {2025},
+    address = {Abu Dhabi, UAE},
+    publisher = {Association for Computational Linguistics},
+    url = {https://aclanthology.org/2025.coling-main.128/}
+}
+
+@article{perez-ignore,
+    title = {Ignore Previous Prompt: Attack Techniques for Language Models},
+    author = {Fábio Perez and Ian Ribeiro},
+    journal = {arXiv preprint arXiv:2211.09527},
+    year = {2022},
+    url = {https://arxiv.org/abs/2211.09527}
+}
+
+@article{liu-promptinjection,
+    title = {Prompt Injection Attack against {LLM}-Integrated Applications},
+    author = {Yi Liu and Gelei Deng and Yuekang Li and Kailong Wang and Tianwei Zhang and Yepang Liu and Haoyu Wang and Yanhong Zheng and Yang Liu},
+    journal = {arXiv preprint arXiv:2306.05499},
+    year = {2023},
+    url = {https://arxiv.org/abs/2306.05499}
+}
+
+@inproceedings{greshake-indirect,
+    title = {Not What You've Signed Up For: Compromising Real-World {LLM}-Integrated Applications with Indirect Prompt Injection},
+    author = {Kai Greshake and Sahar Abdelnabi and Shailesh Mishra and Christoph Endres and Thorsten Holz and Mario Fritz},
+    booktitle = {Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISec)},
+    year = {2023},
+    url = {https://arxiv.org/abs/2302.12173}
+}
+
+% ============================================================
+% Dokumentace systému Kelvin
+% ============================================================
+
+@online{kelvin-architecture,
+    author = {MRLvsb}, % TODO: Jaké autory? :D
+    title = {Kelvin -- Architecture},
+    year = {2024},
+    urldate = {2025-01-15},
+    url = {https://mrlvsb.github.io/kelvin/intro/architecture},
+}
+
+% ============================================================
+% Analýza modelů
+% ============================================================
+
+@article{humaneval,
+    author = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming and Pinto, Henrique Ponde de Oliveira and Kaplan, Jared and Edwards, Harri and Burda, Yura and Joseph, Nicholas and Brockman, Greg and others},
+    title = {Evaluating Large Language Models Trained on Code},
+    year = {2021},
+    journal = {arXiv preprint},
+    volume = {arXiv:2107.03374},
+    url = {https://arxiv.org/abs/2107.03374},
+    urldate = {2025-01-15},
+}
+
+@article{mbpp,
+    author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
+    title = {Program Synthesis with Large Language Models},
+    year = {2021},
+    journal = {arXiv preprint},
+    volume = {arXiv:2108.07732},
+    url = {https://arxiv.org/abs/2108.07732},
+    urldate = {2025-01-15},
+}
+
+@article{livecodebench,
+    author = {Jain, Naman and Han, King and Gu, Alex and Li, Wen-Ding and Yan, Fanjia and Zhang, Tianjun and Wang, Sida and Solar-Lezama, Armando and Sen, Koushik and Stoica, Ion},
+    title = {LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code},
+    year = {2024},
+    journal = {arXiv preprint},
+    volume = {arXiv:2403.07974},
+    url = {https://arxiv.org/abs/2403.07974},
+    urldate = {2025-01-15},
+}
+
+@article{mindstudio-comparison,
+    author = {Mind Studio},
+    title = {GPT-5.4 vs. Claude Opus 4.6 vs. Gemini 3.1 Pro: Benchmarks},
+    year = {2026},
+    url = {https://www.mindstudio.ai/blog/gpt-54-vs-claude-opus-46-vs-gemini-31-pro-benchmarks},
+    urldate = {2026-03-15},
+}
+
+@misc{llm-stats-humaneval,
+    title = {{HumanEval Leaderboard}},
+    author = {{LLM Stats}},
+    year = {2026},
+    url = {https://llm-stats.com/benchmarks/humaneval},
+    note = {Accessed: 2026-04-17}
+}
+
+% ============================================================
+% Zdroje LLM
+% ============================================================
+
+@online{openai_api,
+    author = {{OpenAI}},
+    title = {OpenAI API Documentation},
+    year = {2024},
+    url = {https://platform.openai.com/docs},
+    urldate = {2025-01-15},
+}
+
+@online{anthropic_api,
+    author = {{Anthropic}},
+    title = {Claude API Documentation},
+    year = {2024},
+    url = {https://docs.anthropic.com},
+    urldate = {2025-01-15},
+}
+
+@online{google_vertex,
+    author = {{Google}},
+    title = {Vertex AI -- Gemini API Documentation},
+    year = {2024},
+    url = {https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/gemini},
+    urldate = {2025-01-15},
+}
+
+@article{mistral_api,
+    author = {Jiang, Albert Q. and Sablayrolles, Alexandre and Mensch, Arthur and Bamford, Chris and Chaplot, Devendra Singh and Casas, Diego de las and Bressand, Florian and Lengyel, Gianna and Lample, Guillaume and Saulnier, Lucile and others},
+    title = {Mistral 7B},
+    year = {2023},
+    journal = {arXiv preprint},
+    volume = {arXiv:2310.06825},
+    url = {https://arxiv.org/abs/2310.06825},
+    urldate = {2025-01-15},
+}
+
+% ============================================================
+% Individuální citace modelů
+% ============================================================
+
+@online{gpt-5.4,
+    author = {{OpenAI}},
+    title = {{GPT-5.4} -- {OpenAI API}},
+    year = {2026},
+    url = {https://developers.openai.com/api/docs/models/gpt-5.4},
+}
+
+@online{gpt-5.4-mini,
+    author = {{OpenAI}},
+    title = {{GPT-5.4 mini} -- {OpenAI API}},
+    year = {2026},
+    url = {https://developers.openai.com/api/docs/models/gpt-5.4-mini},
+}
+
+@online{gpt-5.4-nano,
+    author = {{OpenAI}},
+    title = {{GPT-5 nano} -- {OpenAI API}},
+    year = {2026},
+    url = {https://developers.openai.com/api/docs/models/gpt-5.4-nano},
+}
+
+@online{claude-opus-4.6,
+    author = {{Anthropic}},
+    title = {{Claude Opus} 4.6 {System Card}},
+    year = {2026},
+    url = {https://www.anthropic.com/claude-opus-4-6-system-card},
+}
+
+@online{claude-sonnet-4.6,
+    author = {{Anthropic}},
+    title = {{Claude Sonnet} 4.6 {System Card}},
+    year = {2026},
+    url = {https://www.anthropic.com/claude-sonnet-4-6-system-card},
+}
+
+@online{claude-3.5,
+    author = {{Anthropic}},
+    title = {Model {Card Addendum}: {Claude} 3.5 {Haiku} and {Upgraded Claude} 3.5 {Sonnet}},
+    year = {2024},
+    url = {https://assets.anthropic.com/m/1cd9d098ac3e6467/original/Claude-3-Model-Card-October-Addendum.pdf},
+}
+
+@online{claude-3,
+    author = {{Anthropic}},
+    title = {The {Claude} 3 {Model Family}: {Opus, Sonnet, Haiku}},
+    year = {2024},
+    url = {https://assets.anthropic.com/m/61e7d27f8c8f5919/original/Claude-3-Model-Card.pdf},
+}
+
+@online{geminy-3.1-pro,
+    author = {{Google DeepMind}},
+    title = {{Gemini} 3.1 {Pro} {Model Card}},
+    year = {2026},
+    url = {https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-1-Pro-Model-Card.pdf},
+    urldate = {2026-03-03},
+}
+
+@online{geminy-3.1-flash-lite,
+    author = {{Google DeepMind}},
+    title = {{Gemini} 3.1 {Flash Lite} {Model Card}},
+    year = {2026},
+    url = {https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-1-Flash-Lite-Model-Card.pdf},
+    urldate = {2026-03-03},
+}
+
+@online{geminy-3-flash,
+    author = {{Google DeepMind}},
+    title = {{Gemini} 3 {Flash} -- {Vertex AI}},
+    year = {2025},
+    url = {https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Flash-Model-Card.pdf},
+    urldate = {2025-12-01},
+}
+
+@online{geminy-2.5-flash,
+    author = {{Google DeepMind}},
+    title = {{Gemini} 2.5 {Flash} -- {Vertex AI}},
+    year = {2025},
+    url = {https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-2-5-Flash-Model-Card.pdf},
+    urldate = {2025-12-01},
+}
+
+@article{codellama,
+    author = {Rozière, Baptiste and Gehring, Jonas and Gloeckle, Fabian and Sootla, Sten and Gat, Itai and Tan, Xiaoqing Ellen and Adi, Yossi and Liu, Jingyu and Sauvestre, Romain and Remez, Tal and Rapin, Jérémy and Kozhevnikov, Artyom and Evtimov, Ivan and Bitton, Joanna and Bhatt, Manish and Ferber, Cristian Canton and Grattafiori, Aaron and Xiong, Wenhan and Défossez, Alexandre and Copet, Jade and Azhar, Faisal and Touvron, Hugo and Martin, Louis and Usunier, Nicolas and Scialom, Thomas and Synnaeve, Gabriel},
+    title = {Code Llama: Open Foundation Models for Code},
+    journal = {arXiv preprint arXiv:2308.12950},
+    year = {2023},
+    url = {https://arxiv.org/abs/2308.12950},
+}
+
+@article{deepseek-coder,
+    author = {Guo, Daya and Zhu, Qihao and Yang, Dejian and Xie, Zhenda and Dong, Kai and Zhang, Wentao and Chen, Guanting and Bi, Xiao and Wu, Y. and Li, Y. K. and Luo, Fuli and Xiong, Yaying and Liang, Wenfeng},
+    title = {{DeepSeek-Coder}: When the Large Language Model Meets Programming -- The Rise of Code Intelligence},
+    journal = {arXiv preprint arXiv:2401.14196},
+    year = {2024},
+    url = {https://arxiv.org/abs/2401.14196},
+}
+
+@article{starcoder2,
+    author = {Lozhkov, Anton and Li, Raymond and Allal, Loubna Ben and Cassano, Federico and Lamy-Poirier, Joel and Tazi, Nouamane and Tang, Ao and Pykhtar, Dmytro and Liu, Jiawei and Wei, Yuxiang and others},
+    title = {{StarCoder} 2 and The Stack v2: The Next Generation},
+    journal = {arXiv preprint arXiv:2402.19173},
+    year = {2024},
+    url = {https://arxiv.org/abs/2402.19173},
+}
+
+@article{qwen25-coder,
+    author = {Hui, Binyuan and Yang, Jian and Cui, Zeyu and Yang, Jiaxi and Liu, Dayiheng and Zhang, Lei and Liu, Tianyu and Zhang, Jiajun and Yu, Bowen and Dang, Kai and others},
+    title = {{Qwen2.5-Coder} Technical Report},
+    journal = {arXiv preprint arXiv:2409.12186},
+    year = {2024},
+    url = {https://arxiv.org/abs/2409.12186},
+}
+
+@online{qwen3-coder,
+    author = {{Qwen Team}},
+    title = {{Qwen3-Coder}: A Code-Specialized Large Language Model},
+    year = {2025},
+    url = {https://qwenlm.github.io/blog/qwen3-coder/},
+    urldate = {2026-03-15},
+}
+
+@article{llama3,
+    author = {Grattafiori, Aaron and Dubey, Abhimanyu and Jauhri, Abhinav and Pandey, Abhinav and Kadian, Abhishek and Al-Dahle, Ahmad and Letman, Aiesha and Mathur, Akhil and Schelten, Alan and others},
+    title = {The {Llama} 3 Herd of Models},
+    journal = {arXiv preprint arXiv:2407.21783},
+    year = {2024},
+    url = {https://arxiv.org/abs/2407.21783},
+}
+
+@online{gpt-5,
+    author = {{OpenAI}},
+    title = {{GPT-5} System Card},
+    year = {2025},
+    url = {https://openai.com/index/gpt-5-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{openai-o1,
+    author = {{OpenAI}},
+    title = {OpenAI o1 System Card},
+    year = {2024},
+    url = {https://openai.com/index/openai-o1-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{openai-o1-mini,
+    author = {{OpenAI}},
+    title = {OpenAI o1-mini System Card},
+    year = {2024},
+    url = {https://openai.com/index/openai-o1-mini-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{gpt-4o,
+    author = {{OpenAI}},
+    title = {{GPT-4o} System Card},
+    year = {2024},
+    url = {https://openai.com/index/gpt-4o-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{gpt-4o-mini,
+    author = {{OpenAI}},
+    title = {{GPT-4o} mini System Card},
+    year = {2024},
+    url = {https://openai.com/index/gpt-4o-mini-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{gpt-4.5,
+    author = {{OpenAI}},
+    title = {{GPT-4.5} System Card},
+    year = {2025},
+    url = {https://openai.com/index/gpt-4-5-system-card/},
+    urldate = {2026-04-17},
+}
+
+@online{gpt-4-turbo,
+    author = {{OpenAI}},
+    title = {{GPT-4} Technical Report},
+    year = {2023},
+    url = {https://arxiv.org/abs/2303.08774},
+    urldate = {2026-04-17},
+}
+
+@online{mistral-large-2,
+    author = {{Mistral AI}},
+    title = {Mistral Large 2},
+    year = {2024},
+    url = {https://mistral.ai/news/mistral-large-2407/},
+    urldate = {2026-04-17},
+}
+
+@online{grok-2,
+    author = {{xAI}},
+    title = {Grok-2 Beta Release},
+    year = {2024},
+    url = {https://x.ai/blog/grok-2},
+    urldate = {2026-04-17},
+}
+
+@online{gemini-1.5-pro,
+    author = {{Google DeepMind}},
+    title = {Gemini 1.5 {Pro} {Model Card}},
+    year = {2024},
+    url = {https://storage.googleapis.com/deepmind-media/gemini/gemini_v1_5_report.pdf},
+    urldate = {2026-04-17},
+}
+
+% ============================================================
+%  Náastroje LLM
+% ============================================================
+
+@online{ollama,
+    author = {{Ollama}},
+    title = {Ollama -- Run Large Language Models Locally},
+    year = {2024},
+    url = {https://ollama.com},
+    urldate = {2025-01-15},
+}
+
+@online{huggingface-transformers,
+    author = {{Hugging Face}},
+    title = {Transformers -- State-of-the-Art Natural Language Processing},
+    year = {2024},
+    url = {https://huggingface.co/docs/transformers/index},
+    urldate = {2025-01-15},
+}
+
+@inproceedings{vllm,
+    author = {Kwon, Woosuk and Li, Zhuohan and Zhuang, Siyuan and Sheng, Ying and Zheng, Lianmin and Yu, Cody Hao and Gonzalez, Joseph E. and Zhang, Hao and Stoica, Ion},
+    title = {Efficient Memory Management for Large Language Model Serving with PagedAttention},
+    year = {2023},
+    booktitle = {Proceedings of the ACM SIGOPS 29th Symposium on Operating Systems Principles},
+    url = {https://arxiv.org/abs/2309.06180},
+    urldate = {2025-01-15},
+}
+
+@online{llamacpp,
+    author = {Gerganov, Georgi and others},
+    title = {llama.cpp -- Port of Facebook's LLaMA model in C/C++},
+    year = {2023},
+    url = {https://github.com/ggml-org/llama.cpp},
+    urldate = {2025-01-15},
+}
+
+% ============================================================
+% Prompt engineering
+% ============================================================
+
+@article{white-prompt,
+    author = {White, Jules and Fu, Quchen and Hays, Sam and Sandborn, Michael and Olea, Carlos and Gilbert, Henry and Elnashar, Ashraf and Spencer-Smith, Jesse and Schmidt, Douglas C.},
+    title = {A Prompt Pattern Catalog to Enhance Prompt Engineering with {ChatGPT}},
+    journal = {arXiv preprint arXiv:2302.11382},
+    year = {2023},
+    url = {https://arxiv.org/abs/2302.11382},
+}
+
+@inproceedings{kojima-zeroshot,
+    author = {Kojima, Takeshi and Gu, Shixiang Shane and Reid, Machel and Matsuo, Yutaka and Iwasawa, Yusuke},
+    title = {Large Language Models are Zero-Shot Reasoners},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {35},
+    year = {2022},
+    url = {https://arxiv.org/abs/2205.11916},
+}
+
+@inproceedings{wei-cot,
+    author = {Wei, Jason and Wang, Xuezhi and Schuurmans, Dale and Bosma, Maarten and Ichter, Brian and Xia, Fei and Chi, Ed H. and Le, Quoc V. and Zhou, Denny},
+    title = {Chain-of-Thought Prompting Elicits Reasoning in Large Language Models},
+    booktitle = {Advances in Neural Information Processing Systems},
+    volume = {35},
+    year = {2022},
+    url = {https://arxiv.org/abs/2201.11903},
+}
+
+@inproceedings{sennrich-bpe,
+    author = {Sennrich, Rico and Haddow, Barry and Birch, Alexandra},
+    title = {Neural Machine Translation of Rare Words with Subword Units},
+    booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+    year = {2016},
+    pages = {1715--1725},
+    url = {https://arxiv.org/abs/1508.07909},
+}
+
+@online{openai-tokenizer,
+    author = {{OpenAI}},
+    title = {Tokenizer -- OpenAI Platform},
+    url = {https://platform.openai.com/tokenizer},
+    urldate = {2026-04-12},
+}
+
+@inproceedings{dolos,
+    author = {Maertens, Tom and Smet, Charlotte and Verdegem, Pieter and De~Schuymer, Bram and Dawyndt, Peter and Mesuere, Bart},
+    title = {Dolos: Language-agnostic plagiarism detection in source code},
+    booktitle = {Journal of Computer Assisted Learning},
+    volume = {38},
+    number = {4},
+    pages = {1046--1061},
+    year = {2022},
+    url = {https://doi.org/10.1111/jcal.12662},
+}
+
+@online{moss,
+    author = {Aiken, Alex},
+    title = {MOSS: A System for Detecting Software Similarity},
+    url = {https://theory.stanford.edu/~aiken/moss/},
+    urldate = {2026-04-12},
+}
+
+@online{anthropic_extended_thinking,
+    author = {{Anthropic}},
+    title = {Extended Thinking -- Claude Documentation},
+    year = {2025},
+    url = {https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking},
+    urldate = {2026-04-21},
+}
+
+@online{openai_reasoning,
+    author = {{OpenAI}},
+    title = {Reasoning Models -- OpenAI Documentation},
+    year = {2025},
+    url = {https://platform.openai.com/docs/guides/reasoning},
+    urldate = {2026-04-21},
+}

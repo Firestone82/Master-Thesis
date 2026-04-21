@@ -1,0 +1,22 @@
+\subsection{Asynchronní úloha a průběh analýzy}
+\label{subsec:implementation-job}
+
+Samotný průběh analýzy je řízen asynchronní úlohou definovanou v souboru \texttt{job.py}, která je při zpracování odevzdání volána souběžně se spuštěním evaluační pipeline.
+Úloha je zcela nezávislá na synchronní části evaluace a prochází několika na sebe navazujícími kroky.
+
+Nejprve jsou pomocí funkcí z modulu \texttt{processor.py} shromážděny všechny zdrojové soubory patřící k~danému odevzdání.
+Každý soubor je převeden na objekt \texttt{EmbeddedFile}, který obsahuje relativní cestu v~rámci odevzdání, identifikovaný programovací jazyk, úplný obsah souboru a celkový počet řádků.
+Tento formát umožňuje modelu pracovat s~plným kontextem souboru a současně mu poskytuje strukturovaná metadata.
+
+Následně je z databáze načten prompt definovaný pro danou úlohu v~její konfiguraci.
+Prompty jsou uloženy jako samostatné záznamy a lze je upravovat prostřednictvím administračního rozhraní systému Kelvin, aniž by bylo nutné nasazovat novou verzi aplikace (viz \secref{subsec:implementation-prompts}).
+Konkrétní režim analýzy je rovněž načten z konfigurace a může nabývat hodnot \texttt{CHAIN\_OF\_THOUGHT}, \texttt{ZERO\_SHOT} nebo \texttt{THINKING} (viz \secref{subsec:prompts-strategies}).
+
+Poté je vytvořena instance třídy \texttt{Analyzer} s klientem knihovny \texttt{openai} poskytnutým modulem \texttt{openai\_config.py}.
+Třída \texttt{Analyzer} obdrží seznam souborů, prompt a zvolený režim a provede samotnou komunikaci s~jazykovým modelem.
+Po dokončení komunikace je odpověď modelu zpracována pomocnými funkcemi z modulu \texttt{processor.py}, které ji parsují do seznamu objektů \texttt{SuggestedCommentDTO} a uloží je do databáze jako instance Django modelu \texttt{SuggestedComment}.
+
+V případě selhání kteréhokoli kroku, například nedostupnosti LLM serveru, chyby při parsování odpovědi nebo překročení časového limitu, je úloha označena jako neúspěšná a do databáze se nic neukládá.
+Informace o selhání je zaznamenána do logu systému a zároveň je administrátorům odeslána notifikace formou emailu, což umožňuje rychlou reakci a řešení problému.
+
+\endinput

@@ -1,0 +1,24 @@
+\subsection{Interakce učitele s návrhy na řádcích}
+\label{subsec:implementation-interaction}
+
+U každého jednotlivého navrhovaného komentáře má učitel k dispozici čtyři akce.
+
+\begin{itemize}
+    \item \textbf{Přijmout} (\textit{accept}) znamená, že návrh je schválen a systém automaticky vytvoří standardní komentář viditelný pro studenta.
+    Přijatý návrh zůstává v databázi propojen s vytvořeným komentářem, což umožňuje zpětné dohledání vztahu mezi LLM návrhem a finálně publikovaným komentářem.
+
+    \item \textbf{Upravit} (\textit{edit}) umožňuje učiteli pozměnit obsah návrhu před jeho publikací.
+    Komentář se poté vytvoří stejným způsobem jako při přijetí, avšak s upraveným textem.
+
+    \item \textbf{Zamítnout} (\textit{reject}) označí návrh jako nevhodný, takže se studentovi nezobrazí.
+    Zamítnutý návrh zůstává v databázi pro pozdější analýzu kvality modelu, avšak žádný odpovídající standardní komentář není vytvořen.
+
+    \item \textbf{Ohodnotit} (\textit{rate}) umožňuje učiteli poskytnout zpětnou vazbu o kvalitě a relevanci návrhu, přičemž hodnocení lze zada pouze před přijetím nebo zamítnutím.
+    Podrobněji je systém hodnocení popsán níže.
+\end{itemize}
+
+Před publikací návrhu je vhodné, aby učitel zvážil jeho obsah a ohodnotil jej, protože navrhované komentáře mohou obsahovat nepřesnosti nebo být v daném kontextu zcela nevhodné.
+Hodnocení podle metrik definovaných v \secref[sekci]{subsec:criteria-quality} tvoří základ zpětné vazby, která může v budoucnu sloužit k~iterativnímu zlepšování promptů.
+Panel pro přijetí nebo zamítnutí návrhu včetně hodnocení kvality a relevance pomocí hvězdiček je zobrazen v pravém horním rohu komentáře na \figref[obrázku]{fig:frontend-comment}.
+
+\endinput

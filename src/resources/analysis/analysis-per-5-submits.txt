@@ -1,0 +1,72 @@
+# qwen3-coder:30b	chain-of-toughts/cpp 	upr/with_comments/1233
+[16:57:48] [INFO] app.analyzer.analyzer: Step 'Draft analysis' tokens — input: 2098, output: 2342
+[16:58:58] [INFO] app.analyzer.analyzer: Step 'Critique analysis' tokens — input: 4065, output: 2622
+[16:59:14] [INFO] app.analyzer.analyzer: Step 'Review analysis' tokens — input: 4620, output: 586
+[16:59:14] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 157.09 seconds. Issues found: 3. Total tokens — input: 9584, output: 5550
+[16:59:42] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 2544, output: 342
+
+# qwen3-coder:30b	chain-of-toughts/cpp	upr/with_comments/1223
+[17:01:17] [INFO] app.analyzer.analyzer: Step 'Draft analysis' tokens — input: 919, output: 3016
+[17:02:35] [INFO] app.analyzer.analyzer: Step 'Critique analysis' tokens — input: 3440, output: 2924
+[17:02:49] [INFO] app.analyzer.analyzer: Step 'Review analysis' tokens — input: 3747, output: 464
+[17:02:49] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 171.21 seconds. Issues found: 4. Total tokens — input: 9687, output: 6404
+[17:03:12] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1021, output: 422
+
+# qwen3-coder:30b	chain-of-toughts/cpp	upr/with_comments/1224
+[17:04:15] [INFO] app.analyzer.analyzer: Step 'Draft analysis' tokens — input: 1246, output: 1901
+[17:05:05] [INFO] app.analyzer.analyzer: Step 'Critique analysis' tokens — input: 2837, output: 2100
+[17:05:13] [INFO] app.analyzer.analyzer: Step 'Review analysis' tokens — input: 3246, output: 313
+[17:05:13] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 107.44 seconds. Issues found: 2. Total tokens — input: 7247, output: 4314
+[17:05:26] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1237, output: 250
+
+# qwen3-coder:30b	chain-of-toughts/cpp	upr/with_comments/1215
+[17:06:28] [INFO] app.analyzer.analyzer: Step 'Draft analysis' tokens — input: 4536, output: 1830
+[17:07:12] [INFO] app.analyzer.analyzer: Step 'Critique analysis' tokens — input: 5991, output: 1677
+[17:07:23] [INFO] app.analyzer.analyzer: Step 'Review analysis' tokens — input: 6113, output: 356
+[17:07:23] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 103.48 seconds. Issues found: 2. Total tokens — input: 9620, output: 3863
+[17:07:51] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 4841, output: 253
+
+# qwen3-coder:30b	chain-of-toughts/cpp	upr/with_comments/1228
+[17:09:02] [INFO] app.analyzer.analyzer: Step 'Draft analysis' tokens — input: 1555, output: 2419
+[17:10:02] [INFO] app.analyzer.analyzer: Step 'Critique analysis' tokens — input: 3586, output: 2626
+[17:10:16] [INFO] app.analyzer.analyzer: Step 'Review analysis' tokens — input: 4081, output: 569
+[17:10:16] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 131.69 seconds. Issues found: 4. Total tokens — input: 9126, output: 5614
+[17:10:42] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1833, output: 450
+
+# qwen3-coder:30b	one-shot/cpp	upr/with_comments/1228
+[17:19:24] [INFO] app.analyzer.analyzer: Step 'One-shot analysis' tokens — input: 1527, output: 564
+[17:19:24] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 21.88 seconds. Issues found: 6. Total tokens — input: 1527, output: 564
+[17:19:46] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1847, output: 586
+
+# qwen3-coder:30b	one-shot/cpp	upr/with_comments/1233
+[17:20:18] [INFO] app.analyzer.analyzer: Step 'One-shot analysis' tokens — input: 2070, output: 590
+[17:20:18] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 16.85 seconds. Issues found: 5. Total tokens — input: 2070, output: 590
+[17:20:57] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 2574, output: 536
+
+# qwen3-coder:30b	one-shot/cpp	upr/with_comments/1215
+[17:21:24] [INFO] app.analyzer.analyzer: Step 'One-shot analysis' tokens — input: 4508, output: 305
+[17:21:24] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 13.04 seconds. Issues found: 2. Total tokens — input: 4508, output: 305
+[17:21:48] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 4791, output: 264
+
+# qwen3-coder:30b	one-shot/cpp	upr/with_comments/1223
+[17:22:15] [INFO] app.analyzer.analyzer: Step 'One-shot analysis' tokens — input: 891, output: 478
+[17:22:15] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 12.64 seconds. Issues found: 5. Total tokens — input: 891, output: 478
+[17:22:43] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1048, output: 456
+
+# qwen3-coder:30b	one-shot/cpp	upr/with_comments/1224
+[17:23:11] [INFO] app.analyzer.analyzer: Step 'One-shot analysis' tokens — input: 1218, output: 570
+[17:23:11] [INFO] app.analyzer.analyzer: Source code review completed. Total elapsed time: 14.02 seconds. Issues found: 5. Total tokens — input: 1218, output: 570
+[17:23:37] [INFO] app.analyzer.critiquer: Critiquer tokens — input: 1514, output: 504
+
+# Summary of results:
+| Metric                | Chain-of-Thoughts | One-shot |
+| --------------------- | ----------------- | -------- |
+| **Avg Time (s)**      | 134.18            | 15.69    |
+| **Avg Issues**        | 3.0               | 4.6      |
+| **Avg Input Tokens**  | 9052.8            | 2042.8   |
+| **Avg Output Tokens** | 5149.0            | 501.4    |
+
+# Quick interpretation
+- Speed: One-shot is ~8.5× faster
+- Quality (issues found): Chain-of-thoughts finds fewer issues on average
+- Token usage: Chain-of-thoughts is significantly more expensive (~4–10×)

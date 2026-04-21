@@ -1,43 +1,123 @@
 \documentclass[czech,master]{diploma}
 
+% Standard packages
 \usepackage[autostyle=true,czech=quotes]{csquotes} % correct quotation typesetting, support for biblatex
 \usepackage[backend=biber, style=iso-numeric, alldates=iso]{biblatex} % bibliography
 \usepackage{dcolumn} % table columns with numeric values
 \usepackage{subfig} % macros for "subfigures" and "subtables"
+
+% Custom packages
 \usepackage{float} % better figure placement (H)
 \usepackage{bookmark} % Required for generating PDF bookmarks
 \usepackage{hyperref} % Links in PDF
 \usepackage{subcaption} % For multiple images in one float
 \usepackage{tikz} % For drawing in LaTeX
 \usepackage{amsmath} % For improved equation typesetting
+\usepackage{tablefootnote} % For footnotes in tables
+\usepackage{color} % For colored text (e.g., TO.DO notes)
+\usepackage{array} % For advanced table formatting
+\usepackage{amsfonts} % For additional math symbols
 \usepackage[cpp]{diplomalst}
 \usepackage{fontspec}
+\usepackage{pgfmath}
+\usepackage{additionallst}
+\usepackage{minted}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{multirow}
+\pgfplotsset{compat=1.18}
 
-\renewcommand{\lstlistingname}{Zdrojový Kód} % Convert "Listing" to "Zdrojový Kód"
-\newcolumntype{d}[1]{D{,}{,}{#1}} % New type of table column with numbers aligned by decimal comma
 
-% Required thesis metadata
+% ==] Overrides and custom settings [==
+
+% Enable fixed-point arithmetic in TikZ for more accurate calculations (e.g., for cost computations)
+\usetikzlibrary{fpu}
+
+% Additional TikZ libraries used by architecture and sequence diagrams
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, fit}
+
+% Table of contents depth - TODO: Remove in final version!
+%\setcounter{tocdepth}{3}
+
+% New type of table column with numbers aligned by decimal comma
+\newcolumntype{d}[1]{D{,}{,}{#1}}
+
+% Settings for minted code listings
+\setminted{fontsize=\fontsize{9}{11}\selectfont, baselinestretch=1.05, frame=single, framesep=6pt, rulecolor=\color{black!50}, linenos, numbersep=6pt, breaklines, breakanywhere=true, tabsize=4, ignorelexererrors=true}
+\renewcommand\listingscaption{Výpis}
+\renewcommand{\lstlistingname}{Prompt}
+
+% Tolerance settings for overfull boxes
+\emergencystretch=3em
+\hfuzz=10pt
+
+% Allow overfull vboxes without warnings (e.g., for bibliography)
+\vbadness=10000
+
+% ==] Thesis metadata and configuration [==
+
 \ThesisAuthor{Bc. Pavel Mikula}
 \ThesisSupervisor{Mgr. Ing. Michal Krumnikl, Ph.D.}
 \CzechThesisTitle{Integrace velkých jazykových modelů do systému Kelvin}
-\EnglishThesisTitle{Integrating large language models into the Kelvin system}
-\SubmissionYear{2025}
+\EnglishThesisTitle{Integrating Large Language Models into Kelvin}
+\SubmissionYear{2026}
 
-\ThesisAssignmentFileName{../resources/ThesisSpecification_MIK0486.pdf}
+\ThesisAssignmentFileName{resources/ThesisSpecification_MIK0486.pdf}
 
-\CzechAbstract{} % TODO: Abstract
-\CzechKeywords{} % TODO: Keywords
+\CzechAbstract{
+    Tato diplomová práce se zabývá návrhem a implementací modulu pro automatickou analýzu zdrojových kódů pomocí velkých jazykových modelů (LLM) v rámci webového informačního systému využívaného při výuce programování.
+    Práce popisuje principy fungování LLM, architekturu Transformer a základní metody jejich využití při analýze a hodnocení kódu.
+    Součástí je porovnání různých způsobů nasazení a přístupů k promptování z hlediska kvality výsledků, provozních nároků a ochrany dat.
+    Navržené řešení je experimentálně ověřeno na reálných datech a jeho výsledky ukazují možnosti využití LLM jako podpůrného nástroje při hodnocení programátorských úloh.
+}
+\CzechKeywords{velké jazykové modely, analýza zdrojového kódu, automatické hodnocení, Transformer, promptování, výuka programování}
 
-\EnglishAbstract{} % TODO: Abstract
-\EnglishKeywords{} % TODO: Keywords
+\EnglishAbstract{
+    This thesis focuses on the design and implementation of a module for automatic analysis of source code using large language models (LLMs) within a web-based information system used in programming education.
+    The thesis describes the principles of LLMs, the Transformer architecture, and approaches for applying these models to source code analysis.
+    It also compares different deployment approaches and prompting strategies with respect to output quality, operational requirements, and data protection.
+    The proposed solution is experimentally evaluated on real-world data, demonstrating the potential of LLMs as a supporting tool for assessing programming assignments.
+}
+\EnglishKeywords{large language models, source code analysis, automated assessment, Transformer, prompting, programming education}
 
-% TODO: add acronyms used in the thesis
-\AddAcronym{TUG}{\TeX{} Users Group}
+% TODO: Check if all these acronyms are actually used in the text, and remove those that are not.
+\AddAcronym{LLM}{Large Language Model}
+\AddAcronym{API}{Application Programming Interface}
+\AddAcronym{AST}{Abstract Syntax Tree}
+\AddAcronym{BPE}{Byte Pair Encoding}
+\AddAcronym{CFG}{Control Flow Graph}
+\AddAcronym{CoT}{Chain-of-Thought}
+\AddAcronym{CPU}{Central Processing Unit}
+\AddAcronym{CUDA}{Compute Unified Device Architecture}
+\AddAcronym{DPA}{Data Processing Agreement}
+\AddAcronym{GDPR}{General Data Protection Regulation}
+\AddAcronym{GGUF}{GPT-Generated Unified Format}
+\AddAcronym{GPU}{Graphics Processing Unit}
+\AddAcronym{GPT}{Generative Pre-trained Transformer}
+\AddAcronym{JSON}{JavaScript Object Notation}
+\AddAcronym{LSTM}{Long Short-Term Memory}
+\AddAcronym{PPO}{Proximal Policy Optimization}
+\AddAcronym{REST}{Representational State Transfer}
+\AddAcronym{RLHF}{Reinforcement Learning from Human Feedback}
+\AddAcronym{RNN}{Recurrent Neural Network}
+\AddAcronym{SFT}{Supervised Fine-Tuning}
+\AddAcronym{SLA}{Service Level Agreement}
+\AddAcronym{UI}{User Interface}
+\AddAcronym{VRAM}{Video Random Access Memory}
+\AddAcronym{DOLOS}{Detection of Logical Similarity}
+\AddAcronym{MOSS}{Measure Of Software Similarity}
+\AddAcronym{RAM}{Random Access Memory}
+\AddAcronym{ORM}{Object-Relational Mapping}
+\AddAcronym{TPU}{Tensor Processing Unit}
 
-% TODO: Write acknowledgement
-\Acknowledgement{Rád bych na tomto místě poděkoval všem, kteří mi s prací pomohli, protože bez nich by tato práce nevznikla.}
+\Acknowledgement{Rád bych na tomto místě poděkoval svému vedoucímu práce Mgr. Ing. Michalu Krumniklovi, Ph.D. za odborné vedení, cenné rady a trpělivost při konzultacích v průběhu celé práce. Dále děkuji kolegům, kteří se podíleli na hodnocení výstupů jazykových modelů a svými připomínkami přispěli k získání objektivnějších výsledků experimentálního ověření.}
 
-\addbibresource{../resources/sauce.bib}
+\addbibresource{resources/sauce.bib}
+
+% ==] Custom macros [==
+
+\input{macros}
 
 %
 % ==] Main document [==
@@ -54,24 +134,28 @@
     \listoftables
     \clearpage
 
-    \renewcommand{\lstlistlistingname}{Seznam zdrojových kódů}
-    \addcontentsline{toc}{chapter}{Seznam zdrojových kódů}
+    % Source codes
+    \renewcommand{\lstlistlistingname}{Seznam výpisů}
+    \addcontentsline{toc}{chapter}{Seznam výpisů}
     \lstlistoflistings
-    \clearpage
 
     % Introduction
-    \input{chapters/Introduction}
+    \clearpage
+    \input{chapters/1-Introduction}
 
     % Main chapters
-    \input{chapters/Theory}
-
-    % Conclusion
-    \input{chapters/Conclusion}
+    \input{chapters/2-Kelvin}
+    \input{chapters/3-LLM}
+    \input{chapters/4-Selection}
+    \input{chapters/5-Implementation}
+    \input{chapters/6-Conclusion}
 
     \appendix
-    \input{chapters/Appendix}
+    \input{chapters/7-Appendix}
 
     % Bibliography
+    {\sloppy
     \printbibliography[title={Literatura}, heading=bibintoc]
+    }
 
 \end{document}

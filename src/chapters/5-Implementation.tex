@@ -1,0 +1,44 @@
+\chapter{Implementace do systému Kelvin}
+\label{ch:implementation}
+
+Předchozí \secref[kapitola]{ch:selection} popsala výběr modelu, způsobu nasazení a promptovací strategie pro integraci LLM do systému Kelvin.
+Tato kapitola se věnuje samotné realizaci navrženého řešení: konkrétnímu způsobu začlenění LLM modulu do architektury systému, průběhu komunikace s jazykovým modelem, prezentaci výsledků učiteli v uživatelském rozhraní a evaluačnímu nástroji využitému pro ověření kvality jednotlivých konfigurací.
+
+% =============================================================
+\section{Backend}
+\label{sec:implementation-backend}
+
+Implementace LLM modulu na straně backendu byla realizována jako samostatná část Django aplikace (modul), která rozšiřuje systém Kelvin o nový asynchronní krok navazující vedle existující synchronní evaluaci odevzdání.
+Tato sekce popisuje integraci do evaluační pipeline, strukturu modulu, průběh asynchronní analýzy, konfiguraci jazykových modelů a způsob ukládání výsledků.
+
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-1-implementation-backend-pipeline}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-2-implementation-backend-module}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-3-implementation-backend-job}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-4-implementation-backend-config}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-5-implementation-backend-analyzer}
+\input{chapters/5-implementation/5-1-implementation-backend/5-1-6-implementation-backend-model}
+
+% =============================================================
+\section{Frontend}
+\label{sec:implementation-frontend}
+
+Frontendová část LLM modulu byla implementována ve Vue.js v souladu s probíhající migrací systému Kelvin na tuto technologii, jak bylo popsáno v \secref[sekci]{sec:kelvin-architecture}.
+Navržené rozhraní respektuje existující vizuální styl systému a přirozeně rozšiřuje stávající zobrazení komentářů ke zdrojovému kódu.
+
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-1-implementation-frontend-display}
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-2-implementation-frontend-interaction}
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-3-implementation-frontend-summary}
+\input{chapters/5-implementation/5-2-implementation-frontend/5-2-4-implementation-frontend-prompts}
+
+% =============================================================
+\section{Nástroj pro analýzu kvality promptů}
+\label{sec:implementation-tool}
+
+Pro účely systematického ověření kvality různých kombinací promptů, modelů a promptovacích technik byla v rámci této práce vytvořena samostatná evaluační aplikace.
+Tato aplikace nebyla určena pro produkční provoz v systému Kelvin, ale sloužila výhradně jako výzkumný nástroj umožňující strukturovaný sběr zpětné vazby od učitelů a objektivní porovnání zvolených konfigurací.
+
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-1-implementation-tool-purpose}
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-2-implementation-tool-functionality}
+\input{chapters/5-implementation/5-3-implementation-tool/5-3-3-implementation-tool-results}
+
+\endinput

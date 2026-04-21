@@ -1,0 +1,26 @@
+\subsection{Třída Analyzer a režimy analýzy}
+\label{subsec:implementation-analyzer}
+
+Komunikace s jazykovým modelem je zapouzdřena ve třídě \texttt{Analyzer} v souboru \texttt{llm\_reviewer.py}.
+Třída přijímá seznam objektů \texttt{EmbeddedFile} připravených v souboru \texttt{job.py}, nakonfigurovaného klienta knihovny \texttt{openai} a zvolený režim analýzy.
+Knihovna \texttt{openai} poskytuje jednotné rozhraní pro všechny OpenAI-kompatibilní servery, takže stejný kód funguje jak pro lokální instanci Ollama, tak pro cloudové poskytovatele.
+
+Centrálním vstupním bodem třídy je metoda \texttt{process}, která na základě zvoleného režimu orchestruje celý průběh analýzy.
+Při volbě režimu \texttt{ZERO\_SHOT} nebo \texttt{THINKING} je provedeno jediné volání příslušné analytické metody.
+Při volbě \texttt{CHAIN\_OF\_THOUGHT} jsou postupně spuštěny tři fáze -- \textbf{hrubá analýza}, \textbf{kritická revize} a \textbf{finální shrnutí} -- přičemž výstup každé fáze je předán jako kontext fázi následující.
+Srovnání režimů z pohledu kvality výstupů a doby zpracování je uvedeno v \secref[sekci]{subsec:choice-strategies}.
+
+\subsubsection*{Normalizace názvu souboru}
+\label{subsubsec:implementation-analyzer-normalization}
+
+Po dokončení analýzy je výsledek předán metodě \texttt{normalize\_issue\_filenames}.
+Jazykové modely v názvech souborů občas vynechávají část cesty nebo ji mírně pozměňují.
+Metoda proto každý vrácený název porovná se skutečnými vstupními cestami pomocí postupné shody přípon, prefixů a základního názvu a při jednoznačné shodě název opraví.
+Tím je zajištěno, že každý nalezený problém odkazuje na platný soubor bez ohledu na to, jak jeho cestu model zapsal.
+
+Toto opatření reaguje na konkrétní případy zjištěné během testování.
+Studenti občas odevzdají soubor, ke kterému operační systém při duplicitních názvech připojí číselnou příponu (např.\ \texttt{main.c~(1)}).
+Některé modely tuto příponu ve svém výstupu vynechávají, což následně vede k chybám při mapování problému na správný soubor.
+V jiných případech modely nahrazují původní název generickým; například soubor \texttt{MIK0486.c} byl ve výstupu některých modelů uveden pouze jako \texttt{main.c}.
+
+\endinput

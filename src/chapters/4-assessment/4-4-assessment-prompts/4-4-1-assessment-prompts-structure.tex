@@ -1,0 +1,28 @@
+\subsection{Struktura promptu}
+\label{subsec:prompts-structure}
+
+Prompt je textový vstup, který definuje, co má jazykový model provést.
+V kontextu analýzy studentského kódu v systému Kelvin se prompt skládá z několika logicky oddělených částí, jejichž správná struktura výrazně ovlivňuje kvalitu generovaného výstupu~\cite{white-prompt}.
+
+\begin{enumerate}
+    \item \textbf{Systémový prompt} obsahuje instrukce definující roli modelu, požadovaný jazyk odpovědi, formát výstupu a pravidla, která má model při analýze dodržovat.
+    Typicky se jedná o pokyny jako \uv{Jsi zkušený programátor analyzující studentský kód v jazyce C++} doplněné o specifické požadavky na strukturu odpovědi.
+    Systémový prompt je konstantní pro všechna odevzdání a jeho rozsah se pohybuje v řádu 50 až 200 řádků.
+
+    \item \textbf{Zadání úlohy} poskytuje modelu kontext potřebný pro posouzení, zda studentské řešení odpovídá požadavkům.
+    Bez zadání může model hodnotit pouze obecnou kvalitu kódu, ale není schopen posoudit, zda řešení splňuje konkrétní podmínky.
+
+    \item \textbf{Zdrojový kód studenta} je hlavní analyzovaný vstup.
+    Model obdrží kompletní obsah odevzdaného souboru včetně komentářů a prázdných řádků.
+    Zachování těchto řádků je důležité, protože bez nich by model špatně odkazoval na konkrétní místa v kódu a výstup by byl matoucí.
+
+    \item \textbf{Specifikace výstupního formátu} definuje, v jaké struktuře má model vrátit výsledky analýzy.
+    Pro strojové zpracování na straně systému Kelvin je vhodný strukturovaný formát JSON, který obsahuje seznam nalezených problémů s uvedením čísla řádku, popisu problému a důležitosti.
+    Tato specifikace je součástí systémového promptu a zajišťuje, že výstup modelu lze programově zpracovat bez dodatečného parsování volného textu.
+\end{enumerate}
+
+Správné oddělení těchto částí je důležité nejen pro kvalitu výstupu, ale i pro údržbu systému.
+Pokud je systémový prompt oddělen od zadání a zdrojového kódu, lze jej snadno aktualizovat bez nutnosti měnit způsob, jakým systém Kelvin předává data modelu.
+Příklad použitelného promptu je možné vidět v \lstref[příloze]{lst:simple-prompt}.
+
+\endinput

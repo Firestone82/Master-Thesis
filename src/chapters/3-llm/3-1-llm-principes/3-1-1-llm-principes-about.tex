@@ -1,0 +1,30 @@
+\subsection{Co jsou LLM?}
+\label{subsec:llm-about}
+
+Velký jazykový model (Large Language Model, LLM) je třída modelů strojového učení určená k modelování pravděpodobnostního rozdělení přirozeného jazyka~\cite{redhat-llm,jelodar-llmsourcecode}.
+Formálně se model snaží odhadnout podmíněnou pravděpodobnost: $P(x_t \mid x_1, x_2, \ldots, x_{t-1}), \label{eq:llm-probability}$
+
+Tedy pravděpodobnost výskytu tokenu $x_t$ na dané pozici na základě všech předcházejících tokenů.
+Zjednodušeně řečeno, se model učí předpovídat, jaké slovo nebo symbol s největší pravděpodobností následuje za dosavadním textem.
+
+Označení \textit{velký} odráží historický vývoj, jelikož s rostoucím počtem parametrů modelu a objemem trénovaných dat se kvalita generovaného textu i schopnost zvládat složité úlohy výrazně zlepšují.
+Dnešní modely jsou již trénovány na stovkách miliard až trilionech tokenů a jejich parametry se pohybují v řádu miliard až stovek miliard hodnot.
+
+Klíčovou vlastností moderních LLM je, že nejde pouze o statistické modely jazyka v úzkém slova smyslu.
+Prostřednictvím rozsáhlého trénování a následného dolaďování modely implicitně absorbují encyklopedické znalosti, schopnost logického uvažování a dovednost řídit se instrukcemi formulovanými v přirozeném jazyce.
+
+\subsubsection*{Zdrojový kód jako jazyk}
+\label{subsubsec:code-as-language}
+
+Pro účely této práce je důležité, že zdrojový kód lze z pohledu jazykového modelu chápat jako specifický jazyk.
+Takový jazyk, který má přísnější syntaxi, formálnější sémantiku a výrazně nižší míru nejasnosti než přirozený jazyk.
+Přesto je zdrojový kód stále textem, zapisuje se lineárně, má pravidelnou strukturu a vykazuje statisticky předvídatelné vzory.
+
+Model trénovaný na velkém množství zdrojového kódu se implicitně naučí fráze programovacích jazyků, typické struktury a jejich správné použití, časté programátorské chyby i konvence pojmenování.
+Tato schopnost umožňuje LLM provádět nad kódem operace jako syntaktická analýza (rozpoznávání struktur, funkcí, tříd a proměnných), sémantická interpretace (pochopení záměru a účelu jednotlivých částí kódu), detekce potenciálních problémů (identifikace rizikových konstrukcí a neefektivních vzorů) a generování vysvětlení (popis chování kódu přirozeným jazykem srozumitelným i méně zkušeným studentům).
+
+Je však zásadní zdůraznit, co LLM není: není to formální verifikátor ani interpret.
+Negeneruje důkaz správnosti programu, nespouští kód a nevytváří abstraktní syntaktický strom (AST) v klasickém slova smyslu.
+Výsledek analýzy je vždy pravděpodobnostní odhad ze statistických vzorů, nikoli logicky zaručený závěr.
+
+\endinput

@@ -1,0 +1,21 @@
+\subsection{Typy statických analyzátorů}
+\label{subsec:static-types}
+
+Pod pojmem statický analyzátor se skrývá široká škála nástrojů, které se liší hloubkou analýzy a rozsahem zachycených problémů.
+Pro účely srovnání s LLM postačí rozlišit tři základní úrovně, od nejjednodušších kontrol až po rozsáhlé enterprise systémy.
+
+\begin{itemize}
+    \item \textbf{Kompilátorová analýza} je nejzákladnější formou statické analýzy.
+    Kompilátory jako GCC nebo Clang\footnote{\url{https://clang.llvm.org/}} při překladu upozorňují na zjevné problémy, například nevyužité či neinicializované proměnné.
+
+    \item \textbf{Lintery a pokročilé analyzátory} rozšiřují tuto vrstvu o sady pravidel pro dobré programátorské zvyky, bezpečnost a styl.
+    Typickými zástupci pro jazyk C++ jsou \texttt{clang-tidy}\footnote{\url{https://clang.llvm.org/extra/clang-tidy/}} a \texttt{cppcheck}\footnote{\url{https://cppcheck.sourceforge.io/}}.
+
+    \item \textbf{Enterprise nástroje}, například SonarQube\footnote{\url{https://www.sonarsource.com/products/sonarqube/}}, propojují statickou analýzu s dlouhodobým sledováním kvality kódu.
+    Pro akademické prostředí systému Kelvin jsou však předimenzované.
+\end{itemize}
+
+Ze všech uvedených kategorií jsou pro školní systém relevantní především lintery, protože nabízejí vyváženou kombinaci pokrytí a provozní jednoduchosti.
+Samotné rozdíly mezi těmito přístupy a velkými jazykovými modely jsou podrobněji rozebrány v následující sekci.
+
+\endinput

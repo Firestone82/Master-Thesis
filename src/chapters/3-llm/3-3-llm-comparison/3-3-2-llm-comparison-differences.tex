@@ -1,0 +1,64 @@
+\subsection{Zásadní rozdíly v přístupu}
+\label{subsec:static-vs-llm-differences}
+
+Klíčové rozdíly mezi statickými analyzátory a LLM lze shrnout do čtyř kategorii: determinismus výstupu, hloubka formální analýzy, práce s kontextem a srozumitelnost výstupů.
+
+\subsubsection*{Determinismus vs pravděpodobnost.}
+\label{subsubsec:determinism-vs-probability}
+
+Statický analyzátor je deterministický systém, pro identický vstup vždy produkuje identický výstup.
+To umožňuje přesnou reprodukovatelnost výsledků a snadné testování samotného nástroje.
+
+LLM je pravděpodobnostní systém, kde výstup závisí na parametrech inference (zejména teplotě) a není plně reprodukovatelný.
+Při nízké teplotě se modely výstupu přibližují, ale absolutní reprodukovatelnost není garantována.
+Pro systém poskytující automatizovanou zpětnou vazbu studentům to znamená, že výsledky analýzy pro dvě identická odevzdání se mohou v detailech lišit.
+
+\subsubsection*{Formální analýza vs heuristická interpretace.}
+\label{subsubsec:formal-vs-heuristic}
+
+Statický analyzátor provádí formálně definovanou analýzu nad přesnou strukturální reprezentací programu.
+Může dokazovat (v rámci svého modelu) přítomnost nebo absenci určitého vzoru.
+
+LLM provádí heuristickou interpretaci, jeho závěry jsou odhady odvozené ze statistických vzorů, nikoli z formálního průchodu strukturou programu.
+Z toho vyplývá, že LLM může chybět detekce vzoru, který statický analyzátor najde spolehlivě, a naopak tak LLM může upozornit na problém, který statická analýza vůbec nedokáže formalizovat.
+
+\subsubsection*{Kontext zadání a záměr.}
+\label{subsubsec:context}
+
+Toto je oblast, kde LLM přináší základně odlišnou hodnotu.
+Statický analyzátor nemá přístup k žádnému kontextu vně zdrojového kódu.
+Neví, jakou úlohu program řeší, jaké jsou požadavky na výkonnost nebo jaká jsou omezení implementace.
+LLM, kterému je v promptu poskytnuto zadání úlohy, dokáže posoudit soulad implementace se zadáním, efektivitu zvoleného algoritmu, vhodnost použitých datových struktur i správné ošetření hraničních vstupů.
+Tato schopnost je pro hodnocení studentských prací velmi cenná, jde přesně o tu vrstvu, která vyžaduje lidský úsudek a nejvíce zatěžuje čas vyučujícího.
+
+\subsubsection*{Forma výstupů a srozumitelnost.}
+\label{subsubsec:output-format}
+
+Statické analyzátory typicky produkují stručná technická hlášení vázaná na konkrétní řádek a pravidlo.
+Výstup \texttt{cppcheck} ve tvaru \texttt{[file.cpp:47]: (error) Memory leak: p} je precizní, avšak pro studenta, který nemusí znát základy správy paměti, je pouze obtížně pochopitelný bod bez vysvětlení.
+LLM je schopen generovat vysvětlení přirozeným jazykem, které studentovi popíše, v čem spočívá problém, proč je nebezpečný a jak ho opravit.
+Souhrnné porovnání obou přístupů je uvedeno v \tabref[tabulce]{tab:llm-vs-static-summary}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Vlastnost}                   & \textbf{Statický analyzátor} & \textbf{Velký jazykový model} \\
+        \midrule
+        Deterministický výstupu              & Ano                          & Ne (pravděpodobnostní)        \\
+        Formální verifikace pravidel         & Ano                          & Ne                            \\
+        Analýza řízení toku (CFG)            & Ano                          & Omezeně / heuristicky         \\
+        Detekce syntaktických chyb           & Ano (spolehlivě)             & Omezeně                       \\
+        Práce s kontextem zadání úlohy       & Ne                           & Ano                           \\
+        Hodnocení vhodnosti algoritmu        & Ne                           & Ano (při znalosti zadání)     \\
+        Hodnocení čitelnosti a stylu         & Omezeně (dle pravidel)       & Ano                           \\
+        Vysvětlení přirozeným jazykem        & Ne (technická hlášení)       & Ano                           \\
+        Škálovatelnost na libovolný kód      & Ano                          & Limitováno kontextem          \\
+        Detekce bezpečnostních zranitelností & Ano (definované vzory)       & Omezeně                       \\
+        \bottomrule
+    \end{tabular}
+    \caption{Porovnání statických analyzátorů a velkých jazykových modelů při analýze zdrojového kódu.}
+    \label{tab:llm-vs-static-summary}
+\end{table}
+
+\endinput

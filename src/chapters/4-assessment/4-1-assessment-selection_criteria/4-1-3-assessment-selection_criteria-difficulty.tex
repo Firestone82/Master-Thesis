@@ -1,0 +1,25 @@
+\subsection{Náročnost provozu}
+\label{subsec:criteria-operational}
+
+Náročnost provozu určuje, jaké zdroje jsou potřeba k dlouhodobému provozování modelu v produkčním prostředí systému Kelvin.
+Zahrnuje finanční náklady, nároky na infrastrukturu i lidskou práci spojenou s údržbou.
+Struktura nákladů se zásadně liší podle zvoleného způsobu nasazení.
+
+U cloudového API jsou náklady průběžné a přímo úměrné objemu zpracovaných dat.
+Jak bylo popsáno v \secref[sekci]{subsec:llm-tokens-parameters-context}, cenové modely poskytovatelů jsou založeny na počtu zpracovaných tokenů, přičemž vstupní a výstupní tokeny jsou zpravidla účtovány odlišnou sazbou.
+
+Spotřeba tokenů závisí na zvolené strategii promptování.
+Na základě experimentálního měření na reálných studentských odevzdáních ze systému Kelvin, podrobně popsaného v \secref[sekci]{sec:selection-choice}, lze pro typické odevzdání očekávat:
+\begin{itemize}
+    \item při přístupu \textbf{zero-shot}: \tavg{2~043} vstupních a \tavg{501} výstupních tokenů,
+    \item při přístupu \textbf{chain-of-thought}: \tavg{9~053} vstupních a \tavg{5~149} výstupních tokenů.
+\end{itemize}
+Spotřeba tokenů je tedy v závislosti na přístupu přibližně čtyř až desetkrát vyšší u chain-of-thought oproti zero-shot variantě.
+Celkové náklady na jedno odevzdání jsou dány cenou za token konkrétního modelu, jak je podrobně rozvedeno v \secref[sekci]{subsec:deployment-cloud}.
+
+U on-premise nasazení jsou náklady primárně jednorázové.
+Zahrnují pořízení hardwaru, především grafických karet s dostatečnou kapacitou VRAM pro inferenci (viz \secref{subsec:llm-computational-cost}).
+Průběžné náklady tvoří elektřina, chlazení a lidská práce spojená se správou a aktualizací modelu.
+Na rozdíl od cloudového API jsou však marginální náklady na každé další zpracované odevzdání prakticky nulové, což činí on-premise řešení ekonomicky výhodnějším při velkém objemu požadavků.
+
+\endinput
