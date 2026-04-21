@@ -2,11 +2,7 @@
 \label{subsec:llm-about}
 
 Velký jazykový model (Large Language Model, LLM) je třída modelů strojového učení určená k modelování pravděpodobnostního rozdělení přirozeného jazyka~\cite{redhat-llm,jelodar-llmsourcecode}.
-Formálně se model snaží odhadnout podmíněnou pravděpodobnost:
-
-\begin{equation}
-    P(x_t \mid x_1, x_2, \ldots, x_{t-1}), \label{eq:llm-probability}
-\end{equation}
+Formálně se model snaží odhadnout podmíněnou pravděpodobnost: $P(x_t \mid x_1, x_2, \ldots, x_{t-1}), \label{eq:llm-probability}$
 
 Tedy pravděpodobnost výskytu tokenu $x_t$ na dané pozici na základě všech předcházejících tokenů.
 Zjednodušeně řečeno, se model učí předpovídat, jaké slovo nebo symbol s největší pravděpodobností následuje za dosavadním textem.
