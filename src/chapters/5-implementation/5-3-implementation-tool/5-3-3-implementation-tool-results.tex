@@ -11,20 +11,23 @@ Strategie \textit{chain-of-thought} byla testována s modelem \texttt{gemini-2.5
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{llrrrr}
-        \toprule
-        \textbf{Strategie} & \textbf{Model} & \textbf{Prům. relevance} & \textbf{Prům. kvalita} & \textbf{Celk. hodnocení} & \textbf{Počet} \\
-        \midrule
-        \textit{chain-of-thought} & \texttt{gemini-2.5-pro}  & 7{,}72 & 7{,}74 & \tavg{7{,}73} & 47 \\
-        \textit{chain-of-thought} & \texttt{qwen3-coder:30b} & 7{,}45 & 7{,}79 & \tavg{7{,}62} & 43 \\
-        \textit{zero-shot}        & \texttt{qwen3-coder:30b} & 6{,}24 & 6{,}29 & \tavg{6{,}26} & 21 \\
-        \bottomrule
-    \end{tabular}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{llrrrr}
+            \toprule
+            \multirow[b]{2}{*}{\textbf{Strategie}} & \multirow[b]{2}{*}{\textbf{Model}} & \multicolumn{2}{c}{\textbf{Průměrné hodnocení}} & \multirow[b]{2}{*}{\textbf{Celkové hodnocení}} & \multirow[b]{2}{*}{\textbf{Počet}} \\
+            & & \textbf{Relevance} & \textbf{Kvalita} & & \\
+            \midrule
+            \textit{chain-of-thought} & \texttt{gemini-2.5-pro}  & 7{,}72 & 7{,}74 & \tavg{7{,}73} & 47 \\
+            \textit{chain-of-thought} & \texttt{qwen3-coder:30b} & 7{,}45 & 7{,}79 & \tavg{7{,}62} & 43 \\
+            \textit{zero-shot}        & \texttt{qwen3-coder:30b} & 6{,}24 & 6{,}29 & \tavg{6{,}26} & 21 \\
+            \bottomrule
+        \end{tabular}
+    }
     \caption{Průměrná hodnocení učitelů dle strategie promptování a modelu. Celkové hodnocení je aritmetickým průměrem relevance a kvality.}
     \label{tab:teacher-ratings}
 \end{table}
 
-Výsledky ukazují, že strategie \textit{chain-of-thought} dosáhla výrazně lepšího hodnocení než \textit{zero-shot} (7,62--7,73 oproti 6,26 z 10).
+Výsledky ukazují, že strategie \textit{chain-of-thought} dosáhla výrazně lepšího hodnocení než \textit{zero-shot} (7,62 -- 7,73 oproti 6,26 z 10).
 Model \texttt{gemini-2.5-pro} dosáhl mírně vyššího celkového skóre než on-premise \texttt{qwen3-coder:30b} při stejné strategii (7,73 oproti 7,62), přičemž rozdíl je minimální (0,11 bodu) a on-premise model překonal cloudový v dimenzi kvality formulace (7,79 oproti 7,74).
 
 Je však třeba brát tato data s rezervou -- hodnocení se zúčastnilo pouze pět z devíti vyučujících a počty ohodnocených návrhů jsou relativně nízké.
