@@ -151,12 +151,14 @@
     url = {https://www.redhat.com/en/topics/ai/what-are-large-language-models},
 }
 
-@inproceedings{liu-lost,
+@article{liu-lost,
     title = {Lost in the Middle: How Language Models Use Long Contexts},
     author = {Nelson F. Liu and Kevin Lin and John Hewitt and Ashwin Paranjape and Michele Bevilacqua and Fabio Petroni and Percy Liang},
-    booktitle = {Transactions of the Association for Computational Linguistics},
+    journal = {Transactions of the Association for Computational Linguistics},
+    volume = {12},
+    pages = {157--173},
     year = {2024},
-    url = {https://arxiv.org/abs/2307.03172}
+    url = {https://arxiv.org/abs/2307.03172},
 }
 
 @inproceedings{hosseini-efficient,
@@ -198,7 +200,7 @@
 % ============================================================
 
 @online{kelvin-architecture,
-    author = {MRLvsb}, % TODO: Jaké autory? :D
+    author = {{VŠB -- Technická univerzita Ostrava}},
     title = {Kelvin -- Architecture},
     year = {2024},
     urldate = {2025-01-15},
@@ -213,8 +215,7 @@
     author = {Chen, Mark and Tworek, Jerry and Jun, Heewoo and Yuan, Qiming and Pinto, Henrique Ponde de Oliveira and Kaplan, Jared and Edwards, Harri and Burda, Yura and Joseph, Nicholas and Brockman, Greg and others},
     title = {Evaluating Large Language Models Trained on Code},
     year = {2021},
-    journal = {arXiv preprint},
-    volume = {arXiv:2107.03374},
+    journal = {arXiv preprint arXiv:2107.03374},
     url = {https://arxiv.org/abs/2107.03374},
     urldate = {2025-01-15},
 }
@@ -223,36 +224,34 @@
     author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
     title = {Program Synthesis with Large Language Models},
     year = {2021},
-    journal = {arXiv preprint},
-    volume = {arXiv:2108.07732},
+    journal = {arXiv preprint arXiv:2108.07732},
     url = {https://arxiv.org/abs/2108.07732},
     urldate = {2025-01-15},
 }
 
 @article{livecodebench,
     author = {Jain, Naman and Han, King and Gu, Alex and Li, Wen-Ding and Yan, Fanjia and Zhang, Tianjun and Wang, Sida and Solar-Lezama, Armando and Sen, Koushik and Stoica, Ion},
-    title = {LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code},
+    title = {{LiveCodeBench}: Holistic and Contamination Free Evaluation of Large Language Models for Code},
     year = {2024},
-    journal = {arXiv preprint},
-    volume = {arXiv:2403.07974},
+    journal = {arXiv preprint arXiv:2403.07974},
     url = {https://arxiv.org/abs/2403.07974},
     urldate = {2025-01-15},
 }
 
-@article{mindstudio-comparison,
-    author = {Mind Studio},
-    title = {GPT-5.4 vs. Claude Opus 4.6 vs. Gemini 3.1 Pro: Benchmarks},
+@online{mindstudio-comparison,
+    author = {{Mind Studio}},
+    title = {{GPT-5.4} vs. {Claude Opus} 4.6 vs. {Gemini} 3.1 {Pro}: Real Benchmark Results Compared},
     year = {2026},
     url = {https://www.mindstudio.ai/blog/gpt-54-vs-claude-opus-46-vs-gemini-31-pro-benchmarks},
     urldate = {2026-03-15},
 }
 
-@misc{llm-stats-humaneval,
-    title = {{HumanEval Leaderboard}},
+@online{llm-stats-humaneval,
+    title = {{HumanEval} Leaderboard},
     author = {{LLM Stats}},
     year = {2026},
     url = {https://llm-stats.com/benchmarks/humaneval},
-    note = {Accessed: 2026-04-17}
+    urldate = {2026-04-17},
 }
 
 % ============================================================
@@ -285,10 +284,9 @@
 
 @article{mistral_api,
     author = {Jiang, Albert Q. and Sablayrolles, Alexandre and Mensch, Arthur and Bamford, Chris and Chaplot, Devendra Singh and Casas, Diego de las and Bressand, Florian and Lengyel, Gianna and Lample, Guillaume and Saulnier, Lucile and others},
-    title = {Mistral 7B},
+    title = {Mistral {7B}},
     year = {2023},
-    journal = {arXiv preprint},
-    volume = {arXiv:2310.06825},
+    journal = {arXiv preprint arXiv:2310.06825},
     url = {https://arxiv.org/abs/2310.06825},
     urldate = {2025-01-15},
 }
@@ -302,6 +300,7 @@
     title = {{GPT-5.4} -- {OpenAI API}},
     year = {2026},
     url = {https://developers.openai.com/api/docs/models/gpt-5.4},
+    urldate = {2026-04-17},
 }
 
 @online{gpt-5.4-mini,
@@ -309,13 +308,15 @@
     title = {{GPT-5.4 mini} -- {OpenAI API}},
     year = {2026},
     url = {https://developers.openai.com/api/docs/models/gpt-5.4-mini},
+    urldate = {2026-04-17},
 }
 
 @online{gpt-5.4-nano,
     author = {{OpenAI}},
-    title = {{GPT-5 nano} -- {OpenAI API}},
+    title = {{GPT-5.4 nano} -- {OpenAI API}},
     year = {2026},
     url = {https://developers.openai.com/api/docs/models/gpt-5.4-nano},
+    urldate = {2026-04-17},
 }
 
 @online{claude-opus-4.6,
@@ -323,6 +324,7 @@
     title = {{Claude Opus} 4.6 {System Card}},
     year = {2026},
     url = {https://www.anthropic.com/claude-opus-4-6-system-card},
+    urldate = {2026-04-17},
 }
 
 @online{claude-sonnet-4.6,
@@ -330,6 +332,7 @@
     title = {{Claude Sonnet} 4.6 {System Card}},
     year = {2026},
     url = {https://www.anthropic.com/claude-sonnet-4-6-system-card},
+    urldate = {2026-04-17},
 }
 
 @online{claude-3.5,
@@ -337,6 +340,7 @@
     title = {Model {Card Addendum}: {Claude} 3.5 {Haiku} and {Upgraded Claude} 3.5 {Sonnet}},
     year = {2024},
     url = {https://assets.anthropic.com/m/1cd9d098ac3e6467/original/Claude-3-Model-Card-October-Addendum.pdf},
+    urldate = {2026-04-17},
 }
 
 @online{claude-3,
@@ -344,6 +348,7 @@
     title = {The {Claude} 3 {Model Family}: {Opus, Sonnet, Haiku}},
     year = {2024},
     url = {https://assets.anthropic.com/m/61e7d27f8c8f5919/original/Claude-3-Model-Card.pdf},
+    urldate = {2026-04-17},
 }
 
 @online{geminy-3.1-pro,
@@ -444,9 +449,9 @@
 
 @online{openai-o1-mini,
     author = {{OpenAI}},
-    title = {OpenAI o1-mini System Card},
+    title = {Introducing OpenAI o1-mini},
     year = {2024},
-    url = {https://openai.com/index/openai-o1-mini-system-card/},
+    url = {https://openai.com/index/openai-o1-mini-advancing-cost-efficient-reasoning/},
     urldate = {2026-04-17},
 }
 
@@ -460,9 +465,9 @@
 
 @online{gpt-4o-mini,
     author = {{OpenAI}},
-    title = {{GPT-4o} mini System Card},
+    title = {{GPT-4o} mini: advancing cost-efficient intelligence},
     year = {2024},
-    url = {https://openai.com/index/gpt-4o-mini-system-card/},
+    url = {https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/},
     urldate = {2026-04-17},
 }
 
@@ -474,12 +479,12 @@
     urldate = {2026-04-17},
 }
 
-@online{gpt-4-turbo,
+@article{gpt-4-turbo,
     author = {{OpenAI}},
     title = {{GPT-4} Technical Report},
     year = {2023},
+    journal = {arXiv preprint arXiv:2303.08774},
     url = {https://arxiv.org/abs/2303.08774},
-    urldate = {2026-04-17},
 }
 
 @online{mistral-large-2,
@@ -507,7 +512,7 @@
 }
 
 % ============================================================
-%  Náastroje LLM
+%  Nástroje LLM
 % ============================================================
 
 @online{ollama,
@@ -584,25 +589,28 @@
 
 @online{openai-tokenizer,
     author = {{OpenAI}},
-    title = {Tokenizer -- OpenAI Platform},
+    title = {Tokenizer -- {OpenAI} Platform},
+    year = {2023},
     url = {https://platform.openai.com/tokenizer},
     urldate = {2026-04-12},
 }
 
-@inproceedings{dolos,
+@article{dolos,
     author = {Maertens, Tom and Smet, Charlotte and Verdegem, Pieter and De~Schuymer, Bram and Dawyndt, Peter and Mesuere, Bart},
     title = {Dolos: Language-agnostic plagiarism detection in source code},
-    booktitle = {Journal of Computer Assisted Learning},
+    journal = {Journal of Computer Assisted Learning},
     volume = {38},
     number = {4},
     pages = {1046--1061},
     year = {2022},
+    doi = {10.1111/jcal.12662},
     url = {https://doi.org/10.1111/jcal.12662},
 }
 
 @online{moss,
     author = {Aiken, Alex},
-    title = {MOSS: A System for Detecting Software Similarity},
+    title = {{MOSS}: A System for Detecting Software Similarity},
+    year = {1994},
     url = {https://theory.stanford.edu/~aiken/moss/},
     urldate = {2026-04-12},
 }
