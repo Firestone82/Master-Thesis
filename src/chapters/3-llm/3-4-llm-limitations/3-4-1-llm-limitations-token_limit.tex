@@ -5,8 +5,8 @@ Tokenizace a kontextové okno byly vysvětleny v \secref[sekci]{subsec:llm-token
 Každý model je omezen maximálním počtem tokenů, které může zpracovat v jednom průchodu inference.
 Pokud vstup tento limit překročí, část informací se do modelu vůbec nedostane.
 Typicky jsou odříznuty tokeny z konce vstupu, nebo musí být vstup manuálně zkrácen před odesláním.
-
 Pro analýzu zdrojového kódu je toto omezení zvlášť problematické ze dvou důvodů:
+
 \begin{enumerate}
     \item Programátorské chyby mají svou strukturu rozloženou napříč kódem.
     Únik paměti může vzniknout tím, že je paměť alokována v jedné funkci na řádku 20, přerušena výjimkou na řádku 80 a uvolnění voláno teprve na řádku 150 -- přičemž cesta výjimky ho obejde.
